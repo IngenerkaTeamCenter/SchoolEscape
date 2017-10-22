@@ -1,4 +1,4 @@
-#include "TXLib.h"
+    #include "TXLib.h"
 
 struct Bomzh
 {
@@ -16,7 +16,7 @@ void drawBomzh(Bomzh b)
 {
 if (b.direction == 0)
 {
-txBitBlt(txDC(), b.x - 27, b.y - 74, 54, 86, b.picDown, b.frame * 54, 0, RGB(255, 255, 255));
+txTransparentBlt(txDC(), b.x - 27, b.y - 74, 54, 86, b.picDown, b.frame * 54, 0, RGB(255, 255, 255));
 }
 
 if (b.direction == 1)
@@ -34,53 +34,53 @@ txTransparentBlt(txDC(), b.x - 24, b.y - 74, 48, 86, b.picRight, b.frame * 48, 0
 }
 }
 
-void moveBomzh(Bomzh b)
+void moveBomzh(Bomzh* b)
 {
-    int predX = b.x;
-    int predY = b.y;
+    int predX = b->x;
+    int predY = b->y;
 
     if (GetAsyncKeyState(VK_UP))
     {
-        b.y -= 2;
-        b.direction = 1;
+        b->y -= 2;
+        b->direction = 1;
 
-        if (b.frame == 0)
+        if (b->frame == 0)
         {
-            b.frame = 1;
-            b.frameTimer = 0;
+            b->frame = 1;
+            b->frameTimer = 0;
         }
         else
         {
-            b.frameTimer++;
-            if (b.frameTimer >= 14)
+            b->frameTimer++;
+            if (b->frameTimer >= 14)
             {
-                b.frame++;
-                if (b.frame == 5)
-                b.frame = 1;
-                b.frameTimer = 0;
+                b->frame++;
+                if (b->frame >= 3)
+                b->frame = 1;
+                b->frameTimer = 0;
             }
         }
     }
 
     if (GetAsyncKeyState(VK_DOWN))
     {
-        b.y += 2;
-        b.direction = 0;
+        b->y += 2;
+        b->direction = 0;
 
-        if (b.frame == 0)
+        if (b->frame == 0)
         {
-            b.frame = 1;
-            b.frameTimer = 0;
+            b->frame = 1;
+            b->frameTimer = 0;
         }
         else
         {
-            b.frameTimer++;
-            if (b.frameTimer >= 14)
+            b->frameTimer++;
+            if (b->frameTimer >= 14)
             {
-                b.frame++;
-                if (b.frame == 5)
-                    b.frame = 1;
-                b.frameTimer = 0;
+                b->frame++;
+                if (b->frame >= 3)
+                    b->frame = 1;
+                b->frameTimer = 0;
             }
         }
     }
@@ -88,46 +88,46 @@ void moveBomzh(Bomzh b)
 
     if (GetAsyncKeyState(VK_RIGHT))
     {
-        b.x += 2;
-        b.direction = 3;
+        b->x += 2;
+        b->direction = 3;
 
-        if (b.frame == 0)
+        if (b->frame == 0)
         {
-            b.frame = 1;
-            b.frameTimer = 0;
+            b->frame = 1;
+            b->frameTimer = 0;
         }
         else
         {
-            b.frameTimer++;
-            if (b.frameTimer >= 20)
+            b->frameTimer++;
+            if (b->frameTimer >= 20)
             {
-                b.frame++;
-                if (b.frame == 5)
-                    b.frame = 1;
-                b.frameTimer = 0;
+                b->frame++;
+                if (b->frame >= 3)
+                    b->frame = 1;
+                b->frameTimer = 0;
             }
         }
     }
 
     if (GetAsyncKeyState(VK_LEFT))
     {
-        b.x -= 2;
-        b.direction = 2;
+        b->x -= 2;
+        b->direction = 2;
 
-        if (b.frame == 0)
+        if (b->frame == 0)
         {
-            b.frame = 1;
-            b.frameTimer = 0;
+            b->frame = 1;
+            b->frameTimer = 0;
         }
         else
         {
-            b.frameTimer++;
-            if (b.frameTimer >= 20)
+            b->frameTimer++;
+            if (b->frameTimer >= 20)
             {
-                b.frame++;
-                if (b.frame == 5)
-                b.frame = 1;
-                b.frameTimer = 0;
+                b->frame++;
+                if (b->frame >= 3)
+                    b->frame = 1;
+                b->frameTimer = 0;
             }
         }
     }
@@ -139,7 +139,7 @@ void moveBomzh(Bomzh b)
      {
          txSetFillColor(TX_BLACK);
          txRectangle(0, 0, 1200, 900);
-         moveBomzh(b);
+         moveBomzh(&b);
          drawBomzh(b);
          txSleep(10);
      }
@@ -155,6 +155,8 @@ void moveBomzh(Bomzh b)
      b.x = 400;
      b.y = 300;
      b.direction = 0;
+     b.frame = 0;
+     b.frameTimer = 0;
      b.picDown = txLoadImage("BomzhDown.bmp");
      b.picUp = txLoadImage("BomzhUp.bmp");
      b.picLeft = txLoadImage("BomzhLeft.bmp");
