@@ -1,160 +1,191 @@
 #include "TXLib.h"
-#include <stdlib.h>
 
-const int OKNO_GLAVNOGO_MENU = 1;
-const int OKNO_PERSONAGA = 2;
-const int OKNO_PODTVERGDENIA = 22;
-const int OKNO_GAME = 222;
-const int OKNO_NASTROEK = 3;
-
-struct Button
+struct Bomzh
 {
-    int x;
-    int y;
-    int x2;
-    int y2;
-    HDC pic;
+    int x, y;
+    int speed;
+    int manyframeUp;
+    int manyframeDown;
+    int manyframeLeft;
+    int manyframeRight;
+    int width;
+    int height;
+    int PointStartX1;
+    int PointStartX2;
+    int PointStartY;
+    int direction; // 0 вниз   1  вверх   2 влево    3 вправо
+    HDC picDown;
+    HDC picUp;
+    HDC picLeft;
+    HDC picRight;
+    int frame;
+    int frameTimer;
 };
 
-struct Menu
+void drawBomzh(Bomzh b)
 {
-    Button Start;
-    Button Settings;
-    Button Exit;
-    Button Back;
-    Button Person;
-    HDC fon;
-};
-
-
-int main()
+if (b.direction == 0)
 {
-    int Window = OKNO_GLAVNOGO_MENU;
-    txCreateWindow(1090,654);
-    Menu m = {{100, 250, 322, 304, txLoadImage ("IMG\\КартинкиГлавногоМеню\\Играть.bmp")},
-              {100, 350, 449, 404, txLoadImage ("IMG\\КартинкиГлавногоМеню\\Настройки.bmp")},
-              {100, 450, 322, 504, txLoadImage ("IMG\\КартинкиГлавногоМеню\\Выход.bmp")},
-              {20, 550, 120, 650,   txLoadImage ("IMG\\КартинкиГлавногоМеню\\Назад.bmp")},
-              {500, 50, 700, 350,   txLoadImage ("IMG\\КартинкиГлавногоМеню\\Назад2.bmp")},
-                                   txLoadImage ("IMG\\КартинкиГлавногоМеню\\Меню.bmp")};
+txTransparentBlt(txDC(), b.x - b.PointStartX1, b.y - b.PointStartY, b.width, b.height, b.picDown, b.frame * 54, 0, RGB(255, 255, 255));
+}
 
-    txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
-    txBitBlt(txDC(), m.Start.x, m.Start.y,           222, 54, m.Start.pic, 0, 0);
-    txBitBlt(txDC(), m.Settings.x, m.Settings.y,     349, 54, m.Settings.pic, 0, 0);
-    txBitBlt(txDC(), m.Exit.x, m.Exit.y,             222, 54, m.Exit.pic, 0, 0);
+if (b.direction == 1)
+{
+txTransparentBlt(txDC(), b.x - b.PointStartX1, b.y - b.PointStartY, b.width, b.height, b.picUp, b.frame * 54, 0, RGB(255, 255, 255));
+}
 
-    while (1)
+if (b.direction == 2)
+{
+txTransparentBlt(txDC(), b.x - b.PointStartX2, b.y - b.PointStartY, b.width - 6, b.height, b.picLeft, b.frame * 48, 0, RGB(255, 255, 255));
+}
+if (b.direction == 3)
+{
+txTransparentBlt(txDC(), b.x - b.PointStartX2, b.y - b.PointStartY, b.width - 6, b.height, b.picRight, b.frame * 48, 0, RGB(255, 255, 255));
+}
+}
+
+void moveBomzh(Bomzh* b)
+{
+    int predX = b->x;
+    int predY = b->y;
+
+    if (GetAsyncKeyState(VK_UP))
     {
-        if(Window == OKNO_GLAVNOGO_MENU)
-        {
-            //Нажали на старт в главном меню
-            if( m.Start.y2 >= txMouseY() && txMouseY() >= m.Start.y &&
-               txMouseButtons() == 1)
-            {
-                Window = OKNO_PERSONAGA;
-                txClear();
-                txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
-                txBitBlt(txDC(), m.Person.x, m.Person.y,           200, 300, m.Person.pic, 0, 0);
-                txBitBlt(txDC(), m.Back.x, m.Back.y,             100, 100, m.Back.pic, 0, 0);
-                txSleep(1000);
-            }
-            else if( m.Settings.y2 >= txMouseY() && txMouseY() >= m.Settings.y &&
-               txMouseButtons() == 1)
-            {
-                Window = OKNO_NASTROEK;
-                txClear();
-                txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
-                txBitBlt(txDC(), m.Settings.x, m.Settings.y,     349, 54, m.Settings.pic, 0, 0);
-                txBitBlt(txDC(), m.Back.x, m.Back.y,             100, 100, m.Back.pic, 0, 0);
-                txSleep(1000);
-            }
-            else if( m.Exit.y2 >= txMouseY() && txMouseY() >= m.Exit.y && txMouseButtons() == 1)
-            {
-                txDeleteDC(m.Settings.pic);
-                txDeleteDC(m.Exit.pic);
-                txDeleteDC(m.Start.pic);
-                txDeleteDC(m.fon);
-                txDeleteDC(m.Back.pic);
-                txDeleteDC(m.Person.pic);
-                exit(1);
-                txDestroyWindow();
-            }
-        }
-        else if (Window == OKNO_PERSONAGA)
-        {
-            //В окне выбора персонажа нажали на "выбрать"
-            if( m.Person.y2 >= txMouseY() &&
-                m.Person.y <= txMouseY()  &&
-                m.Person.x2 >= txMouseX() &&
-                m.Person.x <= txMouseX() &&
-               txMouseButtons() == 1)
-            {
-                Window = OKNO_PODTVERGDENIA;
-                txClear();
-                txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
-                txBitBlt(txDC(), m.Person.x, m.Person.y,           200, 300, m.Person.pic, 0, 0);
-                txBitBlt(txDC(), m.Start.x, m.Start.y,           222, 54, m.Start.pic, 0, 0);
-                txBitBlt(txDC(), m.Back.x, m.Back.y,             100, 100, m.Back.pic, 0, 0);
-                txSleep(1000);
-            }
-            //кнопка назад
-            else if( m.Back.y2 >= txMouseY() && txMouseY() >= m.Back.y && m.Back.x2 >= txMouseX() &&
-                txMouseX() >= m.Back.x && txMouseButtons() == 1)
-            {
-                Window = OKNO_GLAVNOGO_MENU;
-                txClear();
-                txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
-                txBitBlt(txDC(), m.Start.x, m.Start.y,           222, 54, m.Start.pic, 0, 0);
-                txBitBlt(txDC(), m.Settings.x, m.Settings.y,     349, 54, m.Settings.pic, 0, 0);
-                txBitBlt(txDC(), m.Exit.x, m.Exit.y,             222, 54, m.Exit.pic, 0, 0);
-                txSleep(1000);
-            }
-        }
-        else if (Window == OKNO_PODTVERGDENIA)
-        {
-            //Нажали на старт в окне подтверждения
-            if( m.Start.y2 >= txMouseY() &&
-               txMouseY() >= m.Start.y && txMouseButtons() == 1)
-            {
-                txTextOut(100, 100, "dsgsdgsdgf");
-                txSleep(1000);
-                Window = OKNO_GAME;
-                txClear();
-                txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
+        b->y -= b->speed;
+        b->direction = 1;
 
-                txSleep(1000);
-                break;
-            }
-            else if( m.Back.y2 >= txMouseY() && txMouseY() >= m.Back.y &&
-                    m.Back.x2 >= txMouseX() && txMouseX() >= m.Back.x && txMouseButtons() == 1)
-            {
-                Window = OKNO_PERSONAGA;
-                txClear();
-                txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
-                txBitBlt(txDC(), m.Person.x, m.Person.y,           200, 300, m.Person.pic, 0, 0);
-                txBitBlt(txDC(), m.Back.x, m.Back.y,             100, 100, m.Back.pic, 0, 0);
-                txSleep(1000);
-            }
-        }
-        else if (Window == OKNO_NASTROEK)
+        if (b->frame == 0)
         {
-            if( m.Back.y2 >= txMouseY() && txMouseY() >= m.Back.y && m.Back.x2 >= txMouseX() && txMouseX() >= m.Back.x && txMouseButtons() == 1 && Window == 3)
+            b->frame = 1;
+            b->frameTimer = 0;
+        }
+        else
+        {
+            b->frameTimer++;
+            if (b->frameTimer >= 14)
             {
-                Window = 1;
-                txClear();
-                txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
-                txBitBlt(txDC(), m.Start.x, m.Start.y,           222, 54, m.Start.pic, 0, 0);
-                txBitBlt(txDC(), m.Settings.x, m.Settings.y,     349, 54, m.Settings.pic, 0, 0);
-                txBitBlt(txDC(), m.Exit.x, m.Exit.y,             222, 54, m.Exit.pic, 0, 0);
-                txSleep(1000);
+                b->frame++;
+                if (b->frame >= b->manyframeUp)
+                b->frame = 1;
+                b->frameTimer = 0;
             }
         }
     }
 
-    txDeleteDC(m.Settings.pic);
-    txDeleteDC(m.Exit.pic);
-    txDeleteDC(m.Start.pic);
-    txDeleteDC(m.fon);
-    txDeleteDC(m.Person.pic);
-    txDeleteDC(m.Back.pic);
+    if (GetAsyncKeyState(VK_DOWN))
+    {
+        b->y += b->speed;
+        b->direction = 0;
+
+        if (b->frame == 0)
+        {
+            b->frame = 1;
+            b->frameTimer = 0;
+        }
+        else
+        {
+            b->frameTimer++;
+            if (b->frameTimer >= 14)
+            {
+                b->frame++;
+                if (b->frame >= b->manyframeDown)
+                    b->frame = 1;
+                b->frameTimer = 0;
+            }
+        }
+    }
+
+
+    if (GetAsyncKeyState(VK_RIGHT))
+    {
+        b->x += b->speed;
+        b->direction = 3;
+
+        if (b->frame == 0)
+        {
+            b->frame = 1;
+            b->frameTimer = 0;
+        }
+        else
+        {
+            b->frameTimer++;
+            if (b->frameTimer >= 20)
+            {
+                b->frame++;
+                if (b->frame >= b->manyframeRight)
+                    b->frame = 1;
+                b->frameTimer = 0;
+            }
+        }
+    }
+
+    if (GetAsyncKeyState(VK_LEFT))
+    {
+        b->x -= b->speed;
+        b->direction = 2;
+
+        if (b->frame == 0)
+        {
+            b->frame = 1;
+            b->frameTimer = 0;
+        }
+        else
+        {
+            b->frameTimer++;
+            if (b->frameTimer >= 20)
+            {
+                b->frame++;
+                if (b->frame >= b->manyframeLeft)
+                    b->frame = 1;
+                b->frameTimer = 0;
+            }
+        }
+    }
 }
+
+ void scene1(Bomzh b)
+ {
+     while (!GetAsyncKeyState(VK_ESCAPE))
+     {
+         txSetFillColor(TX_BLACK);
+         txRectangle(0, 0, 1200, 900);
+         moveBomzh(&b);
+         drawBomzh(b);
+         txSleep(10);
+     }
+ }
+
+ int main()
+
+ {
+     txCreateWindow (1090, 654);
+     txBegin();
+
+     Bomzh b;
+     b.x = 400;
+     b.y = 300;
+     b.width = 54;
+     b.height = 86;
+     b.speed = 2;
+     b.manyframeRight = 3;
+     b.manyframeLeft = 3;
+     b.PointStartX1 = 27;
+     b.PointStartX2 = 24;
+     b.PointStartY = 74;
+     b.manyframeUp = 5;
+     b.manyframeDown = 5;
+     b.direction = 0;
+     b.frame = 0;
+     b.frameTimer = 0;
+     b.picDown = txLoadImage("BomzhDown.bmp");
+     b.picUp = txLoadImage("BomzhUp.bmp");
+     b.picLeft = txLoadImage("BomzhLeft.bmp");
+     b.picRight = txLoadImage("BomzhRight.bmp");
+
+     scene1(b);
+     txDeleteDC(b.picDown);
+     txDeleteDC(b.picUp);
+     txDeleteDC(b.picLeft);
+     txDeleteDC(b.picRight);
+
+ }
