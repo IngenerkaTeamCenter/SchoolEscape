@@ -1,4 +1,5 @@
-#include "TXLib.h"
+#include "Lib\\TXLib.h"
+#include "Lib\\Bomzh.h"
 
 struct Bomzh
 {
@@ -13,7 +14,7 @@ struct Bomzh
     int PointStartX1;
     int PointStartX2;
     int PointStartY;
-    int direction; // 0 ����   1  �����   2 �����    3 ������
+    int direction; // 0 Down   1  Up   2 Left    3 Right
     HDC picDown;
     HDC picUp;
     HDC picLeft;
@@ -143,7 +144,7 @@ void moveBomzh(Bomzh* b)
     }
 }
 
- void scene1(Bomzh b)
+ void scene1(Bomzh b, /*Director d*/)
  {
      while (!GetAsyncKeyState(VK_ESCAPE))
      {
@@ -151,15 +152,21 @@ void moveBomzh(Bomzh* b)
          txRectangle(0, 0, 1200, 900);
          moveBomzh(&b);
          drawBomzh(b);
+         //moveDirector(&d);
+         //drawDirector(d);
          txSleep(10);
      }
  }
 
  int main()
-
  {
      txCreateWindow (1090, 654);
      txBegin();
+
+     //Director d;
+     //d.x = 50;
+     //...
+     //d.picRight = ...
 
      Bomzh b;
      b.x = 400;
@@ -177,15 +184,14 @@ void moveBomzh(Bomzh* b)
      b.direction = 0;
      b.frame = 0;
      b.frameTimer = 0;
-     b.picDown = txLoadImage("BomzhDown.bmp");
-     b.picUp = txLoadImage("BomzhUp.bmp");
-     b.picLeft = txLoadImage("BomzhLeft.bmp");
-     b.picRight = txLoadImage("BomzhRight.bmp");
+     b.picDown = txLoadImage("IMG\\Персонажи\\Бомж\\BomzhDown.bmp");
+     b.picUp = txLoadImage("IMG\\Персонажи\\Бомж\\BomzhUp.bmp");
+     b.picLeft = txLoadImage("IMG\\Персонажи\\Бомж\\BomzhLeft.bmp");
+     b.picRight = txLoadImage("IMG\\Персонажи\\Бомж\\BomzhRight.bmp");
 
-     scene1(b);
+     scene1(b/*, d*/);
      txDeleteDC(b.picDown);
      txDeleteDC(b.picUp);
      txDeleteDC(b.picLeft);
      txDeleteDC(b.picRight);
-
  }
