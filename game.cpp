@@ -25,106 +25,57 @@ struct Bomzh
 
 void drawBomzh(Bomzh b)
 {
-if (b.direction == 0)
-{
-txTransparentBlt(txDC(), b.x - b.PointStartX1, b.y - b.PointStartY, b.width, b.height, b.picDown, b.frame * 54, 0, RGB(255, 255, 255));
-}
-
-if (b.direction == 1)
-{
-txTransparentBlt(txDC(), b.x - b.PointStartX1, b.y - b.PointStartY, b.width, b.height, b.picUp, b.frame * 54, 0, RGB(255, 255, 255));
-}
-
-if (b.direction == 2)
-{
-txTransparentBlt(txDC(), b.x - b.PointStartX2, b.y - b.PointStartY, b.width - 6, b.height, b.picLeft, b.frame * 48, 0, RGB(255, 255, 255));
-}
-if (b.direction == 3)
-{
-txTransparentBlt(txDC(), b.x - b.PointStartX2, b.y - b.PointStartY, b.width - 6, b.height, b.picRight, b.frame * 48, 0, RGB(255, 255, 255));
-}
+    if (b.direction == 0)
+    {
+        txTransparentBlt(txDC(), b.x - b.PointStartX1, b.y - b.PointStartY, b.width, b.height, b.picDown, b.frame * 54, 0, RGB(255, 255, 255));
+    }
+    else if (b.direction == 1)
+    {
+        txTransparentBlt(txDC(), b.x - b.PointStartX1, b.y - b.PointStartY, b.width, b.height, b.picUp, b.frame * 54, 0, RGB(255, 255, 255));
+    }
+    else if (b.direction == 2)
+    {
+        txTransparentBlt(txDC(), b.x - b.PointStartX2, b.y - b.PointStartY, b.width - 6, b.height, b.picLeft, b.frame * 48, 0, RGB(255, 255, 255));
+    }
+    else if (b.direction == 3)
+    {
+        txTransparentBlt(txDC(), b.x - b.PointStartX2, b.y - b.PointStartY, b.width - 6, b.height, b.picRight, b.frame * 48, 0, RGB(255, 255, 255));
+    }
 }
 
 void moveBomzh(Bomzh* b)
 {
     int predX = b->x;
     int predY = b->y;
+    int maxCountOfFrames = 0;
 
     if (GetAsyncKeyState(VK_UP))
     {
         b->y -= b->speed;
         b->direction = 1;
-
-        if (b->frame == 0)
-        {
-            b->frame = 1;
-            b->frameTimer = 0;
-        }
-        else
-        {
-            b->frameTimer++;
-            if (b->frameTimer >= 14)
-            {
-                b->frame++;
-                if (b->frame >= b->manyframeUp)
-                b->frame = 1;
-                b->frameTimer = 0;
-            }
-        }
+        maxCountOfFrames = b->manyframeUp;
     }
-
-    if (GetAsyncKeyState(VK_DOWN))
+    else if (GetAsyncKeyState(VK_DOWN))
     {
         b->y += b->speed;
         b->direction = 0;
-
-        if (b->frame == 0)
-        {
-            b->frame = 1;
-            b->frameTimer = 0;
-        }
-        else
-        {
-            b->frameTimer++;
-            if (b->frameTimer >= 14)
-            {
-                b->frame++;
-                if (b->frame >= b->manyframeDown)
-                    b->frame = 1;
-                b->frameTimer = 0;
-            }
-        }
+        maxCountOfFrames = b->manyframeDown;
     }
-
-
-    if (GetAsyncKeyState(VK_RIGHT))
+    else if (GetAsyncKeyState(VK_RIGHT))
     {
         b->x += b->speed;
         b->direction = 3;
-
-        if (b->frame == 0)
-        {
-            b->frame = 1;
-            b->frameTimer = 0;
-        }
-        else
-        {
-            b->frameTimer++;
-            if (b->frameTimer >= 20)
-            {
-                b->frame++;
-                if (b->frame >= b->manyframeRight)
-                    b->frame = 1;
-                b->frameTimer = 0;
-            }
-        }
+        maxCountOfFrames = b->manyframeRight;
     }
-
-    if (GetAsyncKeyState(VK_LEFT))
+    else if (GetAsyncKeyState(VK_LEFT))
     {
         b->x -= b->speed;
         b->direction = 2;
+        maxCountOfFrames = b->manyframeLeft;
+    }
 
+    if (predX != b->x || predY != b->y)
+    {
         if (b->frame == 0)
         {
             b->frame = 1;
@@ -136,7 +87,7 @@ void moveBomzh(Bomzh* b)
             if (b->frameTimer >= 20)
             {
                 b->frame++;
-                if (b->frame >= b->manyframeLeft)
+                if (b->frame >= maxCountOfFrames)
                     b->frame = 1;
                 b->frameTimer = 0;
             }
@@ -144,7 +95,7 @@ void moveBomzh(Bomzh* b)
     }
 }
 
- void scene1(Bomzh b, /*Director d*/)
+ void scene1(Bomzh b/*, Director d*/)
  {
      while (!GetAsyncKeyState(VK_ESCAPE))
      {
@@ -184,10 +135,10 @@ void moveBomzh(Bomzh* b)
      b.direction = 0;
      b.frame = 0;
      b.frameTimer = 0;
-     b.picDown = txLoadImage("IMG\\Персонажи\\Бомж\\BomzhDown.bmp");
-     b.picUp = txLoadImage("IMG\\Персонажи\\Бомж\\BomzhUp.bmp");
-     b.picLeft = txLoadImage("IMG\\Персонажи\\Бомж\\BomzhLeft.bmp");
-     b.picRight = txLoadImage("IMG\\Персонажи\\Бомж\\BomzhRight.bmp");
+     b.picDown = txLoadImage("IMG\\Men\\Homeless\\HomelessDown.bmp");
+     b.picUp = txLoadImage("IMG\\Men\\Homeless\\HomelessUp.bmp");
+     b.picLeft = txLoadImage("IMG\\Men\\Homeless\\HomelessLeft.bmp");
+     b.picRight = txLoadImage("IMG\\Men\\Homeless\\HomelessRight.bmp");
 
      scene1(b/*, d*/);
      txDeleteDC(b.picDown);
