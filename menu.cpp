@@ -1,42 +1,19 @@
 #include "TXLib.h"
-#include <stdlib.h>
-
-const int OKNO_GLAVNOGO_MENU = 1;
-const int OKNO_PERSONAGA = 2;
-const int OKNO_PODTVERGDENIA = 22;
-const int OKNO_GAME = 222;
-const int OKNO_NASTROEK = 3;
-
-struct Button
-{
-    int x;
-    int y;
-    int x2;
-    int y2;
-    HDC pic;
-};
-
-struct Menu
-{
-    Button Start;
-    Button Settings;
-    Button Exit;
-    Button Back;
-    Button Person;
-    HDC fon;
-};
-
+#include "Lib\\menu.cpp"
 
 int main()
 {
+    txDisableAutoPause();
     int Window = OKNO_GLAVNOGO_MENU;
     txCreateWindow(1090,654);
-    Menu m = {{100, 250, 322, 304, txLoadImage ("IMG\\ÊàðòèíêèÃëàâíîãîÌåíþ\\Èãðàòü.bmp")},
-              {100, 350, 449, 404, txLoadImage ("IMG\\ÊàðòèíêèÃëàâíîãîÌåíþ\\Íàñòðîéêè.bmp")},
-              {100, 450, 322, 504, txLoadImage ("IMG\\ÊàðòèíêèÃëàâíîãîÌåíþ\\Âûõîä.bmp")},
-              {20, 550, 120, 650,   txLoadImage ("IMG\\ÊàðòèíêèÃëàâíîãîÌåíþ\\Íàçàä.bmp")},
-              {500, 50, 700, 350,   txLoadImage ("IMG\\ÊàðòèíêèÃëàâíîãîÌåíþ\\Íàçàä2.bmp")},
-                                   txLoadImage ("IMG\\ÊàðòèíêèÃëàâíîãîÌåíþ\\Ìåíþ.bmp")};
+    Menu m = {{100, 250, 322, 304, txLoadImage ("IMG\\ÐšÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ¸Ð“Ð»Ð°Ð²Ð½Ð¾Ð³Ð¾ÐœÐµÐ½ÑŽ\\Ð˜Ð³Ñ€Ð°Ñ‚ÑŒ.bmp")},
+              {100, 350, 449, 404, txLoadImage ("IMG\\ÐšÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ¸Ð“Ð»Ð°Ð²Ð½Ð¾Ð³Ð¾ÐœÐµÐ½ÑŽ\\ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸.bmp")},
+              {100, 450, 322, 504, txLoadImage ("IMG\\ÐšÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ¸Ð“Ð»Ð°Ð²Ð½Ð¾Ð³Ð¾ÐœÐµÐ½ÑŽ\\Ð’Ñ‹Ñ…Ð¾Ð´.bmp")},
+              {20, 580, 242, 634,   txLoadImage ("IMG\\ÐšÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ¸Ð“Ð»Ð°Ð²Ð½Ð¾Ð³Ð¾ÐœÐµÐ½ÑŽ\\ÐÐ°Ð·Ð°Ð´.bmp")},
+              {500, 230, 650, 549,   txLoadImage ("IMG\\ÐšÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ¸Ð“Ð»Ð°Ð²Ð½Ð¾Ð³Ð¾ÐœÐµÐ½ÑŽ\\Ð¿ÐµÑ€Ñ1.bmp")},
+              {200, 230, 400, 530,   txLoadImage ("IMG\\ÐšÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ¸Ð“Ð»Ð°Ð²Ð½Ð¾Ð³Ð¾ÐœÐµÐ½ÑŽ\\Ð¿ÐµÑ€Ñ2.bmp")},
+              {800, 230, 1000, 530,   txLoadImage ("IMG\\ÐšÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ¸Ð“Ð»Ð°Ð²Ð½Ð¾Ð³Ð¾ÐœÐµÐ½ÑŽ\\Ð¿ÐµÑ€Ñ3.bmp")},
+                                   txLoadImage ("IMG\\ÐšÐ°Ñ€Ñ‚Ð¸Ð½ÐºÐ¸Ð“Ð»Ð°Ð²Ð½Ð¾Ð³Ð¾ÐœÐµÐ½ÑŽ\\ÐœÐµÐ½ÑŽ.bmp")};
 
     txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
     txBitBlt(txDC(), m.Start.x, m.Start.y,           222, 54, m.Start.pic, 0, 0);
@@ -47,57 +24,93 @@ int main()
     {
         if(Window == OKNO_GLAVNOGO_MENU)
         {
-            //Íàæàëè íà ñòàðò â ãëàâíîì ìåíþ
-            if( m.Start.y2 >= txMouseY() && txMouseY() >= m.Start.y &&
+            //ÐÐ°Ð¶Ð°Ð»Ð¸ Ð½Ð° ÑÑ‚Ð°Ñ€Ñ‚ Ð² Ð³Ð»Ð°Ð²Ð½Ð¾Ð¼ Ð¼ÐµÐ½ÑŽ
+            if( m.Start.y2 >= txMouseY() && txMouseY() >= m.Start.y && m.Start.x2 >= txMouseX() &&
+                m.Start.x <= txMouseX()&&
                txMouseButtons() == 1)
             {
                 Window = OKNO_PERSONAGA;
                 txClear();
                 txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
-                txBitBlt(txDC(), m.Person.x, m.Person.y,           200, 300, m.Person.pic, 0, 0);
-                txBitBlt(txDC(), m.Back.x, m.Back.y,             100, 100, m.Back.pic, 0, 0);
-                txSleep(1000);
+                txBitBlt(txDC(), m.Person1.x, m.Person1.y,           150, 319, m.Person1.pic, 0, 0);
+                txBitBlt(txDC(), m.Person2.x, m.Person2.y,           200, 300, m.Person2.pic, 0, 0);
+                txBitBlt(txDC(), m.Person3.x, m.Person3.y,           200, 300, m.Person3.pic, 0, 0);
+                txBitBlt(txDC(), m.Back.x, m.Back.y,            222, 54, m.Back.pic, 0, 0);
+                txSleep(500);
             }
-            else if( m.Settings.y2 >= txMouseY() && txMouseY() >= m.Settings.y &&
+            else if( m.Settings.y2 >= txMouseY() && txMouseY() >= m.Settings.y && m.Settings.x2 >= txMouseX() &&
+                m.Settings.x <= txMouseX()&&
                txMouseButtons() == 1)
             {
                 Window = OKNO_NASTROEK;
                 txClear();
                 txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
                 txBitBlt(txDC(), m.Settings.x, m.Settings.y,     349, 54, m.Settings.pic, 0, 0);
-                txBitBlt(txDC(), m.Back.x, m.Back.y,             100, 100, m.Back.pic, 0, 0);
-                txSleep(1000);
+                txBitBlt(txDC(), m.Back.x, m.Back.y,             222, 54, m.Back.pic, 0, 0);
+                txSleep(500);
             }
-            else if( m.Exit.y2 >= txMouseY() && txMouseY() >= m.Exit.y && txMouseButtons() == 1)
+            else if( m.Exit.y2 >= txMouseY() && txMouseY() >= m.Exit.y &&
+                    m.Exit.x2 >= txMouseX() &&
+                    m.Exit.x <= txMouseX()&& txMouseButtons() == 1)
             {
                 txDeleteDC(m.Settings.pic);
                 txDeleteDC(m.Exit.pic);
                 txDeleteDC(m.Start.pic);
                 txDeleteDC(m.fon);
                 txDeleteDC(m.Back.pic);
-                txDeleteDC(m.Person.pic);
+                txDeleteDC(m.Person1.pic);
+                txDeleteDC(m.Person2.pic);
+                txDeleteDC(m.Person3.pic);
                 exit(1);
                 txDestroyWindow();
             }
         }
         else if (Window == OKNO_PERSONAGA)
         {
-            //Â îêíå âûáîðà ïåðñîíàæà íàæàëè íà "âûáðàòü"
-            if( m.Person.y2 >= txMouseY() &&
-                m.Person.y <= txMouseY()  &&
-                m.Person.x2 >= txMouseX() &&
-                m.Person.x <= txMouseX() &&
+            //Ð’ Ð¾ÐºÐ½Ðµ Ð²Ñ‹Ð±Ð¾Ñ€Ð° Ð¿ÐµÑ€ÑÐ¾Ð½Ð°Ð¶Ð° Ð½Ð°Ð¶Ð°Ð»Ð¸ Ð½Ð° "Ð²Ñ‹Ð±Ñ€Ð°Ñ‚ÑŒ"
+            if( m.Person1.y2 >= txMouseY() &&
+                m.Person1.y <= txMouseY()  &&
+                m.Person1.x2 >= txMouseX() &&
+                m.Person1.x <= txMouseX() &&
                txMouseButtons() == 1)
             {
                 Window = OKNO_PODTVERGDENIA;
                 txClear();
                 txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
-                txBitBlt(txDC(), m.Person.x, m.Person.y,           200, 300, m.Person.pic, 0, 0);
+                txBitBlt(txDC(), m.Person1.x, m.Person1.y,           150, 319, m.Person1.pic, 0, 0);
                 txBitBlt(txDC(), m.Start.x, m.Start.y,           222, 54, m.Start.pic, 0, 0);
-                txBitBlt(txDC(), m.Back.x, m.Back.y,             100, 100, m.Back.pic, 0, 0);
-                txSleep(1000);
+                txBitBlt(txDC(), m.Back.x, m.Back.y,             222, 54, m.Back.pic, 0, 0);
+                txSleep(500);
             }
-            //êíîïêà íàçàä
+            else if( m.Person2.y2 >= txMouseY() &&
+                m.Person2.y <= txMouseY()  &&
+                m.Person2.x2 >= txMouseX() &&
+                m.Person2.x <= txMouseX() &&
+               txMouseButtons() == 1)
+            {
+                Window = OKNO_PODTVERGDENIA;
+                txClear();
+                txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
+                txBitBlt(txDC(), m.Person1.x, m.Person1.y,           200, 300, m.Person2.pic, 0, 0);
+                txBitBlt(txDC(), m.Start.x, m.Start.y,           222, 54, m.Start.pic, 0, 0);
+                txBitBlt(txDC(), m.Back.x, m.Back.y,             222, 54, m.Back.pic, 0, 0);
+                txSleep(500);
+            }
+            else if( m.Person3.y2 >= txMouseY() &&
+                m.Person3.y <= txMouseY()  &&
+                m.Person3.x2 >= txMouseX() &&
+                m.Person3.x <= txMouseX() &&
+               txMouseButtons() == 1)
+            {
+                Window = OKNO_PODTVERGDENIA;
+                txClear();
+                txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
+                txBitBlt(txDC(), m.Person1.x, m.Person1.y,           200, 300, m.Person3.pic, 0, 0);
+                txBitBlt(txDC(), m.Start.x, m.Start.y,           222, 54, m.Start.pic, 0, 0);
+                txBitBlt(txDC(), m.Back.x, m.Back.y,             222, 54, m.Back.pic, 0, 0);
+                txSleep(500);
+            }
+            //ÐºÐ½Ð¾Ð¿ÐºÐ° Ð½Ð°Ð·Ð°Ð´
             else if( m.Back.y2 >= txMouseY() && txMouseY() >= m.Back.y && m.Back.x2 >= txMouseX() &&
                 txMouseX() >= m.Back.x && txMouseButtons() == 1)
             {
@@ -107,22 +120,21 @@ int main()
                 txBitBlt(txDC(), m.Start.x, m.Start.y,           222, 54, m.Start.pic, 0, 0);
                 txBitBlt(txDC(), m.Settings.x, m.Settings.y,     349, 54, m.Settings.pic, 0, 0);
                 txBitBlt(txDC(), m.Exit.x, m.Exit.y,             222, 54, m.Exit.pic, 0, 0);
-                txSleep(1000);
+                txSleep(500);
             }
         }
         else if (Window == OKNO_PODTVERGDENIA)
         {
-            //Íàæàëè íà ñòàðò â îêíå ïîäòâåðæäåíèÿ
-            if( m.Start.y2 >= txMouseY() &&
-               txMouseY() >= m.Start.y && txMouseButtons() == 1)
+            //ÐÐ°Ð¶Ð°Ð»Ð¸ Ð½Ð° ÑÑ‚Ð°Ñ€Ñ‚ Ð² Ð¾ÐºÐ½Ðµ Ð¿Ð¾Ð´Ñ‚Ð²ÐµÑ€Ð¶Ð´ÐµÐ½Ð¸Ñ
+            if(m.Start.y2 >= txMouseY() && txMouseY() >= m.Start.y && m.Start.x2 >= txMouseX() &&
+               m.Start.x <= txMouseX()&&
+               txMouseButtons() == 1)
             {
-                txTextOut(100, 100, "dsgsdgsdgf");
-                txSleep(1000);
                 Window = OKNO_GAME;
                 txClear();
                 txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
-
-                txSleep(1000);
+                system("main.exe");
+                txSleep(500);
                 break;
             }
             else if( m.Back.y2 >= txMouseY() && txMouseY() >= m.Back.y &&
@@ -131,22 +143,24 @@ int main()
                 Window = OKNO_PERSONAGA;
                 txClear();
                 txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
-                txBitBlt(txDC(), m.Person.x, m.Person.y,           200, 300, m.Person.pic, 0, 0);
-                txBitBlt(txDC(), m.Back.x, m.Back.y,             100, 100, m.Back.pic, 0, 0);
-                txSleep(1000);
+                txBitBlt(txDC(), m.Person1.x, m.Person1.y,           150, 319, m.Person1.pic, 0, 0);
+                txBitBlt(txDC(), m.Person2.x, m.Person2.y,           200, 300, m.Person2.pic, 0, 0);
+                txBitBlt(txDC(), m.Person3.x, m.Person3.y,           200, 300, m.Person3.pic, 0, 0);
+                txBitBlt(txDC(), m.Back.x, m.Back.y,            222, 54, m.Back.pic, 0, 0);
+                txSleep(500);
             }
         }
         else if (Window == OKNO_NASTROEK)
         {
             if( m.Back.y2 >= txMouseY() && txMouseY() >= m.Back.y && m.Back.x2 >= txMouseX() && txMouseX() >= m.Back.x && txMouseButtons() == 1 && Window == 3)
             {
-                Window = 1;
+                Window = OKNO_GLAVNOGO_MENU;
                 txClear();
                 txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
                 txBitBlt(txDC(), m.Start.x, m.Start.y,           222, 54, m.Start.pic, 0, 0);
                 txBitBlt(txDC(), m.Settings.x, m.Settings.y,     349, 54, m.Settings.pic, 0, 0);
                 txBitBlt(txDC(), m.Exit.x, m.Exit.y,             222, 54, m.Exit.pic, 0, 0);
-                txSleep(1000);
+                txSleep(500);
             }
         }
     }
@@ -155,6 +169,6 @@ int main()
     txDeleteDC(m.Exit.pic);
     txDeleteDC(m.Start.pic);
     txDeleteDC(m.fon);
-    txDeleteDC(m.Person.pic);
+    txDeleteDC(m.Person1.pic);
     txDeleteDC(m.Back.pic);
 }
