@@ -31,12 +31,12 @@ int main()
 {
     int Window = OKNO_GLAVNOGO_MENU;
     txCreateWindow(1090,654);
-    Menu m = {{100, 250, 322, 304, txLoadImage ("IMG\\ артинки√лавногоћеню\\»грать.bmp")},
-              {100, 350, 449, 404, txLoadImage ("IMG\\ артинки√лавногоћеню\\Ќастройки.bmp")},
-              {100, 450, 322, 504, txLoadImage ("IMG\\ артинки√лавногоћеню\\¬ыход.bmp")},
-              {20, 550, 120, 650,   txLoadImage ("IMG\\ артинки√лавногоћеню\\Ќазад.bmp")},
-              {500, 50, 700, 350,   txLoadImage ("IMG\\ артинки√лавногоћеню\\Ќазад2.bmp")},
-                                   txLoadImage ("IMG\\ артинки√лавногоћеню\\ћеню.bmp")};
+	Menu m = {{100, 250, 322, 304, txLoadImage ("IMG\\ImgMainMenu\\Playing.bmp")},
+              {100, 350, 449, 404, txLoadImage ("IMG\\ImgMainMenu\\Setting.bmp")},
+              {100, 450, 322, 504, txLoadImage ("IMG\\ImgMainMenu\\Exit.bmp")},
+              { 20, 550, 120, 650,  txLoadImage ("IMG\\ImgMainMenu\\Backword.bmp")},
+              {500,  50, 700, 350,  txLoadImage ("IMG\\ImgMainMenu\\Backword2.bmp")},
+                                    txLoadImage ("IMG\\ImgMainMenu\\Menu.bmp")};
 
     txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
     txBitBlt(txDC(), m.Start.x, m.Start.y,           222, 54, m.Start.pic, 0, 0);
