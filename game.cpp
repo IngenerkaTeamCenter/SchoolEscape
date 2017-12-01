@@ -1,6 +1,7 @@
 #include "Lib\\TXLib.h"
 #include "Lib\\Bomzh.cpp"
 #include "Lib\\Director.cpp"
+#include "Lib\\Cleaner.cpp"
 
  void scene1(Bomzh b, Director d, Point p)
  {
@@ -10,7 +11,7 @@
 
     while (!GetAsyncKeyState(VK_ESCAPE))
     {
-        txSetFillColor(TX_BLACK);
+        txSetFillColor(TX_WHITE);
         txRectangle(0, 0, 1200, 900);
         moveBomzh(&b);
         drawBomzh(b);
@@ -26,6 +27,7 @@
         txSetColor(TX_RED);
         txSetFillColor(TX_RED);
         txCircle(x, y, 10);
+
 
         if (direction == 0)
         {
@@ -89,11 +91,6 @@ int main()
     txCreateWindow (1090, 654);
     txBegin();
 
-    //Director d;
-    //d.x = 50;
-    //...
-    //d.picRight = ...
-
     Bomzh b;
     b.x = 400;
     b.y = 300;
@@ -117,12 +114,11 @@ int main()
 
 
     Director d;
-    d.x = 300;
-    d.y = 200;
-    d.speed = 10;
+    d.x = 500;
+    d.y = 600;
+    d.speed = 2;
     d.width = 54;
     d.height = 86;
-    d.speed = 2;
     d.manyframeRight = 3;
     d.manyframeLeft = 3;
     d.PointStartX1 = 27;
@@ -133,20 +129,21 @@ int main()
     d.direction = 0;
     d.frame = 0;
     d.frameTimer = 0;
-    d.picDown = txLoadImage ("IMG\\Men\\Homeless\\HomelessDown.bmp");
-    d.picUp = txLoadImage ("IMG\\Men\\Homeless\\HomelessUp.bmp");
-    d.picLeft = txLoadImage ("IMG\\Men\\Homeless\\HomelessLeft.bmp");
-    d.picRight = txLoadImage ("IMG\\Men\\Homeless\\HomelessRight.bmp");
+    d.picDown = txLoadImage ("IMG\\Men\\Girl\\GirlDown.bmp");
+    d.picUp = txLoadImage ("IMG\\Men\\Girl\\GirlUp.bmp");
+    d.picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
+    d.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
+    d.radius = 170;
     //d.exit_time = 100000;
 
     Point p;
     p.x = 100;
     p.y = 100;
-    p.x1 = 200;
+    p.x1 = 600;
     p.y1 = 100;
-    p.x2 = 150;
-    p.y2 = 150;
-    p.nomerPoint = 0;
+    p.x2 = 270;
+    p.y2 = 250;
+    p.nomerPoint = 1;
 
     scene1(b, d, p);
     txDeleteDC(b.picDown);
