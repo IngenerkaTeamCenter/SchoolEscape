@@ -32,13 +32,14 @@ struct Director
     HDC picRight;
     int frame;
     int frameTimer;
+    int radius;//נאהטףס מבחמנא
     //int exit_time;
 };
 
 
 void moveDirector(Director *d, Point *p)
 {
-    if((d->x - p->x2) * (d->x - p->x2) + (d->y - p->y2) * (d->y - p->y2) <= 50 * 50)
+    if((d->x - p->x2) * (d->x - p->x2) + (d->y - p->y2) * (d->y - p->y2) <= d->radius * d->radius)
     {
         p->nomerPoint = 2;
     }
@@ -85,6 +86,7 @@ void moveDirector(Director *d, Point *p)
         d->x = d->x - d->speed;
         d->direction = 2;
     }
+    printf("%d", p->nomerPoint);
 }
 
 void drawDirector(Director d)
