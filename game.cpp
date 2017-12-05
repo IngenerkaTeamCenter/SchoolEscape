@@ -1,96 +1,32 @@
 #include "Lib\\TXLib.h"
 #include "Lib\\Bomzh.cpp"
-#include "Lib\\Director.cpp"
-#include "Lib\\Cleaner.cpp"
+#include "Lib\\Robot.cpp"
 
- void scene1(Bomzh b, Director d, Point p)
+ void scene1(Bomzh b, Robot r, Director d, Point p)
  {
-    int x = 700;
-    int y = 0;
-    int direction = 0;
 
     while (!GetAsyncKeyState(VK_ESCAPE))
     {
-        txSetFillColor(TX_WHITE);
+        txSetFillColor(TX_BLACK);
         txRectangle(0, 0, 1200, 900);
         moveBomzh(&b);
         drawBomzh(b);
 
-        txSetColor(TX_RED, 3);
-        //txCircle(p.x, p.y, 5);
-        //txCircle(p.x1, p.y1, 5);
-
+        moveRobot(&r);
+        drawRobot(r);
+        
         p.x2 = b.x;
         p.y2 = b.y;
-        txCircle(p.x2, p.y2, 5);
 
         drawDirector(d);
         moveDirector(&d, &p);
 
-        txSetColor(TX_RED);
-        txSetFillColor(TX_RED);
-        //txCircle(x, y, 10);
-
-
-        if (direction == 0)
-        {
-            x += 4;
-        }
-        else if (direction == 1)
-        {
-            x -= 4;
-        }
-        else if (direction == 2)
-        {
-            y += 4;
-        }
-        else
-        {
-            y -= 4;
-        }
-
-        if (x > txGetExtentX() - 50)
-        {
-            while (direction == 0)
-            {
-                direction = random(4);
-            }
-            x -= 65;
-        }
-        if (x < 0 + 50)
-        {
-            while (direction == 1)
-            {
-                direction = random(4);
-            }
-            x += 90;
-        }
-
-        if (y > txGetExtentY() - 40)
-        {
-            while (direction == 2)
-            {
-                direction = random(4);
-            }
-            y -= 10;
-        }
-        if (y < 0 + 70)
-        {
-            while (direction == 3)
-            {
-                direction = random(4);
-            }
-            y += 10;
-        }
-
         txSleep(10);
     }
-
  }
 
 int main()
 {
-
     txCreateWindow (1090, 654);
     txBegin();
 
@@ -148,13 +84,37 @@ int main()
     p.y2 = 200;
     p.nomerPoint = 1;
 
-    scene1(b, d, p);
-    txDeleteDC(b.picDown);
-    txDeleteDC(b.picUp);
-    txDeleteDC(b.picLeft);
-    txDeleteDC(b.picRight);
-    txDeleteDC(d.picDown);
-    txDeleteDC(d.picUp);
-    txDeleteDC(d.picLeft);
-    txDeleteDC(d.picRight);
-}
+     Robot r;
+     r.x = 700;
+     r.y = 100;
+     r.width = 48;
+     r.height = 62;
+     r.manyframeRight = 2;
+     r.manyframeLeft = 2;
+     r.manyframeUp = 4;
+     r.manyframeDown = 4;
+     r.direction = 0;
+     r.frame = 0;
+     r.frameTimer = 0;
+     r.picDown = txLoadImage("IMG\\Men\\Robot\\RobotDown.bmp");
+     r.picUp = txLoadImage("IMG\\Men\\Robot\\RobotUp.bmp");
+     r.picLeft = txLoadImage("IMG\\Men\\Robot\\RobotLeft.bmp");
+     r.picRight = txLoadImage("IMG\\Men\\Robot\\RobotRight.bmp");
+
+     scene1(b, r, d, p);
+
+     txDeleteDC(r.picDown);
+     txDeleteDC(r.picUp);
+     txDeleteDC(r.picLeft);
+     txDeleteDC(r.picRight);
+
+     txDeleteDC(b.picDown);
+     txDeleteDC(b.picUp);
+     txDeleteDC(b.picLeft);
+     txDeleteDC(b.picRight);
+
+     txDeleteDC(d.picDown);
+     txDeleteDC(d.picUp);
+     txDeleteDC(d.picLeft);
+     txDeleteDC(d.picRight);
+ }
