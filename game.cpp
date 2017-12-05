@@ -17,8 +17,11 @@
         drawBomzh(b);
 
         txSetColor(TX_RED, 3);
-        txCircle(p.x, p.y, 5);
-        txCircle(p.x1, p.y1, 5);
+        //txCircle(p.x, p.y, 5);
+        //txCircle(p.x1, p.y1, 5);
+
+        p.x2 = b.x;
+        p.y2 = b.y;
         txCircle(p.x2, p.y2, 5);
 
         drawDirector(d);
@@ -26,7 +29,7 @@
 
         txSetColor(TX_RED);
         txSetFillColor(TX_RED);
-        txCircle(x, y, 10);
+        //txCircle(x, y, 10);
 
 
         if (direction == 0)
@@ -96,7 +99,7 @@ int main()
     b.y = 300;
     b.width = 54;
     b.height = 100;
-    b.speed = 1;
+    b.speed = 5;
     b.manyframeRight = 2;
     b.manyframeLeft = 2;
     b.PointStartX1 = 27;
@@ -141,8 +144,8 @@ int main()
     p.y = 100;
     p.x1 = 600;
     p.y1 = 100;
-    p.x2 = 270;
-    p.y2 = 250;
+    p.x2 = 230;
+    p.y2 = 200;
     p.nomerPoint = 1;
 
     scene1(b, d, p);
