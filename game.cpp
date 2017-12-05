@@ -1,6 +1,7 @@
 #include "Lib\\TXLib.h"
 #include "Lib\\Bomzh.cpp"
 #include "Lib\\Robot.cpp"
+#include "Lib\\Director.cpp"
 
  void scene1(Bomzh b, Robot r, Director d, Point p)
  {
@@ -14,7 +15,7 @@
 
         moveRobot(&r);
         drawRobot(r);
-        
+
         p.x2 = b.x;
         p.y2 = b.y;
 
@@ -84,37 +85,41 @@ int main()
     p.y2 = 200;
     p.nomerPoint = 1;
 
-     Robot r;
-     r.x = 700;
-     r.y = 100;
-     r.width = 48;
-     r.height = 62;
-     r.manyframeRight = 2;
-     r.manyframeLeft = 2;
-     r.manyframeUp = 4;
-     r.manyframeDown = 4;
-     r.direction = 0;
-     r.frame = 0;
-     r.frameTimer = 0;
-     r.picDown = txLoadImage("IMG\\Men\\Robot\\RobotDown.bmp");
-     r.picUp = txLoadImage("IMG\\Men\\Robot\\RobotUp.bmp");
-     r.picLeft = txLoadImage("IMG\\Men\\Robot\\RobotLeft.bmp");
-     r.picRight = txLoadImage("IMG\\Men\\Robot\\RobotRight.bmp");
+    Robot r;
+    r.x = 700;
+    r.y = 100;
+    r.width = 48;
+    r.height = 62;
+    r.manyframeRight = 2;
+    r.manyframeLeft = 2;
+    r.manyframeUp = 4;
+    r.manyframeDown = 4;
+    r.direction = 0;
+    r.frame = 0;
+    r.frameTimer = 0;
+    r.picDown = txLoadImage ("IMG\\Men\\Girl\\GirlDown.bmp");
+    r.picUp = txLoadImage ("IMG\\Men\\Girl\\GirlUp.bmp");
+    r.picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
+    r.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
+    /*r.picDown = txLoadImage("IMG\\Men\\Robot\\RobotDown.bmp");
+    r.picUp = txLoadImage("IMG\\Men\\Robot\\RobotUp.bmp");
+    r.picLeft = txLoadImage("IMG\\Men\\Robot\\RobotLeft.bmp");
+    r.picRight = txLoadImage("IMG\\Men\\Robot\\RobotRight.bmp");*/
 
-     scene1(b, r, d, p);
+    scene1(b, r, d, p);
 
-     txDeleteDC(r.picDown);
-     txDeleteDC(r.picUp);
-     txDeleteDC(r.picLeft);
-     txDeleteDC(r.picRight);
+    txDeleteDC(r.picDown);
+    txDeleteDC(r.picUp);
+    txDeleteDC(r.picLeft);
+    txDeleteDC(r.picRight);
 
-     txDeleteDC(b.picDown);
-     txDeleteDC(b.picUp);
-     txDeleteDC(b.picLeft);
-     txDeleteDC(b.picRight);
+    txDeleteDC(b.picDown);
+    txDeleteDC(b.picUp);
+    txDeleteDC(b.picLeft);
+    txDeleteDC(b.picRight);
 
-     txDeleteDC(d.picDown);
-     txDeleteDC(d.picUp);
-     txDeleteDC(d.picLeft);
-     txDeleteDC(d.picRight);
- }
+    txDeleteDC(d.picDown);
+    txDeleteDC(d.picUp);
+    txDeleteDC(d.picLeft);
+    txDeleteDC(d.picRight);
+}
