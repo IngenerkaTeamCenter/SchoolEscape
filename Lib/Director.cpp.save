@@ -85,6 +85,12 @@ void moveDirector(Director *d, Point *p)
         d->x = d->x - d->speed;
         d->direction = 2;
     }
+    char str[100];
+    sprintf(str, "%d", x);
+    txTextOut(100, 100, str);
+    char str[100];
+    sprintf(str, "%d", x);
+    txTextOut(100, 100, str);
 }
 
 void drawDirector(Director d)
