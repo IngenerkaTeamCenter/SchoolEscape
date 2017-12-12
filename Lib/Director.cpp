@@ -11,6 +11,7 @@ struct Point
 };
 
 
+
 struct Director
 {
     int x, y;
@@ -50,6 +51,10 @@ void moveDirector(Director *d, Point *p)
     {
         p->nomerPoint = 0;
     }
+    else if ((d->x - p->x2) * (d->x - p->x2) + (d->y - p->y2) * (d->y - p->y2) > d->radius * d->radius && p->nomerPoint == 2)
+    {
+        p->nomerPoint = 0;
+    }
 
     int x, y;
     if (p->nomerPoint == 0)
@@ -85,6 +90,13 @@ void moveDirector(Director *d, Point *p)
         d->x = d->x - d->speed;
         d->direction = 2;
     }
+
+    if (p->nomerPoint == 0)
+        txTextOut(400, 400, "0");
+    if (p->nomerPoint == 1)
+        txTextOut(400, 400, "1");
+    if (p->nomerPoint == 2)
+        txTextOut(400, 400, "2");
 }
 
 void drawDirector(Director d)
