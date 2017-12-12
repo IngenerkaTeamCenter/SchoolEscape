@@ -25,22 +25,22 @@ struct Robot
 
 void drawRobot(Robot r)
 {
-    r.frame = 0;
+
     if (r.direction == DIRECTION_DOWN)
     {
-        txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picDown, r.frame * 65, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picDown, r.frame * 45, 0, RGB(255, 255, 255));
     }
     else if (r.direction == DIRECTION_UP)
     {
-        txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picUp, r.frame * 65, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picUp, r.frame * 47, 0, RGB(255, 255, 255));
     }
     else if (r.direction == DIRECTION_LEFT)
     {
-        txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picLeft, r.frame * 64, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picLeft, r.frame * 45, 0, RGB(255, 255, 255));
     }
     else if (r.direction == DIRECTION_RIGHT)
     {
-        txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picRight, r.frame * 64, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picRight, r.frame * 47, 0, RGB(255, 255, 255));
     }
 }
 
@@ -48,23 +48,23 @@ void moveRobot(Robot* r)
 {
     int predX = r->x;
     int predY = r->y;
-    int maxCountOfFrames = 0;
+    int maxCountOfFrames = 4;
 
     if (r->direction == DIRECTION_RIGHT)
     {
-        r->x += 4;
+        r->x += 2;
     }
     else if (r->direction == DIRECTION_LEFT)
     {
-        r->x -= 4;
+        r->x -= 2;
     }
     else if (r->direction == DIRECTION_UP)
     {
-        r->y -= 4;
+        r->y -= 2;
     }
     else if (r->direction == DIRECTION_DOWN)
     {
-        r->y += 4;
+        r->y += 2;
     }
 
     if (r->x > txGetExtentX() - r->width)
@@ -118,12 +118,12 @@ void moveRobot(Robot* r)
     }
 
 
-    char str[100];
+    /*char str[100];
     sprintf(str, "%d", r->x);  //Writing car_x_coord value to str
     txTextOut(100, 100, str);
 
     sprintf(str, "%d", r->y);  //Writing car_x_coord value to str
-    txTextOut(100, 200, str);
+    txTextOut(100, 200, str);*/
 
 }
 
