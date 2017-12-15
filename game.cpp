@@ -1,7 +1,7 @@
 #include "Lib\\TXLib.h"
-#include "Lib\\Bomzh.cpp"
 #include "Lib\\Robot.cpp"
 #include "Lib\\Director.cpp"
+#include "Lib\\Bomzh.cpp"
 
 #include <iostream>
 #include <fstream>
@@ -37,9 +37,6 @@ Robot r;
 
         drawDirector(d);
         moveDirector(&d, &p);
-
-        //drawDirector(d1);
-        //moveDirector(&d1, &p);
 
         txSleep(10);
     }
@@ -134,7 +131,7 @@ int main()
 
 
     d.speed = 2;
-    d.width = 63;
+    d.width = 58;
     d.height = 96;
     d.PointStartX1 = 27;
     d.PointStartX2 = 24;
@@ -149,12 +146,6 @@ int main()
     d.picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
     d.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
     d.radius = 170;
-    //d.exit_time = 100000;
-    /*Director d1;
-    d1 = d;
-    d1.speed = 4;
-    d1.x = 700;
-    d1.y = 200;*/
 
     Point p;
     p.x = 100;
@@ -168,6 +159,7 @@ int main()
 
     r.width = 50;
     r.height = 62;
+    r.speed = 3;
     r.manyframeRight = 4;
     r.manyframeLeft = 4;
     r.manyframeUp = 4;
