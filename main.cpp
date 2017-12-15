@@ -1,6 +1,8 @@
 #include "Lib\\TXLib.h"
 #include "Lib\\menu.cpp"
 
+
+
 int main()
 {
     txDisableAutoPause();
