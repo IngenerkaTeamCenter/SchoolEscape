@@ -24,19 +24,19 @@ struct Bomzh
 
 void drawBomzh(Bomzh b)
 {
-    if (b.direction == 0)
+    if (b.direction == DIRECTION_DOWN)
     {
         txTransparentBlt(txDC(), b.x - b.PointStartX1, b.y - b.PointStartY, b.width, b.height, b.picDown, b.frame * 65, 0, RGB(255, 255, 255));
     }
-    else if (b.direction == 1)
+    else if (b.direction == DIRECTION_UP)
     {
         txTransparentBlt(txDC(), b.x - b.PointStartX1, b.y - b.PointStartY, b.width, b.height, b.picUp, b.frame * 65, 0, RGB(255, 255, 255));
     }
-    else if (b.direction == 2)
+    else if (b.direction == DIRECTION_LEFT)
     {
         txTransparentBlt(txDC(), b.x - b.PointStartX2, b.y - b.PointStartY, b.width - 6, b.height, b.picLeft, b.frame * 64, 0, RGB(255, 255, 255));
     }
-    else if (b.direction == 3)
+    else if (b.direction == DIRECTION_RIGHT)
     {
         txTransparentBlt(txDC(), b.x - b.PointStartX2, b.y - b.PointStartY, b.width - 6, b.height, b.picRight, b.frame * 64, 0, RGB(255, 255, 255));
     }
@@ -51,25 +51,25 @@ void moveBomzh(Bomzh* b)
     if (GetAsyncKeyState(VK_UP))
     {
         b->y -= b->speed;
-        b->direction = 1;
+        b->direction = DIRECTION_UP;
         maxCountOfFrames = b->manyframeUp;
     }
     else if (GetAsyncKeyState(VK_DOWN))
     {
         b->y += b->speed;
-        b->direction = 0;
+        b->direction = DIRECTION_DOWN;
         maxCountOfFrames = b->manyframeDown;
     }
     else if (GetAsyncKeyState(VK_RIGHT))
     {
         b->x += b->speed;
-        b->direction = 3;
+        b->direction = DIRECTION_RIGHT;
         maxCountOfFrames = b->manyframeRight;
     }
     else if (GetAsyncKeyState(VK_LEFT))
     {
         b->x -= b->speed;
-        b->direction = 2;
+        b->direction = DIRECTION_LEFT;
         maxCountOfFrames = b->manyframeLeft;
     }
 
