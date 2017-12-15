@@ -12,6 +12,7 @@ struct Robot
     int manyframeDown;
     int manyframeLeft;
     int manyframeRight;
+    int speed;
     int width;
     int height;
     int direction; // 0 Down   1  Up   2 Left    3 Right
@@ -52,19 +53,19 @@ void moveRobot(Robot* r)
 
     if (r->direction == DIRECTION_RIGHT)
     {
-        r->x += 2;
+        r->x += r->speed;
     }
     else if (r->direction == DIRECTION_LEFT)
     {
-        r->x -= 2;
+        r->x -= r->speed;
     }
     else if (r->direction == DIRECTION_UP)
     {
-        r->y -= 2;
+        r->y -= r->speed;
     }
     else if (r->direction == DIRECTION_DOWN)
     {
-        r->y += 2;
+        r->y += r->speed;
     }
 
     if (r->x > txGetExtentX() - r->width)
