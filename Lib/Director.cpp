@@ -39,11 +39,6 @@ struct Director
 
 void moveDirector(Director *d, Point *p)
 {
-
-    int predX = d->x;
-    int predY = d->y;
-    int maxCountOfFrames = 4;
-
     if((d->x - p->x2) * (d->x - p->x2) + (d->y - p->y2) * (d->y - p->y2) <= d->radius * d->radius)
     {
         p->nomerPoint = 2;
@@ -81,19 +76,19 @@ void moveDirector(Director *d, Point *p)
     if(d->y < y)
     {
         d->y = d->y + d->speed;
-        d->direction = DIRECTION_DOWN;
+        d->direction = 0;
     }
     else if(d->y > y){
         d->y = d->y - d->speed;
-        d->direction = DIRECTION_UP;
+        d->direction = 1;
     }
     if(d->x < x)
     {
         d->x = d->x + d->speed;
-        d->direction = DIRECTION_RIGHT;
+        d->direction = 3;
     } else if(d->x > x){
         d->x = d->x - d->speed;
-        d->direction = DIRECTION_LEFT;
+        d->direction = 2;
     }
 
     if (p->nomerPoint == 0)
@@ -102,46 +97,26 @@ void moveDirector(Director *d, Point *p)
         txTextOut(400, 400, "1");
     if (p->nomerPoint == 2)
         txTextOut(400, 400, "2");
-
-    if (predX != d->x || predY != d->y)
-    {
-        if (d->frame == 0)
-        {
-            d->frame = 1;
-            d->frameTimer = 0;
-        }
-        else
-        {
-            d->frameTimer++;
-            if (d->frameTimer >= 20)
-            {
-                d->frame++;
-                if (d->frame >= maxCountOfFrames)
-                    d->frame = 1;
-                d->frameTimer = 0;
-            }
-        }
-    }
 }
 
 void drawDirector(Director d)
 {
- if (d.direction == DIRECTION_DOWN)
+ if (d.direction == 0)
 {
-txTransparentBlt(txDC(),  d.x - d.PointStartX1 , d.y - d.PointStartY, d.width, d.height, d.picDown, d.frame * 61, 0, RGB(255, 255, 255));
+txTransparentBlt(txDC(),  d.x - d.PointStartX1 , d.y - d.PointStartY, d.width, d.height, d.picDown, d.frame * 54, 0, RGB(255, 255, 255));
 }
 
-if (d.direction == DIRECTION_UP)
+if (d.direction == 1)
 {
-txTransparentBlt(txDC(), d.x - d.PointStartX1 , d.y - d.PointStartY , d.width, d.height, d.picUp, d.frame * 61, 0, RGB(255, 255, 255));
+txTransparentBlt(txDC(), d.x - d.PointStartX1 , d.y - d.PointStartY , d.width, d.height, d.picUp, d.frame * 54, 0, RGB(255, 255, 255));
 }
 
-if (d.direction == DIRECTION_LEFT)
+if (d.direction == 2)
 {
-txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY, d.width - 6, d.height, d.picLeft, d.frame * 61, 0, RGB(255, 255, 255));
+txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY, d.width - 6, d.height, d.picLeft, d.frame * 48, 0, RGB(255, 255, 255));
 }
-if (d.direction == DIRECTION_RIGHT)
+if (d.direction == 3)
 {
-txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
+txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 48, 0, RGB(255, 255, 255));
 }
 }
