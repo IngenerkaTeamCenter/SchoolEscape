@@ -1,9 +1,5 @@
 #include "TXLib.h"
-
-const int DIRECTION_DOWN = 0;
-const int DIRECTION_UP = 1;
-const int DIRECTION_LEFT = 2;
-const int DIRECTION_RIGHT = 3;
+#include "consmenu.cpp"
 
 struct Robot
 {
@@ -12,7 +8,6 @@ struct Robot
     int manyframeDown;
     int manyframeLeft;
     int manyframeRight;
-    int speed;
     int width;
     int height;
     int direction; // 0 Down   1  Up   2 Left    3 Right
@@ -53,19 +48,19 @@ void moveRobot(Robot* r)
 
     if (r->direction == DIRECTION_RIGHT)
     {
-        r->x += r->speed;
+        r->x += 2;
     }
     else if (r->direction == DIRECTION_LEFT)
     {
-        r->x -= r->speed;
+        r->x -= 2;
     }
     else if (r->direction == DIRECTION_UP)
     {
-        r->y -= r->speed;
+        r->y -= 2;
     }
     else if (r->direction == DIRECTION_DOWN)
     {
-        r->y += r->speed;
+        r->y += 2;
     }
 
     if (r->x > txGetExtentX() - r->width)

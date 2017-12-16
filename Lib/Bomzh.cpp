@@ -1,4 +1,5 @@
 #include "TXLib.h"
+#include "consmenu.cpp"
 
 struct Bomzh
 {
@@ -24,19 +25,19 @@ struct Bomzh
 
 void drawBomzh(Bomzh b)
 {
-    if (b.direction == DIRECTION_DOWN)
+    if (b.direction == 0)
     {
         txTransparentBlt(txDC(), b.x - b.PointStartX1, b.y - b.PointStartY, b.width, b.height, b.picDown, b.frame * 65, 0, RGB(255, 255, 255));
     }
-    else if (b.direction == DIRECTION_UP)
+    else if (b.direction == 1)
     {
         txTransparentBlt(txDC(), b.x - b.PointStartX1, b.y - b.PointStartY, b.width, b.height, b.picUp, b.frame * 65, 0, RGB(255, 255, 255));
     }
-    else if (b.direction == DIRECTION_LEFT)
+    else if (b.direction == 2)
     {
         txTransparentBlt(txDC(), b.x - b.PointStartX2, b.y - b.PointStartY, b.width - 6, b.height, b.picLeft, b.frame * 64, 0, RGB(255, 255, 255));
     }
-    else if (b.direction == DIRECTION_RIGHT)
+    else if (b.direction == 3)
     {
         txTransparentBlt(txDC(), b.x - b.PointStartX2, b.y - b.PointStartY, b.width - 6, b.height, b.picRight, b.frame * 64, 0, RGB(255, 255, 255));
     }
@@ -51,25 +52,25 @@ void moveBomzh(Bomzh* b)
     if (GetAsyncKeyState(VK_UP))
     {
         b->y -= b->speed;
-        b->direction = DIRECTION_UP;
+        b->direction = 1;
         maxCountOfFrames = b->manyframeUp;
     }
     else if (GetAsyncKeyState(VK_DOWN))
     {
         b->y += b->speed;
-        b->direction = DIRECTION_DOWN;
+        b->direction = 0;
         maxCountOfFrames = b->manyframeDown;
     }
     else if (GetAsyncKeyState(VK_RIGHT))
     {
         b->x += b->speed;
-        b->direction = DIRECTION_RIGHT;
+        b->direction = 3;
         maxCountOfFrames = b->manyframeRight;
     }
     else if (GetAsyncKeyState(VK_LEFT))
     {
         b->x -= b->speed;
-        b->direction = DIRECTION_LEFT;
+        b->direction = 2;
         maxCountOfFrames = b->manyframeLeft;
     }
 

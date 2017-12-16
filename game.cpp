@@ -1,17 +1,9 @@
 #include "Lib\\TXLib.h"
+#include "Lib\\Bomzh.cpp"
 #include "Lib\\Robot.cpp"
 #include "Lib\\Director.cpp"
-#include "Lib\\Bomzh.cpp"
+#include "Lib\\consmenu.cpp"
 
-#include <iostream>
-#include <fstream>
-#include <string>
-
-using namespace std;
-
-Director d;
-Bomzh b;
-Robot r;
  void scene1(Bomzh b, Robot r, Director d, Point p)
  {
 
@@ -38,6 +30,9 @@ Robot r;
         drawDirector(d);
         moveDirector(&d, &p);
 
+        //drawDirector(d1);
+        //moveDirector(&d1, &p);
+
         txSleep(10);
     }
     txDeleteDC(fon);
@@ -58,60 +53,14 @@ void DeletePics(HDC* picDown, HDC* picUp, HDC* picLeft, HDC* picRight)
     txDeleteDC(*picRight);
  }
 
-void MapSchitivanie()
-{
-    d.x = 100;
-    d.y = 100;
-    b.x = 300;
-    b.y = 500;
-    r.x = 700;
-    r.y = 100;
-    ifstream Map;
-    string stroka_Personage;
-    string stroka_X;
-    string stroka_Y;
-    Map.open("Lib\\Map.txt");
-
-    while (Map.good()) {
-
-        getline (Map, stroka_Personage);
-
-        if (strcmp(stroka_Personage.c_str(), "director") == 0)
-        {
-            getline (Map, stroka_X);
-            d.x = atoi(stroka_X.c_str());
-            getline (Map, stroka_Y);
-            d.y = atoi(stroka_Y.c_str());
-        }
-
-        if (strcmp(stroka_Personage.c_str(), "bomzh") == 0)
-        {
-            getline (Map, stroka_X);
-            b.x = atoi(stroka_X.c_str());
-            getline (Map, stroka_Y);
-            b.y = atoi(stroka_Y.c_str());
-        }
-
-        if (strcmp(stroka_Personage.c_str(), "robot") == 0)
-        {
-            getline (Map, stroka_X);
-            r.x = atoi(stroka_X.c_str());
-            getline (Map, stroka_Y);
-            r.y = atoi(stroka_Y.c_str());
-        }
-            }
-
-    Map.close();
-}
-
 int main()
 {
-
-    MapSchitivanie();
     txCreateWindow (1090, 654);
     txBegin();
 
-
+    Bomzh b;
+    b.x = 300;
+    b.y = 500;
     b.width = 62;
     b.height = 84;
     b.speed = 7;
@@ -130,8 +79,11 @@ int main()
     b.picRight = txLoadImage("IMG\\Men\\Homeless\\HomelessRight.bmp");
 
 
+    Director d;
+    d.x = 100;
+    d.y = 100;
     d.speed = 2;
-    d.width = 58;
+    d.width = 63;
     d.height = 96;
     d.PointStartX1 = 27;
     d.PointStartX2 = 24;
@@ -146,6 +98,12 @@ int main()
     d.picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
     d.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
     d.radius = 170;
+    //d.exit_time = 100000;
+    /*Director d1;
+    d1 = d;
+    d1.speed = 4;
+    d1.x = 700;
+    d1.y = 200;*/
 
     Point p;
     p.x = 100;
@@ -156,10 +114,11 @@ int main()
     p.y2 = 200;
     p.nomerPoint = 1;
 
-
+    Robot r;
+    r.x = 700;
+    r.y = 100;
     r.width = 50;
     r.height = 62;
-    r.speed = 3;
     r.manyframeRight = 4;
     r.manyframeLeft = 4;
     r.manyframeUp = 4;
