@@ -1,8 +1,9 @@
-const int OKNO_GLAVNOGO_MENU = 1;
+/*const int OKNO_GLAVNOGO_MENU = 1;
 const int OKNO_PERSONAGA = 2;
 const int OKNO_PODTVERGDENIA = 22;
 const int OKNO_GAME = 222;
-const int OKNO_NASTROEK = 3;
+const int OKNO_NASTROEK = 3;*/
+#include "consmenu.cpp"
 
 struct Button
 {

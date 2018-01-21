@@ -12,3 +12,5 @@ const int DIRECTION_DOWN = 0;
 const int DIRECTION_UP = 1;
 const int DIRECTION_LEFT = 2;
 const int DIRECTION_RIGHT = 3;
+
+const int GameMode = 1;
