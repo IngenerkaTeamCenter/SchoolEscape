@@ -1,4 +1,6 @@
 #include "TXLib.h"
+#include "consmenu.cpp"
+
 
 
 struct Point
@@ -96,12 +98,12 @@ void moveDirector(Director *d, Point *p)
         d->direction = DIRECTION_LEFT;
     }
 
-    if (p->nomerPoint == 0)
-        txTextOut(400, 400, "0");
-    if (p->nomerPoint == 1)
-        txTextOut(400, 400, "1");
-    if (p->nomerPoint == 2)
-        txTextOut(400, 400, "2");
+    if(GameMode == 1)
+    {
+        char str[100];
+        sprintf(str, "%d", p->nomerPoint);
+        txTextOut(400, 400, str);
+    }
 
     if (predX != d->x || predY != d->y)
     {

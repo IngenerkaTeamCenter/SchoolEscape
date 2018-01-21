@@ -1,11 +1,8 @@
 director
-300
-1000
-director
 400
 1000
 bomzh
-1100
+500
 500
 robot
 300
