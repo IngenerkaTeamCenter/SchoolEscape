@@ -128,22 +128,20 @@ void moveDirector(Director *d, Point *p)
 
 void drawDirector(Director d)
 {
- if (d.direction == DIRECTION_DOWN)
-{
-txTransparentBlt(txDC(),  d.x - d.PointStartX1 , d.y - d.PointStartY, d.width, d.height, d.picDown, d.frame * 61, 0, RGB(255, 255, 255));
-}
-
-if (d.direction == DIRECTION_UP)
-{
-txTransparentBlt(txDC(), d.x - d.PointStartX1 , d.y - d.PointStartY , d.width, d.height, d.picUp, d.frame * 61, 0, RGB(255, 255, 255));
-}
-
-if (d.direction == DIRECTION_LEFT)
-{
-txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY, d.width - 6, d.height, d.picLeft, d.frame * 61, 0, RGB(255, 255, 255));
-}
-if (d.direction == DIRECTION_RIGHT)
-{
-txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
-}
+    if (d.direction == DIRECTION_DOWN)
+    {
+        txTransparentBlt(txDC(),  d.x - d.PointStartX1 , d.y - d.PointStartY, d.width, d.height, d.picDown, d.frame * 61, 0, RGB(255, 255, 255));
+    }
+    else if (d.direction == DIRECTION_UP)
+    {
+        txTransparentBlt(txDC(), d.x - d.PointStartX1 , d.y - d.PointStartY , d.width, d.height, d.picUp, d.frame * 61, 0, RGB(255, 255, 255));
+    }
+    else if (d.direction == DIRECTION_LEFT)
+    {
+        txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY, d.width - 6, d.height, d.picLeft, d.frame * 61, 0, RGB(255, 255, 255));
+    }
+    else if (d.direction == DIRECTION_RIGHT)
+    {
+        txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
+    }
 }

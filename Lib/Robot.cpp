@@ -64,28 +64,28 @@ void moveRobot(Robot* r)
         r->y += r->speed;
     }
 
-    if (r->x > txGetExtentX() - 100 - r->width)
+    if (r->x > txGetExtentX() - r->width)
     {
         while (r->direction == DIRECTION_RIGHT)
         {
             r->direction = random(4);
         }
     }
-    else if (r->x < 260 + r->width)
+    else if (r->x < 0 + r->width)
     {
         while (r->direction == DIRECTION_LEFT)
         {
             r->direction = random(4);
         }
     }
-    if (r->y > txGetExtentY() - 20 - r->height)
+    if (r->y > txGetExtentY() - r->height)
     {
         while (r->direction == DIRECTION_DOWN)
         {
             r->direction = random(4);
         }
     }
-    else if (r->y < 200 + r->height)
+    else if (r->y < 0 + r->height)
     {
         while (r->direction == DIRECTION_UP)
         {
