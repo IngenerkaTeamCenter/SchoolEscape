@@ -2,6 +2,8 @@
 #include "Lib\\Robot.cpp"
 #include "Lib\\Director.cpp"
 #include "Lib\\Bomzh.cpp"
+#include "Lib\\consmenu.cpp"
+
 
 #include <iostream>
 #include <fstream>
@@ -22,7 +24,10 @@ Robot r;
         //txRectangle(0, 0, 1200, 900);
         txBitBlt(txDC(), 0, 0, 1200, 900, fon, 0, 0);
 
-        txCircle(d.x, d.y, d.radius);
+        if(GameMode == 1)
+        {
+            txCircle(d.x, d.y, d.radius);
+        }
 
         moveBomzh(&b);
         drawBomzh(b);
@@ -37,6 +42,7 @@ Robot r;
 
         drawDirector(d);
         moveDirector(&d, &p);
+
 
         txSleep(10);
     }
@@ -104,13 +110,21 @@ void MapSchitivanie()
     Map.close();
 }
 
-int main()
+int main(int argc, char *argv[])
 {
+    const char* nomerPerson;
+    if (argc > 1)
+    {
+        nomerPerson = argv[1];
+    }
+    else
+    {
+        nomerPerson = "2";
+    }
 
     MapSchitivanie();
     txCreateWindow (1090, 654);
     txBegin();
-
 
     b.width = 62;
     b.height = 84;
@@ -132,7 +146,7 @@ int main()
 
     d.speed = 2;
     d.width = 58;
-    d.height = 96;
+    d.height = 55;
     d.PointStartX1 = 27;
     d.PointStartX2 = 24;
     d.PointStartY = 74;
@@ -141,11 +155,28 @@ int main()
     d.manyframeUp = 4;
     d.manyframeDown = 4;
     directionFrameFrameTimer(&d.direction, &d.frame, &d.frameTimer);
-    d.picDown = txLoadImage ("IMG\\Men\\Girl\\GirlDown.bmp");
-    d.picUp = txLoadImage ("IMG\\Men\\Girl\\GirlUp.bmp");
-    d.picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
-    d.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
+    if(strcmp(nomerPerson, "2") == 0)
+    {
+        d.picDown = txLoadImage ("IMG\\Men\\Robot\\RobotDown.bmp");
+        d.picUp = txLoadImage ("IMG\\Men\\Robot\\RobotUp.bmp");
+        d.picLeft = txLoadImage ("IMG\\Men\\Robot\\RobotLeft.bmp");
+        d.picRight = txLoadImage ("IMG\\Men\\Robot\\RobotRight.bmp");
+    } else if(strcmp(nomerPerson, "1") == 0)
+    {
+        d.picDown = txLoadImage ("IMG\\Men\\Homeless\\HomelessDown.bmp");
+        d.picUp = txLoadImage ("IMG\\Men\\Homeless\\HomelessUp.bmp");
+        d.picLeft = txLoadImage ("IMG\\Men\\Homeless\\HomelessLeft.bmp");
+        d.picRight = txLoadImage ("IMG\\Men\\Homeless\\HomelessRight.bmp");
+    } else if(strcmp(nomerPerson, "3") == 0)
+    {
+        d.picDown = txLoadImage ("IMG\\Men\\Girl\\GirlDown.bmp");
+        d.picUp = txLoadImage ("IMG\\Men\\Girl\\GirlUp.bmp");
+        d.picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
+        d.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
+    }
     d.radius = 170;
+
+
 
     Point p;
     p.x = 100;
