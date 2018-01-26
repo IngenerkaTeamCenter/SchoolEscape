@@ -28,6 +28,7 @@ struct Menu
 
 void rabotaMenu(int Window, Menu m)
 {
+    int nomerPerson = 1;
 
     while (1)
     {
@@ -84,6 +85,7 @@ void rabotaMenu(int Window, Menu m)
                txMouseButtons() == 1)
             {
                 Window = OKNO_PODTVERGDENIA;
+                nomerPerson = 1;
                 txClear();
                 txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
                 txBitBlt(txDC(), m.Person1.x, m.Person1.y,           150, 319, m.Person1.pic, 0, 0);
@@ -98,6 +100,7 @@ void rabotaMenu(int Window, Menu m)
                txMouseButtons() == 1)
             {
                 Window = OKNO_PODTVERGDENIA;
+                nomerPerson = 2;
                 txClear();
                 txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
                 txBitBlt(txDC(), m.Person1.x, m.Person1.y,           150, 319, m.Person2.pic, 0, 0);
@@ -112,6 +115,7 @@ void rabotaMenu(int Window, Menu m)
                txMouseButtons() == 1)
             {
                 Window = OKNO_PODTVERGDENIA;
+                nomerPerson = 3;
                 txClear();
                 txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
                 txBitBlt(txDC(), m.Person1.x, m.Person1.y,           200, 300, m.Person3.pic, 0, 0);
@@ -143,7 +147,12 @@ void rabotaMenu(int Window, Menu m)
                 txClear();
                 txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
                 //txTextOut(100, 100, "dsgsdgsdgf");
-                system("game.exe");
+                char cmd[100];
+                sprintf (cmd, "game.exe %d" , nomerPerson);
+
+                txTextOut(200, 200, cmd);
+                txSleep(1000);
+                system(cmd);
                 txSleep(500);
                 break;
             }
