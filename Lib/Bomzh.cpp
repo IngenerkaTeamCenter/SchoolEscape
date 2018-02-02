@@ -1,3 +1,5 @@
+#pragma once
+
 #include "TXLib.h"
 
 struct Bomzh

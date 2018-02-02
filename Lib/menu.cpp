@@ -85,7 +85,7 @@ void rabotaMenu(int Window, Menu m)
                txMouseButtons() == 1)
             {
                 Window = OKNO_PODTVERGDENIA;
-                nomerPerson = 1;
+                nomerPerson = 2;
                 txClear();
                 txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
                 txBitBlt(txDC(), m.Person1.x, m.Person1.y,           150, 319, m.Person1.pic, 0, 0);
@@ -100,7 +100,7 @@ void rabotaMenu(int Window, Menu m)
                txMouseButtons() == 1)
             {
                 Window = OKNO_PODTVERGDENIA;
-                nomerPerson = 2;
+                nomerPerson = 1;
                 txClear();
                 txBitBlt(txDC(), 0, 0, txGetExtentX(), txGetExtentY(), m.fon , 0, 0);
                 txBitBlt(txDC(), m.Person1.x, m.Person1.y,           150, 319, m.Person2.pic, 0, 0);
