@@ -23,8 +23,10 @@ using namespace std;
 
 Director d;
 Bomzh b;
-Robot r;
- void scene1(Bomzh b, Robot r, Director d, Point p)
+Robot robots[100];
+int nomerRobota = 0;
+
+ void scene1(Bomzh b, Robot* r, Director d, Point p)
  {
 
     HDC fon = txLoadImage("IMG\\Maps\\Level1\\canteen.bmp");
@@ -44,8 +46,10 @@ Robot r;
         moveBomzh(&b);
         drawBomzh(b);
 
-        moveRobot(&r);
-        drawRobot(r);
+        moveRobot(&r[0]);
+        drawRobot(r[0]);
+        moveRobot(&r[1]);
+        drawRobot(r[1]);
 
         p.x2 = b.x;
         p.y2 = b.y;
@@ -82,8 +86,8 @@ void MapSchitivanie()
     d.y = 100;
     b.x = 300;
     b.y = 500;
-    r.x = 700;
-    r.y = 100;
+    robots[nomerRobota].x = 700;
+    robots[nomerRobota].y = 100;
     ifstream Map;
     string stroka_Personage;
     string stroka_X;
@@ -113,11 +117,12 @@ void MapSchitivanie()
         if (strcmp(stroka_Personage.c_str(), "robot") == 0)
         {
             getline (Map, stroka_X);
-            r.x = atoi(stroka_X.c_str());
+            robots[nomerRobota].x = atoi(stroka_X.c_str());
             getline (Map, stroka_Y);
-            r.y = atoi(stroka_Y.c_str());
+            robots[nomerRobota].y = atoi(stroka_Y.c_str());
+            nomerRobota++;
         }
-            }
+    }
 
     Map.close();
 }
@@ -200,22 +205,29 @@ int main(int argc, char *argv[])
     p.nomerPoint = 1;
 
 
-    r.width = 50;
-    r.height = 62;
-    r.speed = 3;
-    r.manyframeRight = 4;
-    r.manyframeLeft = 4;
-    r.manyframeUp = 4;
-    r.manyframeDown = 4;
-    directionFrameFrameTimer(&r.direction, &r.frame, &r.frameTimer);
-    r.picDown = txLoadImage("IMG\\Men\\Robot\\RobotDown.bmp");
-    r.picUp = txLoadImage("IMG\\Men\\Robot\\RobotUp.bmp");
-    r.picLeft = txLoadImage("IMG\\Men\\Robot\\RobotLeft.bmp");
-    r.picRight = txLoadImage("IMG\\Men\\Robot\\RobotRight.bmp");
+    for ( int nomer = 0; nomer < nomerRobota; nomer++)
+    {
+        robots[nomer].height = 62;
+        robots[nomer].speed = 10;
+        robots[nomer].manyframeRight = 4;
+        robots[nomer].manyframeLeft = 4;
+        robots[nomer].manyframeUp = 4;
+        robots[nomer].manyframeDown = 4;
+        directionFrameFrameTimer(&robots[nomer].direction, &robots[nomer].frame, &robots[nomer].frameTimer);
+        robots[nomer].picDown = txLoadImage("IMG\\Men\\Robot\\RobotDown.bmp");
+        robots[nomer].picUp = txLoadImage("IMG\\Men\\Robot\\RobotUp.bmp");
+        robots[nomer].picLeft = txLoadImage("IMG\\Men\\Robot\\RobotLeft.bmp");
+        robots[nomer].picRight = txLoadImage("IMG\\Men\\Robot\\RobotRight.bmp");
+        robots[nomer].width = 50;
 
-    scene1(b, r, d, p);
+    }
+
+    scene1(b, robots, d, p);
 
     DeletePics(&d.picDown, &d.picUp, &d.picLeft, &d.picRight);
     DeletePics(&b.picDown, &b.picUp, &b.picLeft, &b.picRight);
-    DeletePics(&r.picDown, &r.picUp, &r.picLeft, &r.picRight);
+    for ( int nomer = 0; nomer < nomerRobota; nomer++)
+    {
+        DeletePics(&robots[nomer].picDown, &robots[nomer].picUp, &robots[nomer].picLeft, &robots[nomer].picRight);
+    }
 }
