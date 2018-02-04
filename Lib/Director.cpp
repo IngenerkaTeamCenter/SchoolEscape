@@ -1,5 +1,9 @@
 #include "TXLib.h"
 #include "consmenu.cpp"
+#include "Bomzh.cpp"
+#include <iostream>
+#include <string>
+
 
 
 
@@ -34,9 +38,20 @@ struct Director
     HDC picRight;
     int frame;
     int frameTimer;
-    int radius;//радиус обзора
+    int radius;//Ч ЧђЧ”ЧЧЈЧЎ ЧћЧ‘Ч—ЧћЧ Чђ
     //int exit_time;
 };
+
+void CatchCheck(Bomzh b, Director d)
+{
+    if((d.x - b.x) * (d.x - b.x) + (d.y - b.y) * (d.y - b.y) <= 75)
+        {
+            txTextOut(0, 0, "game over");
+            //cout << "С‚С‹ РѕР±Р»Р°Р¶Р°Р»СЃСЏ";
+            exit(1);
+            txDestroyWindow();
+        }
+}
 
 
 void moveDirector(Director *d, Point *p)

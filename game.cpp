@@ -9,6 +9,16 @@
 #include <fstream>
 #include <string>
 
+/*void CatchCheck(Bomzh b, Director d)
+{
+    if((d.x - b.x) * (d.x - b.x) + (d.y - b.y) * (d.y - b.y) <= 75)
+        {
+            cout << "ты облажался";
+            exit(1);
+            txDestroyWindow();
+        }
+}*/
+
 using namespace std;
 
 Director d;
@@ -28,6 +38,8 @@ Robot r;
         {
             txCircle(d.x, d.y, d.radius);
         }
+
+        CatchCheck(b, d);
 
         moveBomzh(&b);
         drawBomzh(b);
@@ -138,15 +150,30 @@ int main(int argc, char *argv[])
     b.manyframeDown = 4;
     directionFrameFrameTimer(&b.direction, &b.frame, &b.frameTimer);
     b.frameTimer = 0;
-    b.picDown = txLoadImage("IMG\\Men\\Homeless\\HomelessDown.bmp");
-    b.picUp = txLoadImage("IMG\\Men\\Homeless\\HomelessUp.bmp");
-    b.picLeft = txLoadImage("IMG\\Men\\Homeless\\HomelessLeft.bmp");
-    b.picRight = txLoadImage("IMG\\Men\\Homeless\\HomelessRight.bmp");
+    if(strcmp(nomerPerson, "3") == 0)
+    {
+        b.picDown = txLoadImage ("IMG\\Men\\Robot\\RobotDown.bmp");
+        b.picUp = txLoadImage ("IMG\\Men\\Robot\\RobotUp.bmp");
+        b.picLeft = txLoadImage ("IMG\\Men\\Robot\\RobotLeft.bmp");
+        b.picRight = txLoadImage ("IMG\\Men\\Robot\\RobotRight.bmp");
+    } else if(strcmp(nomerPerson, "2") == 0)
+    {
+        b.picDown = txLoadImage ("IMG\\Men\\Homeless\\HomelessDown.bmp");
+        b.picUp = txLoadImage ("IMG\\Men\\Homeless\\HomelessUp.bmp");
+        b.picLeft = txLoadImage ("IMG\\Men\\Homeless\\HomelessLeft.bmp");
+        b.picRight = txLoadImage ("IMG\\Men\\Homeless\\HomelessRight.bmp");
+    } else if(strcmp(nomerPerson, "1") == 0)
+    {
+        b.picDown = txLoadImage ("IMG\\Men\\Girl\\GirlDown.bmp");
+        b.picUp = txLoadImage ("IMG\\Men\\Girl\\GirlUp.bmp");
+        b.picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
+        b.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
+    }
 
 
     d.speed = 2;
-    d.width = 58;
-    d.height = 55;
+    d.width = 62;
+    d.height = 84;
     d.PointStartX1 = 27;
     d.PointStartX2 = 24;
     d.PointStartY = 74;
@@ -155,25 +182,10 @@ int main(int argc, char *argv[])
     d.manyframeUp = 4;
     d.manyframeDown = 4;
     directionFrameFrameTimer(&d.direction, &d.frame, &d.frameTimer);
-    if(strcmp(nomerPerson, "2") == 0)
-    {
-        d.picDown = txLoadImage ("IMG\\Men\\Robot\\RobotDown.bmp");
-        d.picUp = txLoadImage ("IMG\\Men\\Robot\\RobotUp.bmp");
-        d.picLeft = txLoadImage ("IMG\\Men\\Robot\\RobotLeft.bmp");
-        d.picRight = txLoadImage ("IMG\\Men\\Robot\\RobotRight.bmp");
-    } else if(strcmp(nomerPerson, "1") == 0)
-    {
-        d.picDown = txLoadImage ("IMG\\Men\\Homeless\\HomelessDown.bmp");
-        d.picUp = txLoadImage ("IMG\\Men\\Homeless\\HomelessUp.bmp");
-        d.picLeft = txLoadImage ("IMG\\Men\\Homeless\\HomelessLeft.bmp");
-        d.picRight = txLoadImage ("IMG\\Men\\Homeless\\HomelessRight.bmp");
-    } else if(strcmp(nomerPerson, "3") == 0)
-    {
-        d.picDown = txLoadImage ("IMG\\Men\\Girl\\GirlDown.bmp");
-        d.picUp = txLoadImage ("IMG\\Men\\Girl\\GirlUp.bmp");
-        d.picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
-        d.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
-    }
+    d.picDown = txLoadImage ("IMG\\Men\\Girl\\GirlDown.bmp");
+    d.picUp = txLoadImage ("IMG\\Men\\Girl\\GirlUp.bmp");
+    d.picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
+    d.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
     d.radius = 170;
 
 
