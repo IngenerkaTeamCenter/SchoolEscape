@@ -21,12 +21,14 @@
 
 using namespace std;
 
-Director d;
+Director director[15];
+int nomerDirector = 0;
+
 Bomzh b;
 Robot robots[100];
 int nomerRobota = 0;
 
- void scene1(Bomzh b, Robot* r, Director d, Point p)
+ void scene1(Bomzh b, Robot* r, Director* d, Point p)
  {
 
     HDC fon = txLoadImage("IMG\\Maps\\Level1\\canteen.bmp");
@@ -38,10 +40,10 @@ int nomerRobota = 0;
 
         if(GameMode == 1)
         {
-            txCircle(d.x, d.y, d.radius);
+            txCircle(director[0].x, director[0].y, director[0].radius);
         }
 
-        CatchCheck(b, d);
+        CatchCheck(b, director[nomerDirector]);
 
         moveBomzh(&b);
         drawBomzh(b);
@@ -54,10 +56,11 @@ int nomerRobota = 0;
         p.x2 = b.x;
         p.y2 = b.y;
 
+        drawDirector(d[0]);
+        moveDirector(&d[0], &p);
 
-
-        drawDirector(d);
-        moveDirector(&d, &p);
+        /*drawDirector(d);
+        moveDirector(&d, &p);*/
 
 
         txSleep(10);
@@ -82,8 +85,8 @@ void DeletePics(HDC* picDown, HDC* picUp, HDC* picLeft, HDC* picRight)
 
 void MapSchitivanie()
 {
-    d.x = 100;
-    d.y = 100;
+    director[nomerDirector].x = 100;
+    director[nomerDirector].y = 100;
     b.x = 300;
     b.y = 500;
     robots[nomerRobota].x = 700;
@@ -101,9 +104,12 @@ void MapSchitivanie()
         if (strcmp(stroka_Personage.c_str(), "director") == 0)
         {
             getline (Map, stroka_X);
-            d.x = atoi(stroka_X.c_str());
+            //d.x = atoi(stroka_X.c_str());
+            director[nomerDirector].x = atoi(stroka_X.c_str());
             getline (Map, stroka_Y);
-            d.y = atoi(stroka_Y.c_str());
+            //d.y = atoi(stroka_Y.c_str());
+            robots[nomerDirector].y = atoi(stroka_X.c_str());
+            nomerDirector++;
         }
 
         if (strcmp(stroka_Personage.c_str(), "bomzh") == 0)
@@ -175,23 +181,25 @@ int main(int argc, char *argv[])
         b.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
     }
 
-
-    d.speed = 2;
-    d.width = 62;
-    d.height = 84;
-    d.PointStartX1 = 27;
-    d.PointStartX2 = 24;
-    d.PointStartY = 74;
-    d.manyframeRight = 4;
-    d.manyframeLeft = 4;
-    d.manyframeUp = 4;
-    d.manyframeDown = 4;
-    directionFrameFrameTimer(&d.direction, &d.frame, &d.frameTimer);
-    d.picDown = txLoadImage ("IMG\\Men\\Girl\\GirlDown.bmp");
-    d.picUp = txLoadImage ("IMG\\Men\\Girl\\GirlUp.bmp");
-    d.picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
-    d.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
-    d.radius = 170;
+    for (int nomer = 0; nomer < nomerRobota; nomer++)
+    {
+    director[nomer].speed = 2;
+    director[nomer].width = 62;
+    director[nomer].height = 84;
+    director[nomer].PointStartX1 = 27;
+    director[nomer].PointStartX2 = 24;
+    director[nomer].PointStartY = 74;
+    director[nomer].manyframeRight = 4;
+    director[nomer].manyframeLeft = 4;
+    director[nomer].manyframeUp = 4;
+    director[nomer].manyframeDown = 4;
+    directionFrameFrameTimer(&director[nomer].direction, &director[nomer].frame, &director[nomer].frameTimer);
+    director[nomer].picDown = txLoadImage ("IMG\\Men\\Girl\\GirlDown.bmp");
+    director[nomer].picUp = txLoadImage ("IMG\\Men\\Girl\\GirlUp.bmp");
+    director[nomer].picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
+    director[nomer].picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
+    director[nomer].radius = 170;
+    }
 
 
 
@@ -222,12 +230,17 @@ int main(int argc, char *argv[])
 
     }
 
-    scene1(b, robots, d, p);
+    scene1(b, robots, director, p);
 
-    DeletePics(&d.picDown, &d.picUp, &d.picLeft, &d.picRight);
+    //DeletePics(&d.picDown, &d.picUp, &d.picLeft, &d.picRight);
     DeletePics(&b.picDown, &b.picUp, &b.picLeft, &b.picRight);
-    for ( int nomer = 0; nomer < nomerRobota; nomer++)
+    for (int nomer = 0; nomer < nomerRobota; nomer++)
     {
         DeletePics(&robots[nomer].picDown, &robots[nomer].picUp, &robots[nomer].picLeft, &robots[nomer].picRight);
+    }
+
+    for (int nomer = 0; nomer < nomerDirector; nomer++)
+    {
+        DeletePics(&director[nomer].picDown, &director[nomer].picUp, &director[nomer].picLeft, &director[nomer].picRight);
     }
 }
