@@ -28,7 +28,7 @@ Bomzh b;
 Robot robots[100];
 int nomerRobota = 0;
 
- void scene1(Bomzh b, Robot* r, Director* d, Point p)
+ void scene1(Bomzh b, Robot* r, Director* d, Point p, int nomer_robotov, int nomer_directorov)
  {
 
     HDC fon = txLoadImage("IMG\\Maps\\Level1\\canteen.bmp");
@@ -48,16 +48,20 @@ int nomerRobota = 0;
         moveBomzh(&b);
         drawBomzh(b);
 
-        moveRobot(&r[0]);
-        drawRobot(r[0]);
-        moveRobot(&r[1]);
-        drawRobot(r[1]);
+        for (int nomer = 0; nomer < nomer_robotov; nomer++)
+        {
+            moveRobot(&r[nomer]);
+            drawRobot(r[nomer]);
+        }
+
+        for (int nomer = 0; nomer < nomer_directorov; nomer++)
+        {
+            drawDirector(d[nomer]);
+            moveDirector(&d[nomer], &p);
+        }
 
         p.x2 = b.x;
         p.y2 = b.y;
-
-        drawDirector(d[0]);
-        moveDirector(&d[0], &p);
 
         /*drawDirector(d);
         moveDirector(&d, &p);*/
@@ -194,11 +198,21 @@ int main(int argc, char *argv[])
     director[nomer].manyframeUp = 4;
     director[nomer].manyframeDown = 4;
     directionFrameFrameTimer(&director[nomer].direction, &director[nomer].frame, &director[nomer].frameTimer);
-    director[nomer].picDown = txLoadImage ("IMG\\Men\\Girl\\GirlDown.bmp");
-    director[nomer].picUp = txLoadImage ("IMG\\Men\\Girl\\GirlUp.bmp");
-    director[nomer].picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
-    director[nomer].picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
     director[nomer].radius = 170;
+    if (nomer > 0)
+        {
+            director[nomer].picDown = director[0].picDown;
+            director[nomer].picUp = director[0].picUp;
+            director[nomer].picLeft = director[0].picLeft;
+            director[nomer].picRight = director[0].picRight;
+        }
+        else
+        {
+            director[nomer].picDown = txLoadImage ("IMG\\Men\\Girl\\GirlDown.bmp");
+            director[nomer].picUp = txLoadImage ("IMG\\Men\\Girl\\GirlUp.bmp");
+            director[nomer].picLeft = txLoadImage ("IMG\\Men\\Girl\\GirlLeft.bmp");
+            director[nomer].picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
+        }
     }
 
 
@@ -222,15 +236,26 @@ int main(int argc, char *argv[])
         robots[nomer].manyframeUp = 4;
         robots[nomer].manyframeDown = 4;
         directionFrameFrameTimer(&robots[nomer].direction, &robots[nomer].frame, &robots[nomer].frameTimer);
-        robots[nomer].picDown = txLoadImage("IMG\\Men\\Robot\\RobotDown.bmp");
-        robots[nomer].picUp = txLoadImage("IMG\\Men\\Robot\\RobotUp.bmp");
-        robots[nomer].picLeft = txLoadImage("IMG\\Men\\Robot\\RobotLeft.bmp");
-        robots[nomer].picRight = txLoadImage("IMG\\Men\\Robot\\RobotRight.bmp");
         robots[nomer].width = 50;
+        if (nomer > 0)
+        {
+            robots[nomer].picDown = robots[0].picDown;
+            robots[nomer].picUp = robots[0].picUp;
+            robots[nomer].picLeft = robots[0].picLeft;
+            robots[nomer].picRight = robots[0].picRight;
+        }
+        else
+        {
+            robots[nomer].picDown = txLoadImage("IMG\\Men\\Robot\\RobotDown.bmp");
+            robots[nomer].picUp = txLoadImage("IMG\\Men\\Robot\\RobotUp.bmp");
+            robots[nomer].picLeft = txLoadImage("IMG\\Men\\Robot\\RobotLeft.bmp");
+            robots[nomer].picRight = txLoadImage("IMG\\Men\\Robot\\RobotRight.bmp");
+        }
+        //robots[nomer].width = 50;
 
     }
 
-    scene1(b, robots, director, p);
+    scene1(b, robots, director, p, nomerRobota, nomerDirector);
 
     //DeletePics(&d.picDown, &d.picUp, &d.picLeft, &d.picRight);
     DeletePics(&b.picDown, &b.picUp, &b.picLeft, &b.picRight);
