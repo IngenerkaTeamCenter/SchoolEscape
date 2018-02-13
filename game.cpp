@@ -21,6 +21,16 @@
 
 using namespace std;
 
+Point p[100];
+    /*p.x = 100;
+    p.y = 100;
+    p.x1 = 600;
+    p.y1 = 100;*/
+
+    //point[0].x2 = 230;
+    //point[0].y2 = 200;
+    //point[0].nomerPoint = 1;
+
 Director director[15];
 int nomerDirector = 0;
 
@@ -28,8 +38,19 @@ Bomzh b;
 Robot robots[100];
 int nomerRobota = 0;
 
- void scene1(Bomzh b, Robot* r, Director* d, Point p, int nomer_robotov, int nomer_directorov)
+ void scene1(Bomzh b, Robot* r, Director* d, Point* p, int nomer_robotov, int nomer_directorov)
  {
+
+    for (int nomer = 0; nomer < nomer_directorov; nomer++)
+    {
+        p[nomer].x = 100;
+        p[nomer].y = 100;
+        p[nomer].x1 = 600;
+        p[nomer].y1 = 100;
+        p[nomer].x2 = b.x;
+        p[nomer].y2 = b.y;
+        p[nomer].nomerPoint = 1;
+    }
 
     HDC fon = txLoadImage("IMG\\Maps\\Level1\\canteen.bmp");
     while (!GetAsyncKeyState(VK_ESCAPE))
@@ -56,12 +77,11 @@ int nomerRobota = 0;
 
         for (int nomer = 0; nomer < nomer_directorov; nomer++)
         {
+            p[nomer].x2 = b.x;
+            p[nomer].y2 = b.y;
             drawDirector(d[nomer]);
-            moveDirector(&d[nomer], &p);
+            moveDirector(&d[nomer], &p[nomer]);
         }
-
-        p.x2 = b.x;
-        p.y2 = b.y;
 
         /*drawDirector(d);
         moveDirector(&d, &p);*/
@@ -217,14 +237,7 @@ int main(int argc, char *argv[])
 
 
 
-    Point p;
-    p.x = 100;
-    p.y = 100;
-    p.x1 = 600;
-    p.y1 = 100;
-    p.x2 = 230;
-    p.y2 = 200;
-    p.nomerPoint = 1;
+
 
 
     for ( int nomer = 0; nomer < nomerRobota; nomer++)

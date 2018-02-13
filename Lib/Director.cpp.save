@@ -72,6 +72,7 @@ void moveDirector(Director *d, Point* p)
     else if(p->x1 == d->x && p->y1 == d->y)
     {
         p->nomerPoint = 0;
+        txSl
     }
     else if ((d->x - p->x2) * (d->x - p->x2) + (d->y - p->y2) * (d->y - p->y2) > d->radius * d->radius && p->nomerPoint == 2)
     {
