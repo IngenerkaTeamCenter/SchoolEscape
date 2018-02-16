@@ -42,9 +42,9 @@ struct Director
     //int exit_time;
 };
 
-void CatchCheck(Bomzh b, Director d)
+void CatchCheck(Bomzh b, Director* d, int nomer)
 {
-    if((d.x - b.x) * (d.x - b.x) + (d.y - b.y) * (d.y - b.y) <= 75)
+    if((d[nomer].x - b.x) * (d[nomer].x - b.x) + (d[nomer].y - b.y) * (d[nomer].y - b.y) <= 75)
         {
             txTextOut(0, 0, "game over");
             //cout << "ты облажался";
@@ -95,12 +95,12 @@ void moveDirector(Director *d, Point* p)
         y = p->y2;
     }
 
-    if(d->y < y)
+    if(d->y < y - d->speed)
     {
         d->y = d->y + d->speed;
         d->direction = DIRECTION_DOWN;
     }
-    else if(d->y > y){
+    else if(d->y > y + d->speed){
         d->y = d->y - d->speed;
         d->direction = DIRECTION_UP;
     }

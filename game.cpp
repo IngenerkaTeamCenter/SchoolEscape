@@ -34,6 +34,14 @@ Point p[100];
 Director director[15];
 int nomerDirector = 0;
 
+/*void collisionCheckDirector (Director* d, Point* p)
+{
+    if(&d[nomer].x == &d[nomer - 1])
+    {
+        d[nomer].x++// or d[nomer].speed = 0*
+    }
+}*/
+
 Bomzh b;
 Robot robots[100];
 int nomerRobota = 0;
@@ -64,7 +72,7 @@ int nomerRobota = 0;
             txCircle(director[0].x, director[0].y, director[0].radius);
         }
 
-        CatchCheck(b, director[nomerDirector]);
+        //CatchCheck(b, director[nomerDirector], nomer);
 
         moveBomzh(&b);
         drawBomzh(b);
@@ -79,9 +87,33 @@ int nomerRobota = 0;
         {
             p[nomer].x2 = b.x;
             p[nomer].y2 = b.y;
+            CatchCheck(b, &director[nomer], nomer);
             drawDirector(d[nomer]);
             moveDirector(&d[nomer], &p[nomer]);
         }
+        for (int nomer = 0; nomer < nomer_directorov - 1; nomer++)
+        {
+            for (int nomer1 = nomer + 1; nomer1 < nomer_directorov; nomer1++)
+            {
+                while ( abs (d[nomer].x - d[nomer1].x) < 15 && abs (d[nomer].y - d[nomer1].y) < 15)
+                {
+                    d[nomer1].x = d[nomer1].x + random(-5, 5);
+                    d[nomer1].y = d[nomer1].y + random(-5, 5);
+
+                }
+            }
+        }
+/*
+        Стул стулья[100];
+        for (int номер_стула = 0; номер_стула < 100; номер_стула++)
+        {
+            стулья[номер_стула].координата_х =
+            стулья[номер_стула].масса =
+        }
+        for (int номер_стула = 0; номер_стула < 100; номер_стула++)
+        {
+            if ()
+        }*/
 
         /*drawDirector(d);
         moveDirector(&d, &p);*/
