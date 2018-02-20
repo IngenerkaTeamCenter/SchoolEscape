@@ -21,6 +21,8 @@
 
 using namespace std;
 
+int stena[10];
+int nomerStena = 0;
 Point p[100];
     /*p.x = 100;
     p.y = 100;
@@ -87,9 +89,9 @@ int nomerRobota = 0;
         {
             p[nomer].x2 = b.x;
             p[nomer].y2 = b.y;
-            CatchCheck(b, &director[nomer], nomer);
             drawDirector(d[nomer]);
             moveDirector(&d[nomer], &p[nomer]);
+            catchCheck(b, d[nomer]);
         }
         for (int nomer = 0; nomer < nomer_directorov - 1; nomer++)
         {
@@ -151,6 +153,7 @@ void MapSchitivanie()
     string stroka_Personage;
     string stroka_X;
     string stroka_Y;
+    string a;
     Map.open("Lib\\Map.txt");
 
     while (Map.good()) {
@@ -183,6 +186,13 @@ void MapSchitivanie()
             getline (Map, stroka_Y);
             robots[nomerRobota].y = atoi(stroka_Y.c_str());
             nomerRobota++;
+        }
+
+        if (strcmp(stroka_Personage.c_str(), "stena") == 0)
+        {
+            getline (Map, a);
+            stena[nomerStena] = atoi(a.c_str());
+            nomerStena++;
         }
     }
 
@@ -237,21 +247,21 @@ int main(int argc, char *argv[])
         b.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
     }
 
-    for (int nomer = 0; nomer < nomerRobota; nomer++)
+    for (int nomer = 0; nomer < nomerDirector; nomer++)
     {
-    director[nomer].speed = 2;
-    director[nomer].width = 62;
-    director[nomer].height = 84;
-    director[nomer].PointStartX1 = 27;
-    director[nomer].PointStartX2 = 24;
-    director[nomer].PointStartY = 74;
-    director[nomer].manyframeRight = 4;
-    director[nomer].manyframeLeft = 4;
-    director[nomer].manyframeUp = 4;
-    director[nomer].manyframeDown = 4;
-    directionFrameFrameTimer(&director[nomer].direction, &director[nomer].frame, &director[nomer].frameTimer);
-    director[nomer].radius = 170;
-    if (nomer > 0)
+        director[nomer].speed = 3;
+        director[nomer].width = 61;
+        director[nomer].height = 96;
+        director[nomer].PointStartX1 = 27;
+        director[nomer].PointStartX2 = 24;
+        director[nomer].PointStartY = 74;
+        director[nomer].manyframeRight = 4;
+        director[nomer].manyframeLeft = 4;
+        director[nomer].manyframeUp = 4;
+        director[nomer].manyframeDown = 4;
+        directionFrameFrameTimer(&director[nomer].direction, &director[nomer].frame, &director[nomer].frameTimer);
+        director[nomer].radius = 170;
+        if (nomer > 0)
         {
             director[nomer].picDown = director[0].picDown;
             director[nomer].picUp = director[0].picUp;
