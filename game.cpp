@@ -3,6 +3,7 @@
 #include "Lib\\Director.cpp"
 #include "Lib\\Bomzh.cpp"
 #include "Lib\\consmenu.cpp"
+#include "Lib\\Pitek.cpp"
 
 
 #include <iostream>
@@ -45,8 +46,10 @@ int nomerDirector = 0;
 Bomzh b;
 Robot robots[100];
 int nomerRobota = 0;
+Pitek Piteks[100];
+int nomerPiteka = 0;
 
- void scene1(Bomzh b, Robot* r, Director* d, Point* p, int nomer_robotov, int nomer_directorov)
+ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, int nomer_robotov, int nomer_directorov, int nomer_piteka)
  {
 
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
@@ -83,11 +86,16 @@ int nomerRobota = 0;
             drawRobot(r[nomer]);
         }
 
+        for (int nomer = 0; nomer < nomer_piteka; nomer++)
+        {
+            drawPitek(pi[nomer]);
+        }
+
         for (int nomer = 0; nomer < nomer_directorov; nomer++)
         {
             p[nomer].x2 = b.x;
             p[nomer].y2 = b.y;
-            CatchCheck(b, &director[nomer], nomer);
+            CatchCheck(b, director[nomer]);
             drawDirector(d[nomer]);
             moveDirector(&d[nomer], &p[nomer]);
         }
@@ -147,6 +155,8 @@ void MapSchitivanie()
     b.y = 500;
     robots[nomerRobota].x = 700;
     robots[nomerRobota].y = 100;
+    Piteks[nomerPiteka].x = 400;
+    Piteks[nomerPiteka].y = 300;
     ifstream Map;
     string stroka_Personage;
     string stroka_X;
@@ -184,6 +194,15 @@ void MapSchitivanie()
             robots[nomerRobota].y = atoi(stroka_Y.c_str());
             nomerRobota++;
         }
+
+                if (strcmp(stroka_Personage.c_str(), "pitek") == 0)
+        {
+            getline (Map, stroka_X);
+            robots[nomerPiteka].x = atoi(stroka_X.c_str());
+            getline (Map, stroka_Y);
+            robots[nomerPiteka].y = atoi(stroka_Y.c_str());
+            nomerPiteka++;
+        }
     }
 
     Map.close();
@@ -207,7 +226,7 @@ int main(int argc, char *argv[])
 
     b.width = 62;
     b.height = 84;
-    b.speed = 7;
+    b.speed = 6;
     b.PointStartX1 = 27;
     b.PointStartX2 = 24;
     b.PointStartY = 74;
@@ -239,9 +258,9 @@ int main(int argc, char *argv[])
 
     for (int nomer = 0; nomer < nomerRobota; nomer++)
     {
-    director[nomer].speed = 2;
+    director[nomer].speed = 4;
     director[nomer].width = 62;
-    director[nomer].height = 84;
+    director[nomer].height = 96;
     director[nomer].PointStartX1 = 27;
     director[nomer].PointStartX2 = 24;
     director[nomer].PointStartY = 74;
@@ -269,7 +288,19 @@ int main(int argc, char *argv[])
 
 
 
-
+    for ( int nomer = 0; nomer < nomerPiteka; nomer++)
+    {
+        Piteks[nomer].height = 78;
+        Piteks[nomer].width = 226;
+        if (nomer > 0)
+        {
+            Piteks[nomer].picDown = Piteks[0].picDown;
+        }
+        else
+        {
+            Piteks[nomer].picDown = txLoadImage("IMG\\Items\\Pitek.bmp");
+        }
+    }
 
 
     for ( int nomer = 0; nomer < nomerRobota; nomer++)
@@ -300,13 +331,18 @@ int main(int argc, char *argv[])
 
     }
 
-    scene1(b, robots, director, p, nomerRobota, nomerDirector);
+    scene1(b, robots, director, p, Piteks, nomerRobota, nomerDirector, nomerPiteka);
 
     //DeletePics(&d.picDown, &d.picUp, &d.picLeft, &d.picRight);
     DeletePics(&b.picDown, &b.picUp, &b.picLeft, &b.picRight);
     for (int nomer = 0; nomer < nomerRobota; nomer++)
     {
         DeletePics(&robots[nomer].picDown, &robots[nomer].picUp, &robots[nomer].picLeft, &robots[nomer].picRight);
+    }
+
+    for (int nomer = 0; nomer < nomerPiteka; nomer++)
+    {
+        txDeleteDC(Piteks[nomer].picDown);
     }
 
     for (int nomer = 0; nomer < nomerDirector; nomer++)

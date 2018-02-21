@@ -42,9 +42,9 @@ struct Director
     //int exit_time;
 };
 
-void CatchCheck(Bomzh b, Director* d, int nomer)
+void CatchCheck(Bomzh b, Director d)
 {
-    if((d[nomer].x - b.x) * (d[nomer].x - b.x) + (d[nomer].y - b.y) * (d[nomer].y - b.y) <= 75)
+    if((d.x - b.x) * (d.x - b.x) + (d.y - b.y) * (d.y - b.y) <= 75)
         {
             txTextOut(0, 0, "game over");
             //cout << "ты облажался";
@@ -95,12 +95,12 @@ void moveDirector(Director *d, Point* p)
         y = p->y2;
     }
 
-    if(d->y < y - d->speed)
+    if(d->y < y)
     {
         d->y = d->y + d->speed;
         d->direction = DIRECTION_DOWN;
     }
-    else if(d->y > y + d->speed){
+    else if(d->y > y){
         d->y = d->y - d->speed;
         d->direction = DIRECTION_UP;
     }
@@ -145,18 +145,18 @@ void drawDirector(Director d)
 {
     if (d.direction == DIRECTION_DOWN)
     {
-        txTransparentBlt(txDC(),  d.x - d.PointStartX1 , d.y - d.PointStartY, d.width, d.height, d.picDown, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(),  d.x - d.PointStartX1 - abs_x , d.y - d.PointStartY, d.width, d.height, d.picDown, d.frame * 61, 0, RGB(255, 255, 255));
     }
     else if (d.direction == DIRECTION_UP)
     {
-        txTransparentBlt(txDC(), d.x - d.PointStartX1 , d.y - d.PointStartY , d.width, d.height, d.picUp, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), d.x - d.PointStartX1 - abs_x , d.y - d.PointStartY , d.width, d.height, d.picUp, d.frame * 61, 0, RGB(255, 255, 255));
     }
     else if (d.direction == DIRECTION_LEFT)
     {
-        txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY, d.width - 6, d.height, d.picLeft, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), d.x - d.PointStartX2 - abs_x , d.y - d.PointStartY, d.width - 6, d.height, d.picLeft, d.frame * 61, 0, RGB(255, 255, 255));
     }
     else if (d.direction == DIRECTION_RIGHT)
     {
-        txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), d.x - d.PointStartX2 - abs_x , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
     }
 }
