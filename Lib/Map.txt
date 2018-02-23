@@ -22,3 +22,9 @@ robot
 robot
 300
 200
+pitek
+300
+400
+pitek
+600
+500

@@ -28,20 +28,22 @@ void drawBomzh(Bomzh b)
 {
     if (b.direction == DIRECTION_DOWN)
     {
-        txTransparentBlt(txDC(), b.x - b.PointStartX1, b.y - b.PointStartY, b.width, b.height, b.picDown, b.frame * 65, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), b.x - b.PointStartX1 - abs_x, b.y - b.PointStartY, b.width, b.height, b.picDown, b.frame * 65, 0, RGB(255, 255, 255));
     }
     else if (b.direction == DIRECTION_UP)
     {
-        txTransparentBlt(txDC(), b.x - b.PointStartX1, b.y - b.PointStartY, b.width, b.height, b.picUp, b.frame * 65, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), b.x - b.PointStartX1 - abs_x, b.y - b.PointStartY, b.width, b.height, b.picUp, b.frame * 65, 0, RGB(255, 255, 255));
     }
     else if (b.direction == DIRECTION_LEFT)
     {
-        txTransparentBlt(txDC(), b.x - b.PointStartX2, b.y - b.PointStartY, b.width - 6, b.height, b.picLeft, b.frame * 64, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), b.x - b.PointStartX2 - abs_x, b.y - b.PointStartY, b.width - 6, b.height, b.picLeft, b.frame * 64, 0, RGB(255, 255, 255));
     }
     else if (b.direction == DIRECTION_RIGHT)
     {
-        txTransparentBlt(txDC(), b.x - b.PointStartX2, b.y - b.PointStartY, b.width - 6, b.height, b.picRight, b.frame * 64, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), b.x - b.PointStartX2 - abs_x, b.y - b.PointStartY, b.width - 6, b.height, b.picRight, b.frame * 64, 0, RGB(255, 255, 255));
     }
+
+    //abs_x = b.x - 300;
 }
 
 void moveBomzh(Bomzh* b)
