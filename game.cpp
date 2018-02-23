@@ -1,39 +1,31 @@
 #include "Lib\\TXLib.h"
-#include "Lib\\Robot.cpp"
-#include "Lib\\Director.cpp"
 #include "Lib\\Bomzh.cpp"
 #include "Lib\\consmenu.cpp"
+#include "Lib\\Director.cpp"
 #include "Lib\\Pitek.cpp"
-
-
+#include "Lib\\Robot.cpp"
 #include <iostream>
 #include <fstream>
 #include <string>
 
-/*void CatchCheck(Bomzh b, Director d)
-{
-    if((d.x - b.x) * (d.x - b.x) + (d.y - b.y) * (d.y - b.y) <= 75)
-        {
-            cout << "òû îáëàæàëñÿ";
-            exit(1);
-            txDestroyWindow();
-        }
-}*/
-
 using namespace std;
 
-Point p[100];
-    /*p.x = 100;
-    p.y = 100;
-    p.x1 = 600;
-    p.y1 = 100;*/
+int stena[10];
+int nomerStena = 0;
 
-    //point[0].x2 = 230;
-    //point[0].y2 = 200;
-    //point[0].nomerPoint = 1;
+Point p[100];
 
 Director director[15];
 int nomerDirector = 0;
+
+Bomzh b;
+
+Robot robots[100];
+int nomerRobota = 0;
+
+Pitek Piteks[100];
+int nomerPiteka = 0;
+
 
 /*void collisionCheckDirector (Director* d, Point* p)
 {
@@ -43,15 +35,8 @@ int nomerDirector = 0;
     }
 }*/
 
-Bomzh b;
-Robot robots[100];
-int nomerRobota = 0;
-Pitek Piteks[100];
-int nomerPiteka = 0;
-
- void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, int nomer_robotov, int nomer_directorov, int nomer_piteka)
- {
-
+void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, int nomer_robotov, int nomer_directorov, int nomer_piteka)
+{
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
         p[nomer].x = 100;
@@ -66,8 +51,6 @@ int nomerPiteka = 0;
     HDC fon = txLoadImage("IMG\\Maps\\Level1\\canteen.bmp");
     while (!GetAsyncKeyState(VK_ESCAPE))
     {
-        //txSetFillColor(TX_WHITE);
-        //txRectangle(0, 0, 1200, 900);
         txBitBlt(txDC(), 0, 0, 1200, 900, fon, 0, 0);
 
         if(GameMode == 1)
@@ -95,10 +78,12 @@ int nomerPiteka = 0;
         {
             p[nomer].x2 = b.x;
             p[nomer].y2 = b.y;
-            CatchCheck(b, director[nomer]);
             drawDirector(d[nomer]);
             moveDirector(&d[nomer], &p[nomer]);
+            catchCheck(b, d[nomer]);
         }
+
+        //Directors collision
         for (int nomer = 0; nomer < nomer_directorov - 1; nomer++)
         {
             for (int nomer1 = nomer + 1; nomer1 < nomer_directorov; nomer1++)
@@ -107,25 +92,20 @@ int nomerPiteka = 0;
                 {
                     d[nomer1].x = d[nomer1].x + random(-5, 5);
                     d[nomer1].y = d[nomer1].y + random(-5, 5);
-
                 }
             }
         }
 /*
-        Ñòóë ñòóëüÿ[100];
-        for (int íîìåð_ñòóëà = 0; íîìåð_ñòóëà < 100; íîìåð_ñòóëà++)
+        Ã‘Ã²Ã³Ã« Ã±Ã²Ã³Ã«Ã¼Ã¿[100];
+        for (int Ã­Ã®Ã¬Ã¥Ã°_Ã±Ã²Ã³Ã«Ã  = 0; Ã­Ã®Ã¬Ã¥Ã°_Ã±Ã²Ã³Ã«Ã  < 100; Ã­Ã®Ã¬Ã¥Ã°_Ã±Ã²Ã³Ã«Ã ++)
         {
-            ñòóëüÿ[íîìåð_ñòóëà].êîîðäèíàòà_õ =
-            ñòóëüÿ[íîìåð_ñòóëà].ìàññà =
+            Ã±Ã²Ã³Ã«Ã¼Ã¿[Ã­Ã®Ã¬Ã¥Ã°_Ã±Ã²Ã³Ã«Ã ].ÃªÃ®Ã®Ã°Ã¤Ã¨Ã­Ã Ã²Ã _Ãµ =
+            Ã±Ã²Ã³Ã«Ã¼Ã¿[Ã­Ã®Ã¬Ã¥Ã°_Ã±Ã²Ã³Ã«Ã ].Ã¬Ã Ã±Ã±Ã  =
         }
-        for (int íîìåð_ñòóëà = 0; íîìåð_ñòóëà < 100; íîìåð_ñòóëà++)
+        for (int Ã­Ã®Ã¬Ã¥Ã°_Ã±Ã²Ã³Ã«Ã  = 0; Ã­Ã®Ã¬Ã¥Ã°_Ã±Ã²Ã³Ã«Ã  < 100; Ã­Ã®Ã¬Ã¥Ã°_Ã±Ã²Ã³Ã«Ã ++)
         {
             if ()
         }*/
-
-        /*drawDirector(d);
-        moveDirector(&d, &p);*/
-
 
         txSleep(10);
     }
@@ -161,6 +141,7 @@ void MapSchitivanie()
     string stroka_Personage;
     string stroka_X;
     string stroka_Y;
+    string a;
     Map.open("Lib\\Map.txt");
 
     while (Map.good()) {
@@ -170,10 +151,8 @@ void MapSchitivanie()
         if (strcmp(stroka_Personage.c_str(), "director") == 0)
         {
             getline (Map, stroka_X);
-            //d.x = atoi(stroka_X.c_str());
             director[nomerDirector].x = atoi(stroka_X.c_str());
             getline (Map, stroka_Y);
-            //d.y = atoi(stroka_Y.c_str());
             robots[nomerDirector].y = atoi(stroka_X.c_str());
             nomerDirector++;
         }
@@ -195,7 +174,14 @@ void MapSchitivanie()
             nomerRobota++;
         }
 
-                if (strcmp(stroka_Personage.c_str(), "pitek") == 0)
+        if (strcmp(stroka_Personage.c_str(), "stena") == 0)
+        {
+            getline (Map, a);
+            stena[nomerStena] = atoi(a.c_str());
+            nomerStena++;
+        }
+      
+        if (strcmp(stroka_Personage.c_str(), "pitek") == 0)
         {
             getline (Map, stroka_X);
             robots[nomerPiteka].x = atoi(stroka_X.c_str());
@@ -256,21 +242,21 @@ int main(int argc, char *argv[])
         b.picRight = txLoadImage ("IMG\\Men\\Girl\\GirlRight.bmp");
     }
 
-    for (int nomer = 0; nomer < nomerRobota; nomer++)
+    for (int nomer = 0; nomer < nomerDirector; nomer++)
     {
-    director[nomer].speed = 4;
-    director[nomer].width = 62;
-    director[nomer].height = 96;
-    director[nomer].PointStartX1 = 27;
-    director[nomer].PointStartX2 = 24;
-    director[nomer].PointStartY = 74;
-    director[nomer].manyframeRight = 4;
-    director[nomer].manyframeLeft = 4;
-    director[nomer].manyframeUp = 4;
-    director[nomer].manyframeDown = 4;
-    directionFrameFrameTimer(&director[nomer].direction, &director[nomer].frame, &director[nomer].frameTimer);
-    director[nomer].radius = 170;
-    if (nomer > 0)
+        director[nomer].speed = 3;
+        director[nomer].width = 61;
+        director[nomer].height = 96;
+        director[nomer].PointStartX1 = 27;
+        director[nomer].PointStartX2 = 24;
+        director[nomer].PointStartY = 74;
+        director[nomer].manyframeRight = 4;
+        director[nomer].manyframeLeft = 4;
+        director[nomer].manyframeUp = 4;
+        director[nomer].manyframeDown = 4;
+        directionFrameFrameTimer(&director[nomer].direction, &director[nomer].frame, &director[nomer].frameTimer);
+        director[nomer].radius = 170;
+        if (nomer > 0)
         {
             director[nomer].picDown = director[0].picDown;
             director[nomer].picUp = director[0].picUp;
@@ -286,8 +272,6 @@ int main(int argc, char *argv[])
         }
     }
 
-
-
     for ( int nomer = 0; nomer < nomerPiteka; nomer++)
     {
         Piteks[nomer].height = 78;
@@ -301,7 +285,6 @@ int main(int argc, char *argv[])
             Piteks[nomer].picDown = txLoadImage("IMG\\Items\\Pitek.bmp");
         }
     }
-
 
     for ( int nomer = 0; nomer < nomerRobota; nomer++)
     {
@@ -327,13 +310,10 @@ int main(int argc, char *argv[])
             robots[nomer].picLeft = txLoadImage("IMG\\Men\\Robot\\RobotLeft.bmp");
             robots[nomer].picRight = txLoadImage("IMG\\Men\\Robot\\RobotRight.bmp");
         }
-        //robots[nomer].width = 50;
-
     }
 
     scene1(b, robots, director, p, Piteks, nomerRobota, nomerDirector, nomerPiteka);
 
-    //DeletePics(&d.picDown, &d.picUp, &d.picLeft, &d.picRight);
     DeletePics(&b.picDown, &b.picUp, &b.picLeft, &b.picRight);
     for (int nomer = 0; nomer < nomerRobota; nomer++)
     {

@@ -4,19 +4,13 @@
 #include <iostream>
 #include <string>
 
-
-
-
 struct Point
 {
     int x, y;
     int x1, y1;
     int x2, y2;
     int nomerPoint;
-    //int kolvoPoint;
 };
-
-
 
 struct Director
 {
@@ -42,21 +36,19 @@ struct Director
     //int exit_time;
 };
 
-void CatchCheck(Bomzh b, Director d)
+void catchCheck(Bomzh b, Director d)
 {
     if((d.x - b.x) * (d.x - b.x) + (d.y - b.y) * (d.y - b.y) <= 75)
-        {
-            txTextOut(0, 0, "game over");
-            //cout << "ты облажался";
-            exit(1);
-            txDestroyWindow();
-        }
+    {
+        txTextOut(0, 0, "game over");
+        exit(1);
+        txDestroyWindow();
+    }
 }
 
 
 void moveDirector(Director *d, Point* p)
 {
-
     int predX = d->x;
     int predY = d->y;
     int maxCountOfFrames = 4;
@@ -65,11 +57,11 @@ void moveDirector(Director *d, Point* p)
     {
         p->nomerPoint = 2;
     }
-    else if(p->x == d->x && p->y == d->y)
+    else if( abs(p->x - d->x) < 10 && abs(p->y - d->y) < 10)
     {
         p->nomerPoint = 1;
     }
-    else if(p->x1 == d->x && p->y1 == d->y)
+    else if( abs(p->x1 - d->x) < 10 && abs(p->y1 - d->y) < 10)
     {
         p->nomerPoint = 0;
     }
@@ -95,20 +87,20 @@ void moveDirector(Director *d, Point* p)
         y = p->y2;
     }
 
-    if(d->y < y)
+    if(d->y < y - d->speed)
     {
         d->y = d->y + d->speed;
         d->direction = DIRECTION_DOWN;
     }
-    else if(d->y > y){
+    else if(d->y > y + d->speed){
         d->y = d->y - d->speed;
         d->direction = DIRECTION_UP;
     }
-    if(d->x < x)
+    if(d->x < x - d->speed)
     {
         d->x = d->x + d->speed;
         d->direction = DIRECTION_RIGHT;
-    } else if(d->x > x){
+    } else if(d->x > x + d->speed){
         d->x = d->x - d->speed;
         d->direction = DIRECTION_LEFT;
     }
@@ -117,7 +109,7 @@ void moveDirector(Director *d, Point* p)
     {
         char str[100];
         sprintf(str, "%d", p->nomerPoint);
-        txTextOut(400, 400, str);
+        txTextOut(d->x, 400, str);
     }
 
     if (predX != d->x || predY != d->y)
