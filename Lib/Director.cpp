@@ -4,19 +4,13 @@
 #include <iostream>
 #include <string>
 
-
-
-
 struct Point
 {
     int x, y;
     int x1, y1;
     int x2, y2;
     int nomerPoint;
-    //int kolvoPoint;
 };
-
-
 
 struct Director
 {
@@ -143,18 +137,18 @@ void drawDirector(Director d)
 {
     if (d.direction == DIRECTION_DOWN)
     {
-        txTransparentBlt(txDC(),  d.x - d.PointStartX1 , d.y - d.PointStartY, d.width, d.height, d.picDown, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(),  d.x - d.PointStartX1 - abs_x , d.y - d.PointStartY, d.width, d.height, d.picDown, d.frame * 61, 0, RGB(255, 255, 255));
     }
     else if (d.direction == DIRECTION_UP)
     {
-        txTransparentBlt(txDC(), d.x - d.PointStartX1 , d.y - d.PointStartY , d.width, d.height, d.picUp, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), d.x - d.PointStartX1 - abs_x , d.y - d.PointStartY , d.width, d.height, d.picUp, d.frame * 61, 0, RGB(255, 255, 255));
     }
     else if (d.direction == DIRECTION_LEFT)
     {
-        txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY, d.width - 6, d.height, d.picLeft, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), d.x - d.PointStartX2 - abs_x , d.y - d.PointStartY, d.width - 6, d.height, d.picLeft, d.frame * 61, 0, RGB(255, 255, 255));
     }
     else if (d.direction == DIRECTION_RIGHT)
     {
-        txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), d.x - d.PointStartX2 - abs_x , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
     }
 }

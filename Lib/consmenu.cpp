@@ -15,3 +15,5 @@ const int DIRECTION_RIGHT = 3;
 
 const int GameMode = 0;
 //int nomerPerson = 2;
+int abs_x = 0;
+int abs_y = 0;
