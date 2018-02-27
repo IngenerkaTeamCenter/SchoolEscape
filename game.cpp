@@ -10,7 +10,13 @@
 
 using namespace std;
 
-int stena[10];
+struct Stena
+{
+    int x1, x2;
+    int y1, y2;
+};
+
+Stena stena[10];
 int nomerStena = 0;
 
 Point p[100];
@@ -35,7 +41,24 @@ int nomerPiteka = 0;
     }
 }*/
 
-void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, int nomer_robotov, int nomer_directorov, int nomer_piteka)
+void collisionCheck(Stena s, Bomzh* b)
+{
+    if(((b->x - 31 <= s.x1 && s.x1 <= b->x + 31) ||
+                    (s.x1 <= b->x - 31 && b->x - 31 <= s.x2)) &&
+       ((b->y - 42 <= s.y1 && s.y1 <= b->y + 42) ||
+                    (s.y1 <= b->y - 42 && b->y - 42 <= s.y2)))
+    {
+        b->x = b->x + random(-5, 5);
+        b->y = b->y + random(-5, 5);
+    }
+}
+
+void drawStena(Stena s)
+{
+    txSetFillColor(TX_RED);
+    txRectangle(s.x1, s.y1, s.x2, s.y2);
+}
+void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
 {
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
@@ -72,6 +95,11 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, int nomer_robot
         for (int nomer = 0; nomer < nomer_piteka; nomer++)
         {
             drawPitek(pi[nomer]);
+        }
+        for (int nomer = 0; nomer < nomer_sten; nomer++)
+        {
+            drawStena(stena[nomer]);
+            collisionCheck(stena[nomer], &b);
         }
 
         for (int nomer = 0; nomer < nomer_directorov; nomer++)
@@ -141,7 +169,7 @@ void MapSchitivanie()
     string stroka_Personage;
     string stroka_X;
     string stroka_Y;
-    string a;
+    //string a;
     Map.open("Lib\\Map.txt");
 
     while (Map.good()) {
@@ -176,11 +204,17 @@ void MapSchitivanie()
 
         if (strcmp(stroka_Personage.c_str(), "stena") == 0)
         {
-            getline (Map, a);
-            stena[nomerStena] = atoi(a.c_str());
+            getline (Map, stroka_X);
+            stena[nomerStena].x1 = atoi(stroka_X.c_str());
+            getline (Map, stroka_Y);
+            stena[nomerStena].y1 = atoi(stroka_Y.c_str());
+            getline (Map, stroka_X);
+            stena[nomerStena].x2 = atoi(stroka_X.c_str());
+            getline (Map, stroka_Y);
+            stena[nomerStena].y2 = atoi(stroka_Y.c_str());
             nomerStena++;
         }
-      
+
         if (strcmp(stroka_Personage.c_str(), "pitek") == 0)
         {
             getline (Map, stroka_X);
@@ -312,7 +346,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    scene1(b, robots, director, p, Piteks, nomerRobota, nomerDirector, nomerPiteka);
+    scene1(b, robots, director, p, Piteks, stena, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
 
     DeletePics(&b.picDown, &b.picUp, &b.picLeft, &b.picRight);
     for (int nomer = 0; nomer < nomerRobota; nomer++)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "TXLib.h"
+#include "consmenu.cpp"
 
 struct Bomzh
 {
