@@ -72,7 +72,9 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, int nomer_robot
         for (int nomer = 0; nomer < nomer_piteka; nomer++)
         {
             drawPitek(pi[nomer]);
+            intersect(b.crash, pi[nomer].crash);
         }
+
 
         for (int nomer = 0; nomer < nomer_directorov; nomer++)
         {
@@ -163,6 +165,7 @@ void MapSchitivanie()
             b.x = atoi(stroka_X.c_str());
             getline (Map, stroka_Y);
             b.y = atoi(stroka_Y.c_str());
+            fillCrashZone(&b);
         }
 
         if (strcmp(stroka_Personage.c_str(), "robot") == 0)
@@ -180,13 +183,14 @@ void MapSchitivanie()
             stena[nomerStena] = atoi(a.c_str());
             nomerStena++;
         }
-      
+
         if (strcmp(stroka_Personage.c_str(), "pitek") == 0)
         {
             getline (Map, stroka_X);
-            robots[nomerPiteka].x = atoi(stroka_X.c_str());
+            Piteks[nomerPiteka].x = atoi(stroka_X.c_str());
             getline (Map, stroka_Y);
-            robots[nomerPiteka].y = atoi(stroka_Y.c_str());
+            Piteks[nomerPiteka].y = atoi(stroka_Y.c_str());
+            fillCrashZone(&Piteks[nomerPiteka]);
             nomerPiteka++;
         }
     }
