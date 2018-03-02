@@ -41,15 +41,15 @@ int nomerPiteka = 0;
     }
 }*/
 
-void collisionCheck(Stena s, Bomzh* b)
+void collisionCheck(Stena s, Bomzh* b, int predX, int predY)
 {
-    if(((b->x - 31 <= s.x1 && s.x1 <= b->x + 31) ||
-                    (s.x1 <= b->x - 31 && b->x - 31 <= s.x2)) &&
-       ((b->y - 42 <= s.y1 && s.y1 <= b->y + 42) ||
-                    (s.y1 <= b->y - 42 && b->y - 42 <= s.y2)))
+    if(((b->x - 12 <= s.x1 && s.x1 <= b->x + 12) ||
+                    (s.x1 <= b->x - 12 && b->x - 12 <= s.x2)) &&
+       ((b->y - 12 <= s.y1 && s.y1 <= b->y + 12) ||
+                    (s.y1 <= b->y - 12 && b->y - 12 <= s.y2)))
     {
-        b->x = b->x + random(-5, 5);
-        b->y = b->y + random(-5, 5);
+        b->x = predX;
+        b->y = predY;
     }
 }
 
@@ -81,11 +81,21 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
             txCircle(director[0].x, director[0].y, director[0].radius);
         }
 
-        //CatchCheck(b, director[nomerDirector], nomer);
-
         int predX = b.x;
         int predY = b.y;
+        for (int nomer = 0; nomer < nomer_sten; nomer++)
+        {
+            drawStena(stena[nomer]);
+        }
+
+        //CatchCheck(b, director[nomerDirector], nomer);
+
         moveBomzh(&b);
+
+        for (int nomer = 0; nomer < nomer_sten; nomer++)
+        {
+          collisionCheck(stena[nomer], &b, predX, predY);
+        }
         fillCrashZone(&b);
         for (int nomer = 0; nomer < nomer_piteka; nomer++)
         {
@@ -108,14 +118,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
             moveRobot(&r[nomer]);
             drawRobot(r[nomer]);
         }
-
-
-        for (int nomer = 0; nomer < nomer_sten; nomer++)
-        {
-            drawStena(stena[nomer]);
-            collisionCheck(stena[nomer], &b);
-        }
-
 
         for (int nomer = 0; nomer < nomer_directorov; nomer++)
         {
