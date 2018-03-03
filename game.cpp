@@ -4,9 +4,9 @@
 #include "Lib\\Director.cpp"
 #include "Lib\\Pitek.cpp"
 #include "Lib\\Robot.cpp"
-#include <iostream>
-#include <fstream>
-#include <string>
+//#include <iostream>
+//#include <fstream>
+//#include <string>
 
 using namespace std;
 
@@ -41,15 +41,15 @@ int nomerPiteka = 0;
     }
 }*/
 
-void collisionCheck(Stena s, Bomzh* b)
+void collisionCheck(Stena s, Bomzh* b, int predX, int predY)
 {
-    if(((b->x - 31 <= s.x1 && s.x1 <= b->x + 31) ||
-                    (s.x1 <= b->x - 31 && b->x - 31 <= s.x2)) &&
-       ((b->y - 42 <= s.y1 && s.y1 <= b->y + 42) ||
-                    (s.y1 <= b->y - 42 && b->y - 42 <= s.y2)))
+    if(((b->x - 12 <= s.x1 && s.x1 <= b->x + 12) ||
+                    (s.x1 <= b->x - 12 && b->x - 12 <= s.x2)) &&
+       ((b->y - 12 <= s.y1 && s.y1 <= b->y + 12) ||
+                    (s.y1 <= b->y - 12 && b->y - 12 <= s.y2)))
     {
-        b->x = b->x + random(-5, 5);
-        b->y = b->y + random(-5, 5);
+        b->x = predX;
+        b->y = predY;
     }
 }
 
@@ -81,9 +81,36 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
             txCircle(director[0].x, director[0].y, director[0].radius);
         }
 
+        int predX = b.x;
+        int predY = b.y;
+        for (int nomer = 0; nomer < nomer_sten; nomer++)
+        {
+            drawStena(stena[nomer]);
+        }
+
         //CatchCheck(b, director[nomerDirector], nomer);
 
         moveBomzh(&b);
+
+        for (int nomer = 0; nomer < nomer_sten; nomer++)
+        {
+          collisionCheck(stena[nomer], &b, predX, predY);
+        }
+        fillCrashZone(&b);
+        for (int nomer = 0; nomer < nomer_piteka; nomer++)
+        {
+            if (intersect(b.crash, pi[nomer].crash))
+            {
+                b.x = predX;
+                b.y = predY;
+            }
+        }
+
+        for (int nomer = 0; nomer < nomer_piteka; nomer++)
+        {
+            drawPitek(pi[nomer]);
+        }
+
         drawBomzh(b);
 
         for (int nomer = 0; nomer < nomer_robotov; nomer++)
@@ -91,18 +118,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
             moveRobot(&r[nomer]);
             drawRobot(r[nomer]);
         }
-
-        for (int nomer = 0; nomer < nomer_piteka; nomer++)
-        {
-            drawPitek(pi[nomer]);
-            intersect(b.crash, pi[nomer].crash);
-        }
-        for (int nomer = 0; nomer < nomer_sten; nomer++)
-        {
-            drawStena(stena[nomer]);
-            collisionCheck(stena[nomer], &b);
-        }
-
 
         for (int nomer = 0; nomer < nomer_directorov; nomer++)
         {
@@ -161,12 +176,13 @@ void MapSchitivanie()
 {
     director[nomerDirector].x = 100;
     director[nomerDirector].y = 100;
-    b.x = 300;
-    b.y = 500;
-    robots[nomerRobota].x = 700;
-    robots[nomerRobota].y = 100;
     Piteks[nomerPiteka].x = 400;
     Piteks[nomerPiteka].y = 300;
+    b.x = 300;
+    b.y = 200;
+    robots[nomerRobota].x = 700;
+    robots[nomerRobota].y = 100;
+
     ifstream Map;
     string stroka_Personage;
     string stroka_X;
@@ -177,6 +193,8 @@ void MapSchitivanie()
     while (Map.good()) {
 
         getline (Map, stroka_Personage);
+
+        readRobot(&Map, stroka_Personage, robots, &nomerRobota);
 
         if (strcmp(stroka_Personage.c_str(), "director") == 0)
         {
@@ -193,16 +211,6 @@ void MapSchitivanie()
             b.x = atoi(stroka_X.c_str());
             getline (Map, stroka_Y);
             b.y = atoi(stroka_Y.c_str());
-            fillCrashZone(&b);
-        }
-
-        if (strcmp(stroka_Personage.c_str(), "robot") == 0)
-        {
-            getline (Map, stroka_X);
-            robots[nomerRobota].x = atoi(stroka_X.c_str());
-            getline (Map, stroka_Y);
-            robots[nomerRobota].y = atoi(stroka_Y.c_str());
-            nomerRobota++;
         }
 
         if (strcmp(stroka_Personage.c_str(), "stena") == 0)
@@ -282,7 +290,7 @@ int main(int argc, char *argv[])
 
     for (int nomer = 0; nomer < nomerDirector; nomer++)
     {
-        director[nomer].speed = 3;
+        director[nomer].speed = 1;
         director[nomer].width = 61;
         director[nomer].height = 96;
         director[nomer].PointStartX1 = 27;

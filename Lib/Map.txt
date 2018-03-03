@@ -6,7 +6,7 @@ director
 800
 bomzh
 500
-500
+200
 robot
 300
 100

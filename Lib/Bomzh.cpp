@@ -7,7 +7,6 @@ struct CrashZone
 {
     int x1, y1;
     int x2, y2;
-
 };
 
 bool intersect(int al, int ar, int bl, int br)

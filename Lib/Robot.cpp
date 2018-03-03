@@ -1,5 +1,10 @@
 #include "TXLib.h"
 #include "consmenu.cpp"
+#include <iostream>
+#include <fstream>
+#include <string>
+
+using namespace std;
 
 struct Robot
 {
@@ -38,6 +43,20 @@ void drawRobot(Robot r)
     else if (r.direction == DIRECTION_RIGHT)
     {
         txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picRight, r.frame * 47, 0, RGB(255, 255, 255));
+    }
+}
+
+void readRobot(ifstream* Map, string stroka_Personage, Robot* robots, int* nomerRobota)
+{
+    string stroka_X = "";
+    string stroka_Y = "";
+    if (strcmp(stroka_Personage.c_str(), "robot") == 0)
+    {
+        getline (*Map, stroka_X);
+        robots[*nomerRobota].x = atoi(stroka_X.c_str());
+        getline (*Map, stroka_Y);
+        robots[*nomerRobota].y = atoi(stroka_Y.c_str());
+        *nomerRobota = *nomerRobota + 1;
     }
 }
 
