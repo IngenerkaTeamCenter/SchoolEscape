@@ -125,7 +125,16 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
             p[nomer].y2 = b.y;
             drawDirector(d[nomer]);
             moveDirector(&d[nomer], &p[nomer]);
+            fillCrashZone(&d[nomer]);
             catchCheck(b, d[nomer]);
+            for (int nomer1 = 0; nomer1 < nomer_piteka; nomer1++)
+            {
+                if (intersect(d[nomer].crash, pi[nomer1].crash))
+                {
+                    d[nomer].x = d[nomer].x - 1;
+                    d[nomer].y = d[nomer].y - 1;;
+                }
+            }
         }
 
         //Directors collision
@@ -201,6 +210,7 @@ void MapSchitivanie()
             getline (Map, stroka_X);
             director[nomerDirector].x = atoi(stroka_X.c_str());
             getline (Map, stroka_Y);
+            fillCrashZone(&director[nomerDirector]);
             robots[nomerDirector].y = atoi(stroka_X.c_str());
             nomerDirector++;
         }
