@@ -4,19 +4,13 @@
 #include <iostream>
 #include <string>
 
-
-
-
 struct Point
 {
     int x, y;
     int x1, y1;
     int x2, y2;
     int nomerPoint;
-    //int kolvoPoint;
 };
-
-
 
 struct Director
 {
@@ -39,8 +33,17 @@ struct Director
     int frame;
     int frameTimer;
     int radius;//נאהטףס מבחמנא
+    CrashZone crash;
     //int exit_time;
 };
+
+void fillCrashZone(Director* d)
+{
+    d->crash.x1 = d->x - 27;
+    d->crash.y1 = d->y - 12;
+    d->crash.x2 = d->x + 27;
+    d->crash.y2 = d->y + 12;
+}
 
 void catchCheck(Bomzh b, Director d)
 {
@@ -102,11 +105,11 @@ void moveDirector(Director *d, Point* p)
         d->y = d->y - d->speed;
         d->direction = DIRECTION_UP;
     }
-    if(d->x < x)
+    if(d->x < x - d->speed)
     {
         d->x = d->x + d->speed;
         d->direction = DIRECTION_RIGHT;
-    } else if(d->x > x){
+    } else if(d->x > x + d->speed){
         d->x = d->x - d->speed;
         d->direction = DIRECTION_LEFT;
     }
@@ -143,18 +146,18 @@ void drawDirector(Director d)
 {
     if (d.direction == DIRECTION_DOWN)
     {
-        txTransparentBlt(txDC(),  d.x - d.PointStartX1 , d.y - d.PointStartY, d.width, d.height, d.picDown, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(),  d.x - d.PointStartX1 - abs_x , d.y - d.PointStartY, d.width, d.height, d.picDown, d.frame * 61, 0, RGB(255, 255, 255));
     }
     else if (d.direction == DIRECTION_UP)
     {
-        txTransparentBlt(txDC(), d.x - d.PointStartX1 , d.y - d.PointStartY , d.width, d.height, d.picUp, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), d.x - d.PointStartX1 - abs_x , d.y - d.PointStartY , d.width, d.height, d.picUp, d.frame * 61, 0, RGB(255, 255, 255));
     }
     else if (d.direction == DIRECTION_LEFT)
     {
-        txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY, d.width - 6, d.height, d.picLeft, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), d.x - d.PointStartX2 - abs_x , d.y - d.PointStartY, d.width - 6, d.height, d.picLeft, d.frame * 61, 0, RGB(255, 255, 255));
     }
     else if (d.direction == DIRECTION_RIGHT)
     {
-        txTransparentBlt(txDC(), d.x - d.PointStartX2 , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), d.x - d.PointStartX2 - abs_x , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
     }
 }

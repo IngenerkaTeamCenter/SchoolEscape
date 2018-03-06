@@ -14,15 +14,33 @@ struct Stena
 {
     int x1, x2;
     int y1, y2;
+    CrashZone crash;
 };
+
 
 Stena stena[10];
 int nomerStena = 0;
+
+void fillCrashZone(Stena* stena)
+{
+    stena->crash.x1 = stena->x1;
+    stena->crash.y1 = stena->y1;
+    stena->crash.x2 = stena->x2;
+    stena->crash.y2 = stena->y2;
+}
 
 Point p[100];
 
 Director director[15];
 int nomerDirector = 0;
+
+struct PredXYDirector
+{
+    int PredX;
+    int PredY;
+};
+
+PredXYDirector PXYD[100];
 
 Bomzh b;
 
@@ -52,6 +70,8 @@ void collisionCheck(Stena s, Bomzh* b, int predX, int predY)
         b->y = predY;
     }
 }
+
+
 
 void drawStena(Stena s)
 {
@@ -83,19 +103,24 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
 
         int predX = b.x;
         int predY = b.y;
+
         for (int nomer = 0; nomer < nomer_sten; nomer++)
         {
             drawStena(stena[nomer]);
+            fillCrashZone(&stena[nomer]);
         }
 
         //CatchCheck(b, director[nomerDirector], nomer);
 
         moveBomzh(&b);
-
-        for (int nomer = 0; nomer < nomer_sten; nomer++)
+        for (int nomer = 0; nomer < nomer_directorov; nomer++)
         {
-          collisionCheck(stena[nomer], &b, predX, predY);
+            PXYD[nomer].PredX = d[nomer].x;
+            PXYD[nomer].PredY = d[nomer].y;
+            moveDirector(&d[nomer], &p[nomer]);
+            fillCrashZone(&d[nomer]);
         }
+
         fillCrashZone(&b);
         for (int nomer = 0; nomer < nomer_piteka; nomer++)
         {
@@ -103,6 +128,28 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
             {
                 b.x = predX;
                 b.y = predY;
+            }
+        }
+
+        for (int nomer = 0; nomer < nomer_sten; nomer++)
+        {
+            if (intersect(b.crash, stena[nomer].crash))
+            {
+                b.x = predX;
+                b.y = predY;
+            }
+          //collisionCheck(stena[nomer], &b, predX, predY);
+        }
+
+        for (int nomer = 0; nomer < nomer_sten; nomer++)
+        {
+            for (int nomer1 = 0; nomer1 < nomer_directorov; nomer1++)
+            {
+                if (intersect(d[nomer1].crash, stena[nomer].crash))
+                {
+                    d[nomer1].x = PXYD[nomer1].PredX;
+                    d[nomer1].y = PXYD[nomer1].PredY;
+                }
             }
         }
 
@@ -124,7 +171,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
             p[nomer].x2 = b.x;
             p[nomer].y2 = b.y;
             drawDirector(d[nomer]);
-            moveDirector(&d[nomer], &p[nomer]);
+            //moveDirector(&d[nomer], &p[nomer]);
             catchCheck(b, d[nomer]);
         }
 
