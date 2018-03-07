@@ -34,6 +34,7 @@ struct Director
     int frameTimer;
     int radius;//נאהטףס מבחמנא
     //int exit_time;
+    CrashZone crash;
 };
 
 void catchCheck(Bomzh b, Director d)
@@ -151,4 +152,12 @@ void drawDirector(Director d)
     {
         txTransparentBlt(txDC(), d.x - d.PointStartX2 - abs_x , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
     }
+}
+
+void fillCrashZone(Director* d)
+{
+    d->crash.x1 = d->x - 27;
+    d->crash.y1 = d->y - 20;
+    d->crash.x2 = d->x + 27;
+    d->crash.y2 = d->y + 20;
 }
