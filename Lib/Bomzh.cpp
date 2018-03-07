@@ -118,8 +118,8 @@ void moveBomzh(Bomzh* b)
 
 void fillCrashZone(Bomzh* b)
 {
-    b->crash.x1 = b->x - 27;
-    b->crash.y1 = b->y - 12;
-    b->crash.x2 = b->x + 27;
-    b->crash.y2 = b->y + 12;
+    b->crash.x1 = b->x - 10;
+    b->crash.y1 = b->y - 10;
+    b->crash.x2 = b->x + 20;
+    b->crash.y2 = b->y + 10;
 }

@@ -33,9 +33,18 @@ struct Director
     int frame;
     int frameTimer;
     int radius;//נאהטףס מבחמנא
+    CrashZone crash;
     //int exit_time;
     CrashZone crash;
 };
+
+void fillCrashZone(Director* d)
+{
+    d->crash.x1 = d->x - 27;
+    d->crash.y1 = d->y - 12;
+    d->crash.x2 = d->x + 27;
+    d->crash.y2 = d->y + 12;
+}
 
 void catchCheck(Bomzh b, Director d)
 {
