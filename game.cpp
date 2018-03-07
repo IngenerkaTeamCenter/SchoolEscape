@@ -51,14 +51,6 @@ Pitek Piteks[100];
 int nomerPiteka = 0;
 
 
-/*void collisionCheckDirector (Director* d, Point* p)
-{
-    if(&d[nomer].x == &d[nomer - 1])
-    {
-        d[nomer].x++// or d[nomer].speed = 0*
-    }
-}*/
-
 void collisionCheck(Stena s, Bomzh* b, int predX, int predY)
 {
     if(((b->x - 12 <= s.x1 && s.x1 <= b->x + 12) ||
@@ -71,13 +63,12 @@ void collisionCheck(Stena s, Bomzh* b, int predX, int predY)
     }
 }
 
-
-
 void drawStena(Stena s)
 {
     txSetFillColor(TX_RED);
     txRectangle(s.x1, s.y1, s.x2, s.y2);
 }
+
 void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
 {
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
@@ -138,7 +129,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
                 b.x = predX;
                 b.y = predY;
             }
-          //collisionCheck(stena[nomer], &b, predX, predY);
         }
 
         for (int nomer = 0; nomer < nomer_sten; nomer++)
@@ -171,8 +161,18 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
             p[nomer].x2 = b.x;
             p[nomer].y2 = b.y;
             drawDirector(d[nomer]);
-            //moveDirector(&d[nomer], &p[nomer]);
+            moveDirector(&d[nomer], &p[nomer]);
+            fillCrashZone(&d[nomer]);
+
             catchCheck(b, d[nomer]);
+            for (int nomer1 = 0; nomer1 < nomer_piteka; nomer1++)
+            {
+                if (intersect(d[nomer].crash, pi[nomer1].crash))
+                {
+                    d[nomer].x = d[nomer].x - 1;
+                    d[nomer].y = d[nomer].y - 1;;
+                }
+            }
         }
 
         //Directors collision
@@ -187,18 +187,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
                 }
             }
         }
-/*
-        Ñòóë ñòóëüÿ[100];
-        for (int íîìåð_ñòóëà = 0; íîìåð_ñòóëà < 100; íîìåð_ñòóëà++)
-        {
-            ñòóëüÿ[íîìåð_ñòóëà].êîîðäèíàòà_õ =
-            ñòóëüÿ[íîìåð_ñòóëà].ìàññà =
-        }
-        for (int íîìåð_ñòóëà = 0; íîìåð_ñòóëà < 100; íîìåð_ñòóëà++)
-        {
-            if ()
-        }*/
-
+      
         txSleep(10);
     }
     txDeleteDC(fon);
@@ -234,7 +223,6 @@ void MapSchitivanie()
     string stroka_Personage;
     string stroka_X;
     string stroka_Y;
-    //string a;
     Map.open("Lib\\Map.txt");
 
     while (Map.good()) {
@@ -321,13 +309,15 @@ int main(int argc, char *argv[])
         b.picUp = txLoadImage ("IMG\\Men\\Robot\\RobotUp.bmp");
         b.picLeft = txLoadImage ("IMG\\Men\\Robot\\RobotLeft.bmp");
         b.picRight = txLoadImage ("IMG\\Men\\Robot\\RobotRight.bmp");
-    } else if(strcmp(nomerPerson, "2") == 0)
+    } 
+    else if(strcmp(nomerPerson, "2") == 0)
     {
         b.picDown = txLoadImage ("IMG\\Men\\Homeless\\HomelessDown.bmp");
         b.picUp = txLoadImage ("IMG\\Men\\Homeless\\HomelessUp.bmp");
         b.picLeft = txLoadImage ("IMG\\Men\\Homeless\\HomelessLeft.bmp");
         b.picRight = txLoadImage ("IMG\\Men\\Homeless\\HomelessRight.bmp");
-    } else if(strcmp(nomerPerson, "1") == 0)
+    } 
+    else if(strcmp(nomerPerson, "1") == 0)
     {
         b.picDown = txLoadImage ("IMG\\Men\\Girl\\GirlDown.bmp");
         b.picUp = txLoadImage ("IMG\\Men\\Girl\\GirlUp.bmp");
