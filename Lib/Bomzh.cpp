@@ -40,6 +40,8 @@ struct Bomzh
     int frame;
     int frameTimer;
     CrashZone crash;
+    int predX;
+    int predY;
 };
 
 void drawBomzh(Bomzh b)
