@@ -3,6 +3,9 @@
 #include "Bomzh.cpp"
 #include <iostream>
 #include <string>
+#include <fstream>
+using namespace std;
+
 
 struct Point
 {
@@ -38,6 +41,23 @@ struct Director
     int predX;
     int predY;
 };
+
+Director director[15];
+int nomerDirector = 0;
+
+void readDirector(ifstream* Map, string stroka_Personage, Director* director, int* nomerDirector)
+{
+    string stroka_X = "";
+    string stroka_Y = "";
+    if (strcmp(stroka_Personage.c_str(), "director") == 0)
+        {
+            getline (*Map, stroka_X);
+            director[*nomerDirector].x = atoi(stroka_X.c_str());
+            getline (*Map, stroka_Y);
+            director[*nomerDirector].y = atoi(stroka_X.c_str());
+            *nomerDirector = *nomerDirector + 1;
+        }
+}
 
 void fillCrashZone(Director* d)
 {
@@ -163,3 +183,4 @@ void drawDirector(Director d)
         txTransparentBlt(txDC(), d.x - d.PointStartX2 - abs_x , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
     }
 }
+
