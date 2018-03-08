@@ -25,7 +25,10 @@ struct Robot
     int frameTimer;
 };
 
-void drawRobot(Robot r)
+Robot robots[100];
+int nomerRobota = 0;
+
+void drawRobot(Robot r, int nomerRobota)
 {
 
     if (r.direction == DIRECTION_DOWN)
@@ -44,7 +47,41 @@ void drawRobot(Robot r)
     {
         txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picRight, r.frame * 47, 0, RGB(255, 255, 255));
     }
+
+    for ( int nomer = 0; nomer < nomerRobota; nomer++)
+    {
+        /*robots[nomer].height = 62;
+        robots[nomer].speed = 10;
+        robots[nomer].manyframeRight = 4;
+        robots[nomer].manyframeLeft = 4;
+        robots[nomer].manyframeUp = 4;
+        robots[nomer].manyframeDown = 4;
+        directionFrameFrameTimer(&robots[nomer].direction, &robots[nomer].frame, &robots[nomer].frameTimer);
+        robots[nomer].width = 50;*/
+        if (nomer > 0)
+        {
+            robots[nomer].picDown = robots[0].picDown;
+            robots[nomer].picUp = robots[0].picUp;
+            robots[nomer].picLeft = robots[0].picLeft;
+            robots[nomer].picRight = robots[0].picRight;
+        }
+        else
+        {
+            robots[nomer].picDown = txLoadImage("IMG\\Men\\Robot\\RobotDown.bmp");
+            robots[nomer].picUp = txLoadImage("IMG\\Men\\Robot\\RobotUp.bmp");
+            robots[nomer].picLeft = txLoadImage("IMG\\Men\\Robot\\RobotLeft.bmp");
+            robots[nomer].picRight = txLoadImage("IMG\\Men\\Robot\\RobotRight.bmp");
+        }
+    }
 }
+
+void directionFrameFrameTimer(int *direction, int *frame, int *frameTimer)
+{
+    *direction = 0;
+    *frame = 0;
+    *frameTimer = 0;
+}
+
 
 void readRobot(ifstream* Map, string stroka_Personage, Robot* robots, int* nomerRobota)
 {
@@ -57,6 +94,17 @@ void readRobot(ifstream* Map, string stroka_Personage, Robot* robots, int* nomer
         getline (*Map, stroka_Y);
         robots[*nomerRobota].y = atoi(stroka_Y.c_str());
         *nomerRobota = *nomerRobota + 1;
+    }
+    for(int nomer = 0; nomer < *nomerRobota; nomer++)
+    {
+    robots[nomer].height = 62;
+    robots[nomer].speed = 10;
+    robots[nomer].manyframeRight = 4;
+    robots[nomer].manyframeLeft = 4;
+    robots[nomer].manyframeUp = 4;
+    robots[nomer].manyframeDown = 4;
+    directionFrameFrameTimer(&robots[nomer].direction, &robots[nomer].frame, &robots[nomer].frameTimer);
+    robots[nomer].width = 50;
     }
 }
 
