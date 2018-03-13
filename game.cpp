@@ -92,19 +92,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
                 b.x = b.predX;
                 b.y = b.predY;
             }
-              fillCrashZone(&stena[nomer]);
-        }
-
-        for (int nomer = 0; nomer < nomer_sten; nomer++)
-        {
-            for (int nomer1 = 0; nomer1 < nomer_directorov; nomer1++)
-            {
-                if (intersect(d[nomer1].crash, stena[nomer].crash))
-                {
-                    d[nomer1].x = d[nomer1].predX;
-                    d[nomer1].y = d[nomer1].predY;
-                }
-            }
         }
 
         //Directors collision
@@ -130,13 +117,22 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
 
             for (int nomer1 = 0; nomer1 < nomer_piteka; nomer1++)
             {
-                fillCrashZone(&Piteks[nomer1]);
                 if (intersect(d[nomer].crash, pi[nomer1].crash))
                 {
-                    d[nomer].x = d[nomer1].predX;
-                    d[nomer].y = d[nomer1].predY;
+                    d[nomer].x = d[nomer].predX;
+                    d[nomer].y = d[nomer].predY;
                 }
             }
+
+            for (int nomer1 = 0; nomer1 < nomer_sten; nomer1++)
+            {
+                if (intersect(d[nomer].crash, stena[nomer1].crash))
+                {
+                    d[nomer].x = d[nomer].predX;
+                    d[nomer].y = d[nomer].predY;
+                }
+            }
+
         }
 
         drawLevel(stena, pi, r, d, b, nomerStena, nomerPiteka, nomerRobota, nomerDirector);

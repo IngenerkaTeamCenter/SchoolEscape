@@ -1,6 +1,9 @@
 director
 700
 500
+director
+700
+500
 bomzh
 500
 200

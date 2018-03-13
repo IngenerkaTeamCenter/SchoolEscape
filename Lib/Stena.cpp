@@ -11,8 +11,14 @@ void drawStena(Stena s)
     txRectangle(s.x1, s.y1, s.x2, s.y2);
 }
 
-Stena stena[10];
-int nomerStena = 0;
+void fillCrashZone(Stena* stena)
+{
+    stena->crash.x1 = stena->x1;
+    stena->crash.y1 = stena->y1;
+    stena->crash.x2 = stena->x2;
+    stena->crash.y2 = stena->y2;
+}
+
 
 void readStena(ifstream* Map, string stroka_Personage, Stena* stena, int* nomerStena)
 {
@@ -29,15 +35,11 @@ void readStena(ifstream* Map, string stroka_Personage, Stena* stena, int* nomerS
         getline (*Map, stroka_Y);
         stena[*nomerStena].y2 = atoi(stroka_Y.c_str());
 
+        fillCrashZone(&stena[*nomerStena]);
         *nomerStena = *nomerStena + 1;
     }
 }
 
-void fillCrashZone(Stena* stena)
-{
-    stena->crash.x1 = stena->x1;
-    stena->crash.y1 = stena->y1;
-    stena->crash.x2 = stena->x2;
-    stena->crash.y2 = stena->y2;
-}
 
+Stena stena[10];
+int nomerStena = 0;
