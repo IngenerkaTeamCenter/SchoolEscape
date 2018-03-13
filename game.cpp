@@ -1,51 +1,42 @@
 #include "Lib\\TXLib.h"
+#include "Lib\\directionFrameFrameTimer.cpp"
 #include "Lib\\Bomzh.cpp"
 #include "Lib\\consmenu.cpp"
 #include "Lib\\Director.cpp"
 #include "Lib\\Pitek.cpp"
 #include "Lib\\Robot.cpp"
-//#include <iostream>
-//#include <fstream>
-//#include <string>
+#include "Lib\\Stena.cpp"
 
 using namespace std;
 
-struct Stena
-{
-    int x1, x2;
-    int y1, y2;
-    CrashZone crash;
-};
-
-void fillCrashZone(Stena* stena)
-{
-    stena->crash.x1 = stena->x1;
-    stena->crash.y1 = stena->y1;
-    stena->crash.x2 = stena->x2;
-    stena->crash.y2 = stena->y2;
-}
-
-void drawStena(Stena s)
-{
-    txSetFillColor(TX_RED);
-    txRectangle(s.x1, s.y1, s.x2, s.y2);
-}
-
-
-Stena stena[10];
-int nomerStena = 0;
 
 Point p[100];
-Director director[15];
-int nomerDirector = 0;
 
 Bomzh b;
 
-Robot robots[100];
-int nomerRobota = 0;
+void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, int nomer_sten, int nomer_piteka, int nomer_robotov, int nomer_directorov)
+{
+     for (int nomer = 0; nomer < nomer_sten; nomer++)
+        {
+            drawStena(stena[nomer]);
+        }
+        for (int nomer = 0; nomer < nomer_piteka; nomer++)
+        {
+            drawPitek(pi[nomer]);
+        }
 
-Pitek Piteks[100];
-int nomerPiteka = 0;
+        for (int nomer = 0; nomer < nomer_robotov; nomer++)
+        {
+            drawRobot(r[nomer], nomer_robotov);
+        }
+
+        drawBomzh(b);
+
+        for (int nomer = 0; nomer < nomer_directorov; nomer++)
+        {
+            drawDirector(d[nomer]);
+        }
+}
 
 
 void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
@@ -66,11 +57,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
     {
         txBitBlt(txDC(), 0, 0, 1200, 900, fon, 0, 0);
 
-        if(GameMode == 1)
-        {
-            txCircle(director[0].x, director[0].y, director[0].radius);
-        }
-
         //Move & intersect
         for (int nomer = 0; nomer < nomer_robotov; nomer++)
         {
@@ -90,14 +76,14 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
             fillCrashZone(&d[nomer]);
         }
 
-        for (int nomer = 0; nomer < nomer_piteka; nomer++)
+        /*for (int nomer = 0; nomer < nomer_piteka; nomer++)
         {
             if (intersect(b.crash, pi[nomer].crash))
             {
                 b.x = b.predX;
                 b.y = b.predY;
             }
-        }
+        }*/
 
         for (int nomer = 0; nomer < nomer_sten; nomer++)
         {
@@ -105,18 +91,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
             {
                 b.x = b.predX;
                 b.y = b.predY;
-            }
-        }
-
-        for (int nomer = 0; nomer < nomer_sten; nomer++)
-        {
-            for (int nomer1 = 0; nomer1 < nomer_directorov; nomer1++)
-            {
-                if (intersect(d[nomer1].crash, stena[nomer].crash))
-                {
-                    d[nomer1].x = d[nomer1].predX;
-                    d[nomer1].y = d[nomer1].predY;
-                }
             }
         }
 
@@ -139,53 +113,41 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
             p[nomer].y2 = b.y;
             moveDirector(&d[nomer], &p[nomer]);
             fillCrashZone(&d[nomer]);
-            catchCheck(b, d[nomer]);
+            //catchCheck(b, d[nomer]);
 
             for (int nomer1 = 0; nomer1 < nomer_piteka; nomer1++)
             {
                 if (intersect(d[nomer].crash, pi[nomer1].crash))
                 {
-                    d[nomer].x = d[nomer].x - 1;
-                    d[nomer].y = d[nomer].y - 1;;
+                    d[nomer].x = d[nomer].predX;
+                    d[nomer].y = d[nomer].predY;
                 }
             }
+
+            for (int nomer1 = 0; nomer1 < nomer_sten; nomer1++)
+            {
+                if (intersect(d[nomer].crash, stena[nomer1].crash))
+                {
+                    d[nomer].x = d[nomer].predX;
+                    d[nomer].y = d[nomer].predY;
+                }
+            }
+
         }
 
-
-        //Draw
-        for (int nomer = 0; nomer < nomer_sten; nomer++)
-        {
-            drawStena(stena[nomer]);
-        }
-        for (int nomer = 0; nomer < nomer_piteka; nomer++)
-        {
-            drawPitek(pi[nomer]);
-        }
-
-        for (int nomer = 0; nomer < nomer_robotov; nomer++)
-        {
-            drawRobot(r[nomer]);
-        }
-
-        drawBomzh(b);
-
-        for (int nomer = 0; nomer < nomer_directorov; nomer++)
-        {
-            drawDirector(d[nomer]);
-        }
-
+        drawLevel(stena, pi, r, d, b, nomerStena, nomerPiteka, nomerRobota, nomerDirector);
 
         txSleep(10);
     }
     txDeleteDC(fon);
  }
 
-void directionFrameFrameTimer(int *direction, int *frame, int *frameTimer)
+/*void directionFrameFrameTimer(int *direction, int *frame, int *frameTimer)
 {
     *direction = 0;
     *frame = 0;
     *frameTimer = 0;
-}
+}*/
 
 void DeletePics(HDC* picDown, HDC* picUp, HDC* picLeft, HDC* picRight)
 {
@@ -209,38 +171,22 @@ void MapSchitivanie()
 
         readRobot(&Map, stroka_Personage, robots, &nomerRobota);
 
-        if (strcmp(stroka_Personage.c_str(), "director") == 0)
-        {
-            getline (Map, stroka_X);
-            director[nomerDirector].x = atoi(stroka_X.c_str());
-            getline (Map, stroka_Y);
-            robots[nomerDirector].y = atoi(stroka_X.c_str());
-            nomerDirector++;
-        }
+        readStena(&Map, stroka_Personage, stena, &nomerStena);
 
-        if (strcmp(stroka_Personage.c_str(), "bomzh") == 0)
+        readDirector(&Map, stroka_Personage, director, &nomerDirector);
+
+        readPitek(&Map, stroka_Personage, Piteks, &nomerPiteka);
+
+        readBomzh(&Map, stroka_Personage, b);
+        /*if (strcmp(stroka_Personage.c_str(), "bomzh") == 0)
         {
             getline (Map, stroka_X);
             b.x = atoi(stroka_X.c_str());
             getline (Map, stroka_Y);
             b.y = atoi(stroka_Y.c_str());
-        }
+        }*/
 
-        if (strcmp(stroka_Personage.c_str(), "stena") == 0)
-        {
-            getline (Map, stroka_X);
-            stena[nomerStena].x1 = atoi(stroka_X.c_str());
-            getline (Map, stroka_Y);
-            stena[nomerStena].y1 = atoi(stroka_Y.c_str());
-            getline (Map, stroka_X);
-            stena[nomerStena].x2 = atoi(stroka_X.c_str());
-            getline (Map, stroka_Y);
-            stena[nomerStena].y2 = atoi(stroka_Y.c_str());
-            fillCrashZone(&stena[nomerStena]);
-            nomerStena++;
-        }
-
-        if (strcmp(stroka_Personage.c_str(), "pitek") == 0)
+        /*if (strcmp(stroka_Personage.c_str(), "pitek") == 0)
         {
             getline (Map, stroka_X);
             Piteks[nomerPiteka].x = atoi(stroka_X.c_str());
@@ -248,7 +194,7 @@ void MapSchitivanie()
             Piteks[nomerPiteka].y = atoi(stroka_Y.c_str());
             fillCrashZone(&Piteks[nomerPiteka]);
             nomerPiteka++;
-        }
+        }*/
     }
 
     Map.close();
@@ -266,8 +212,8 @@ int main(int argc, char *argv[])
         nomerPerson = "2";
     }
 
-    MapSchitivanie();
     txCreateWindow (1090, 654);
+    MapSchitivanie();
     txBegin();
 
     b.x = 300;
@@ -352,15 +298,15 @@ int main(int argc, char *argv[])
 
     for ( int nomer = 0; nomer < nomerRobota; nomer++)
     {
-        robots[nomer].height = 62;
+        /*robots[nomer].height = 62;
         robots[nomer].speed = 10;
         robots[nomer].manyframeRight = 4;
         robots[nomer].manyframeLeft = 4;
         robots[nomer].manyframeUp = 4;
         robots[nomer].manyframeDown = 4;
-        directionFrameFrameTimer(&robots[nomer].direction, &robots[nomer].frame, &robots[nomer].frameTimer);
-        robots[nomer].width = 50;
-        if (nomer > 0)
+        robots[nomer].width = 50;*/
+        //directionFrameFrameTimer(&robots[nomer].direction, &robots[nomer].frame, &robots[nomer].frameTimer);
+        /*if (nomer > 0)
         {
             robots[nomer].picDown = robots[0].picDown;
             robots[nomer].picUp = robots[0].picUp;
@@ -373,7 +319,7 @@ int main(int argc, char *argv[])
             robots[nomer].picUp = txLoadImage("IMG\\Men\\Robot\\RobotUp.bmp");
             robots[nomer].picLeft = txLoadImage("IMG\\Men\\Robot\\RobotLeft.bmp");
             robots[nomer].picRight = txLoadImage("IMG\\Men\\Robot\\RobotRight.bmp");
-        }
+        }*/
     }
 
     scene1(b, robots, director, p, Piteks, stena, nomerRobota, nomerDirector, nomerPiteka, nomerStena);

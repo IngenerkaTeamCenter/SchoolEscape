@@ -3,6 +3,9 @@
 #include "Bomzh.cpp"
 #include <iostream>
 #include <string>
+#include <fstream>
+using namespace std;
+
 
 struct Point
 {
@@ -39,6 +42,23 @@ struct Director
     int predY;
 };
 
+Director director[15];
+int nomerDirector = 0;
+
+void readDirector(ifstream* Map, string stroka_Personage, Director* director, int* nomerDirector)
+{
+    string stroka_X = "";
+    string stroka_Y = "";
+    if (strcmp(stroka_Personage.c_str(), "director") == 0)
+        {
+            getline (*Map, stroka_X);
+            director[*nomerDirector].x = atoi(stroka_X.c_str());
+            getline (*Map, stroka_Y);
+            director[*nomerDirector].y = atoi(stroka_X.c_str());
+            *nomerDirector = *nomerDirector + 1;
+        }
+}
+
 void fillCrashZone(Director* d)
 {
     d->crash.x1 = d->x - 27;
@@ -47,7 +67,7 @@ void fillCrashZone(Director* d)
     d->crash.y2 = d->y + 12;
 }
 
-void catchCheck(Bomzh b, Director d)
+/*void catchCheck(Bomzh b, Director d)
 {
     if((d.x - b.x) * (d.x - b.x) + (d.y - b.y) * (d.y - b.y) <= 75)
     {
@@ -55,7 +75,7 @@ void catchCheck(Bomzh b, Director d)
         exit(1);
         txDestroyWindow();
     }
-}
+}*/
 
 
 void moveDirector(Director *d, Point* p)
@@ -121,6 +141,8 @@ void moveDirector(Director *d, Point* p)
         char str[100];
         sprintf(str, "%d", p->nomerPoint);
         txTextOut(d->x, 400, str);
+
+        txCircle(director[0].x, director[0].y, director[0].radius);
     }
 
     if (predX != d->x || predY != d->y)
@@ -163,3 +185,4 @@ void drawDirector(Director d)
         txTransparentBlt(txDC(), d.x - d.PointStartX2 - abs_x , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
     }
 }
+
