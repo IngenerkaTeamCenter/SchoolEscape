@@ -2,6 +2,10 @@
 
 #include "TXLib.h"
 #include "consmenu.cpp"
+#include <iostream>
+#include <string>
+#include <fstream>
+using namespace std;
 
 struct CrashZone
 {
@@ -43,6 +47,19 @@ struct Bomzh
     int predX;
     int predY;
 };
+
+void readBomzh(ifstream* Map, string stroka_Personage, Bomzh b)
+{
+    if (strcmp(stroka_Personage.c_str(), "bomzh") == 0)
+        {
+            string stroka_X = "";
+            string stroka_Y = "";
+            getline (*Map, stroka_X);
+            b.x = atoi(stroka_X.c_str());
+            getline (*Map, stroka_Y);
+            b.y = atoi(stroka_Y.c_str());
+        }
+}
 
 void drawBomzh(Bomzh b)
 {

@@ -13,7 +13,6 @@ const int DIRECTION_UP = 1;
 const int DIRECTION_LEFT = 2;
 const int DIRECTION_RIGHT = 3;
 
-const int GameMode = 0;
-//int nomerPerson = 2;
+const int GameMode = 1;
 int abs_x = 0;
 int abs_y = 0;

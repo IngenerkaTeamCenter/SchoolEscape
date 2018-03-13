@@ -25,7 +25,10 @@ struct Robot
     int frameTimer;
 };
 
-void drawRobot(Robot r)
+Robot robots[100];
+int nomerRobota = 0;
+
+void drawRobot(Robot r, int nomerRobota)
 {
 
     if (r.direction == DIRECTION_DOWN)
@@ -56,6 +59,31 @@ void readRobot(ifstream* Map, string stroka_Personage, Robot* robots, int* nomer
         robots[*nomerRobota].x = atoi(stroka_X.c_str());
         getline (*Map, stroka_Y);
         robots[*nomerRobota].y = atoi(stroka_Y.c_str());
+
+
+        robots[*nomerRobota].height = 62;
+        robots[*nomerRobota].speed = 10;
+        robots[*nomerRobota].manyframeRight = 4;
+        robots[*nomerRobota].manyframeLeft = 4;
+        robots[*nomerRobota].manyframeUp = 4;
+        robots[*nomerRobota].manyframeDown = 4;
+        robots[*nomerRobota].width = 50;
+        directionFrameFrameTimer(&robots[*nomerRobota].direction, &robots[*nomerRobota].frame, &robots[*nomerRobota].frameTimer);
+        if (*nomerRobota > 0)
+        {
+            robots[*nomerRobota].picDown = robots[0].picDown;
+            robots[*nomerRobota].picUp = robots[0].picUp;
+            robots[*nomerRobota].picLeft = robots[0].picLeft;
+            robots[*nomerRobota].picRight = robots[0].picRight;
+        }
+        else
+        {
+            robots[*nomerRobota].picDown = txLoadImage("IMG\\Men\\Robot\\RobotDown.bmp");
+            robots[*nomerRobota].picUp = txLoadImage("IMG\\Men\\Robot\\RobotUp.bmp");
+            robots[*nomerRobota].picLeft = txLoadImage("IMG\\Men\\Robot\\RobotLeft.bmp");
+            robots[*nomerRobota].picRight = txLoadImage("IMG\\Men\\Robot\\RobotRight.bmp");
+        }
+
         *nomerRobota = *nomerRobota + 1;
     }
 }
