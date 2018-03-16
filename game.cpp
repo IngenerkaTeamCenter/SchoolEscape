@@ -6,6 +6,7 @@
 #include "Lib\\Pitek.cpp"
 #include "Lib\\Robot.cpp"
 #include "Lib\\Stena.cpp"
+#include "Lib\\Exit.cpp"
 
 using namespace std;
 
@@ -39,7 +40,8 @@ void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, int nome
 }
 
 
-void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
+
+void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, Exit e, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
 {
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
@@ -52,12 +54,30 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
         p[nomer].nomerPoint = 1;
     }
 
+    int EscapeTimer = 0;
+
     HDC fon = txLoadImage("IMG\\Maps\\Level1\\canteen.bmp");
     while (!GetAsyncKeyState(VK_ESCAPE))
     {
         txBitBlt(txDC(), 0, 0, 1200, 900, fon, 0, 0);
 
         //Move & intersect
+
+                if(GetAsyncKeyState('Q'))
+        {
+
+            drawExit(e);
+
+            EscapeTimer++;
+
+            if(EscapeTimer >= 30)
+                break;
+        }
+        else
+            EscapeTimer = 0;
+
+        txSleep(8);
+
         for (int nomer = 0; nomer < nomer_robotov; nomer++)
         {
             moveRobot(&r[nomer]);
@@ -76,14 +96,14 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, i
             fillCrashZone(&d[nomer]);
         }
 
-        /*for (int nomer = 0; nomer < nomer_piteka; nomer++)
+        for (int nomer = 0; nomer < nomer_piteka; nomer++)
         {
             if (intersect(b.crash, pi[nomer].crash))
             {
                 b.x = b.predX;
                 b.y = b.predY;
             }
-        }*/
+        }
 
         for (int nomer = 0; nomer < nomer_sten; nomer++)
         {
@@ -216,6 +236,11 @@ int main(int argc, char *argv[])
     MapSchitivanie();
     txBegin();
 
+    Exit e;
+    e.x = 60;
+    e.y = 10;
+    e.Exit = txLoadImage("IMG\\ImgMainMenu\\Exit0.bmp");
+
     b.x = 300;
     b.y = 200;
     b.width = 62;
@@ -322,7 +347,7 @@ int main(int argc, char *argv[])
         }*/
     }
 
-    scene1(b, robots, director, p, Piteks, stena, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
+    scene1(b, robots, director, p, Piteks, stena, e, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
 
     DeletePics(&b.picDown, &b.picUp, &b.picLeft, &b.picRight);
     for (int nomer = 0; nomer < nomerRobota; nomer++)
