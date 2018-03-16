@@ -45,13 +45,14 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
 {
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
-        p[nomer].x = 100;
+        p[nomer].x = 300;
         p[nomer].y = 100;
         p[nomer].x1 = 600;
         p[nomer].y1 = 100;
         p[nomer].x2 = b.x;
         p[nomer].y2 = b.y;
         p[nomer].nomerPoint = 1;
+        d[nomer].Stolknuls = 0;
     }
 
     int EscapeTimer = 0;
@@ -60,6 +61,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
     while (!GetAsyncKeyState(VK_ESCAPE))
     {
         txBitBlt(txDC(), 0, 0, 1200, 900, fon, 0, 0);
+        txBegin();
 
         //Move & intersect
 
@@ -67,16 +69,12 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         {
 
             drawExit(e);
-
             EscapeTimer++;
-
             if(EscapeTimer >= 30)
                 break;
         }
         else
             EscapeTimer = 0;
-
-        txSleep(8);
 
         for (int nomer = 0; nomer < nomer_robotov; nomer++)
         {
@@ -131,16 +129,20 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         {
             p[nomer].x2 = b.x;
             p[nomer].y2 = b.y;
+
             moveDirector(&d[nomer], &p[nomer]);
             fillCrashZone(&d[nomer]);
+
             //catchCheck(b, d[nomer]);
 
+            bool stolkn = false;
             for (int nomer1 = 0; nomer1 < nomer_piteka; nomer1++)
             {
                 if (intersect(d[nomer].crash, pi[nomer1].crash))
                 {
                     d[nomer].x = d[nomer].predX;
                     d[nomer].y = d[nomer].predY;
+                    stolkn = true;
                 }
             }
 
@@ -150,13 +152,32 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
                 {
                     d[nomer].x = d[nomer].predX;
                     d[nomer].y = d[nomer].predY;
+                    stolkn = true;
                 }
+            }
+
+            if (stolkn)
+            {
+                d[nomer].Stolknuls = d[nomer].Stolknuls + 1;
+                if (d[nomer].Stolknuls > 2)
+                {
+                    d[nomer].Stolknuls = 0;
+                }
+            }
+            else
+            {
+                d[nomer].Stolknuls = 0;
             }
 
         }
 
         drawLevel(stena, pi, r, d, b, nomerStena, nomerPiteka, nomerRobota, nomerDirector);
 
+char str[100];
+    sprintf(str, "%d", d[0].Stolknuls);  //Writing car_x_coord value to str
+    txTextOut(100, 100, str);
+
+        txEnd();
         txSleep(10);
     }
     txDeleteDC(fon);
