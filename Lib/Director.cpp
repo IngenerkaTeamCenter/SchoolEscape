@@ -40,6 +40,7 @@ struct Director
     //int exit_time;
     int predX;
     int predY;
+    int Stolknuls;
 };
 
 Director director[15];
@@ -118,20 +119,31 @@ void moveDirector(Director *d, Point* p)
         y = p->y2;
     }
 
-    if(d->y < y - d->speed)
+    if(d->Stolknuls == 2)
     {
         d->y = d->y + d->speed;
         d->direction = DIRECTION_DOWN;
     }
-    else if(d->y > y + d->speed){
+    else if(d->y < y - d->speed && d->Stolknuls != 1)
+    {
+        d->y = d->y + d->speed;
+        d->direction = DIRECTION_DOWN;
+    }
+    else if(d->y > y + d->speed && d->Stolknuls != 1){
         d->y = d->y - d->speed;
         d->direction = DIRECTION_UP;
     }
-    if(d->x < x - d->speed)
+
+    if(d->Stolknuls == 1)
+    {
+        d->x = d->x - d->speed;
+        d->direction = DIRECTION_LEFT;
+    }
+    else if(d->x < x - d->speed && d->Stolknuls != 2)
     {
         d->x = d->x + d->speed;
         d->direction = DIRECTION_RIGHT;
-    } else if(d->x > x + d->speed){
+    } else if(d->x > x + d->speed && d->Stolknuls != 2){
         d->x = d->x - d->speed;
         d->direction = DIRECTION_LEFT;
     }
@@ -183,6 +195,12 @@ void drawDirector(Director d)
     else if (d.direction == DIRECTION_RIGHT)
     {
         txTransparentBlt(txDC(), d.x - d.PointStartX2 - abs_x , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
+    }
+
+
+    if (d.Stolknuls > 0)
+    {
+        txTextOut(d.x, d.y - 20, "I'm embarassed");
     }
 }
 
