@@ -7,13 +7,46 @@
 #include "Lib\\Robot.cpp"
 #include "Lib\\Stena.cpp"
 #include "Lib\\Exit.cpp"
+#include <windows.h>
+#include <stdio.h>
 
 using namespace std;
 
 
 Point p[100];
 
+
 Bomzh b;
+
+void ConditionOfVictory(Bomzh* b)
+{
+    int xVictory = 666, yVictory = 555;
+
+    if((b->x - xVictory) * (b->x - xVictory) +
+       (b->y - yVictory) * (b->y - yVictory) <= 50 * 50)
+    {
+        txTextOut(0, 0, "You won");
+        exit(1);
+        txDestroyWindow();
+    }
+
+    if(Time - TimeBeg >= TimeVictory)
+    {
+        txTextOut(0, 0, "You won");
+        exit(1);
+        txDestroyWindow();
+    }
+
+    if(GameMode == 1)
+    {
+        txCircle(xVictory, yVictory, 50);
+        char str[100];
+        sprintf(str, "%d", b->x);
+        txTextOut(b->x, 100, str);
+        sprintf(str, "%d", b->y);
+        txTextOut(b->x + 100, 100, str);
+    }
+}
 
 void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, int nomer_sten, int nomer_piteka, int nomer_robotov, int nomer_directorov)
 {
@@ -43,6 +76,11 @@ void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, int nome
 
 void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, Exit e, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
 {
+    SYSTEMTIME st;
+    GetLocalTime(&st);
+    TimeBeg = 60 * st.wMinute + st.wSecond;
+    Time = 60 * st.wMinute + st.wSecond;
+
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
         p[nomer].x = 300;
@@ -84,6 +122,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         b.predX = b.x;
         b.predY = b.y;
         moveBomzh(&b);
+
         fillCrashZone(&b);
 
         for (int nomer = 0; nomer < nomer_directorov; nomer++)
@@ -173,12 +212,21 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
 
         drawLevel(stena, pi, r, d, b, nomerStena, nomerPiteka, nomerRobota, nomerDirector);
 
-char str[100];
-    sprintf(str, "%d", d[0].Stolknuls);  //Writing car_x_coord value to str
-    txTextOut(100, 100, str);
+
+        //Time += 10;
+        GetLocalTime(&st);
+
+
+
+        Time = 60 * st.wMinute + st.wSecond;
+        char stm[100];
+        sprintf(stm, "%d", TimeVictory - (Time - TimeBeg));
+        txTextOut(50, 50, stm);
+        ConditionOfVictory(&b);
 
         txEnd();
         txSleep(10);
+
     }
     txDeleteDC(fon);
  }
