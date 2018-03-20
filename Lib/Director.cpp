@@ -68,7 +68,7 @@ void fillCrashZone(Director* d)
     d->crash.y2 = d->y + 12;
 }
 
-/*void catchCheck(Bomzh b, Director d)
+void catchCheck(Bomzh b, Director d)
 {
     if((d.x - b.x) * (d.x - b.x) + (d.y - b.y) * (d.y - b.y) <= 75)
     {
@@ -76,7 +76,7 @@ void fillCrashZone(Director* d)
         exit(1);
         txDestroyWindow();
     }
-}*/
+}
 
 
 void moveDirector(Director *d, Point* p)
