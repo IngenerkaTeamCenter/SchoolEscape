@@ -276,7 +276,7 @@ void MapSchitivanie()
 
         readStena(&Map, stroka_Personage, stena, &nomerStena);
 
-        readDirector(&Map, stroka_Personage, director, &nomerDirector);
+        readDirector(&Map, stroka_Personage, director, &nomerDirector, p);
 
         readPitek(&Map, stroka_Personage, Piteks, &nomerPiteka);
 
