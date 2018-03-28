@@ -46,7 +46,7 @@ struct Director
 Director director[15];
 int nomerDirector = 0;
 
-void readDirector(ifstream* Map, string stroka_Personage, Director* director, int* nomerDirector)
+void readDirector(ifstream* Map, string stroka_Personage, Director* director, int* nomerDirector, Point* p)
 {
     string stroka_X = "";
     string stroka_Y = "";
@@ -56,6 +56,8 @@ void readDirector(ifstream* Map, string stroka_Personage, Director* director, in
             director[*nomerDirector].x = atoi(stroka_X.c_str());
             getline (*Map, stroka_Y);
             director[*nomerDirector].y = atoi(stroka_X.c_str());
+            getline (*Map, stroka_X);
+            p[*nomerDirector].x = atoi(stroka_X.c_str());
             *nomerDirector = *nomerDirector + 1;
         }
 }

@@ -46,6 +46,7 @@ struct Bomzh
     CrashZone crash;
     int predX;
     int predY;
+    int life;
 };
 
 void readBomzh(ifstream* Map, string stroka_Personage, Bomzh b)
