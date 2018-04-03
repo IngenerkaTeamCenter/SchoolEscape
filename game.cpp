@@ -13,10 +13,18 @@
 using namespace std;
 
 
-Point p[100];
+
 
 
 Bomzh b;
+
+void catchCheckR(Bomzh* b, Robot r)
+{
+    if(abs(r.x - b->x) <= 30 && abs(r.y - b->y) <= 30)
+    {
+        b->life -= 1;//(b.life -= 10)
+    }
+}
 
 void ConditionOfVictory(Bomzh* b)
 {
@@ -83,7 +91,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
 
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
-        p[nomer].x = 300;
         p[nomer].y = 100;
         p[nomer].x1 = 600;
         p[nomer].y1 = 100;
@@ -117,6 +124,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         for (int nomer = 0; nomer < nomer_robotov; nomer++)
         {
             moveRobot(&r[nomer]);
+            catchCheckR(&b, r[nomer]);
         }
 
         b.predX = b.x;
@@ -172,7 +180,8 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
             moveDirector(&d[nomer], &p[nomer]);
             fillCrashZone(&d[nomer]);
 
-            //catchCheck(b, d[nomer]);
+            catchCheck(b, d[nomer]);
+
 
             bool stolkn = false;
             for (int nomer1 = 0; nomer1 < nomer_piteka; nomer1++)
@@ -221,8 +230,12 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         Time = 60 * st.wMinute + st.wSecond;
         char stm[100];
         sprintf(stm, "%d", TimeVictory - (Time - TimeBeg));
-        txTextOut(50, 50, stm);
+        txTextOut(100, 50, stm);
         ConditionOfVictory(&b);
+
+        char stt[100];
+        sprintf(stt, "%d", b.life);
+        txTextOut(50, 50, stt);
 
         txEnd();
         txSleep(10);
@@ -262,7 +275,7 @@ void MapSchitivanie()
 
         readStena(&Map, stroka_Personage, stena, &nomerStena);
 
-        readDirector(&Map, stroka_Personage, director, &nomerDirector);
+        readDirector(&Map, stroka_Personage, director, &nomerDirector, p);
 
         readPitek(&Map, stroka_Personage, Piteks, &nomerPiteka);
 
@@ -322,6 +335,7 @@ int main(int argc, char *argv[])
     b.manyframeLeft = 4;
     b.manyframeUp = 4;
     b.manyframeDown = 4;
+    b.life = 100;
     directionFrameFrameTimer(&b.direction, &b.frame, &b.frameTimer);
     b.frameTimer = 0;
     if(strcmp(nomerPerson, "3") == 0)
@@ -388,32 +402,6 @@ int main(int argc, char *argv[])
         {
             Piteks[nomer].picDown = txLoadImage("IMG\\Items\\Pitek.bmp");
         }
-    }
-
-    for ( int nomer = 0; nomer < nomerRobota; nomer++)
-    {
-        /*robots[nomer].height = 62;
-        robots[nomer].speed = 10;
-        robots[nomer].manyframeRight = 4;
-        robots[nomer].manyframeLeft = 4;
-        robots[nomer].manyframeUp = 4;
-        robots[nomer].manyframeDown = 4;
-        robots[nomer].width = 50;*/
-        //directionFrameFrameTimer(&robots[nomer].direction, &robots[nomer].frame, &robots[nomer].frameTimer);
-        /*if (nomer > 0)
-        {
-            robots[nomer].picDown = robots[0].picDown;
-            robots[nomer].picUp = robots[0].picUp;
-            robots[nomer].picLeft = robots[0].picLeft;
-            robots[nomer].picRight = robots[0].picRight;
-        }
-        else
-        {
-            robots[nomer].picDown = txLoadImage("IMG\\Men\\Robot\\RobotDown.bmp");
-            robots[nomer].picUp = txLoadImage("IMG\\Men\\Robot\\RobotUp.bmp");
-            robots[nomer].picLeft = txLoadImage("IMG\\Men\\Robot\\RobotLeft.bmp");
-            robots[nomer].picRight = txLoadImage("IMG\\Men\\Robot\\RobotRight.bmp");
-        }*/
     }
 
     scene1(b, robots, director, p, Piteks, stena, e, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
