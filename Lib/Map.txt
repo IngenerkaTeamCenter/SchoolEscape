@@ -1,9 +1,11 @@
 director
 700
 500
+p.x = 9è00
 director
 700
 500
+p.x = 100
 bomzh
 500
 200

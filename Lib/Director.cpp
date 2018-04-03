@@ -11,9 +11,12 @@ struct Point
 {
     int x, y;
     int x1, y1;
+
     int x2, y2;
     int nomerPoint;
 };
+
+Point p[100];
 
 struct Director
 {
@@ -46,7 +49,7 @@ struct Director
 Director director[15];
 int nomerDirector = 0;
 
-void readDirector(ifstream* Map, string stroka_Personage, Director* director, int* nomerDirector)
+void readDirector(ifstream* Map, string stroka_Personage, Director* director, int* nomerDirector, Point* p)
 {
     string stroka_X = "";
     string stroka_Y = "";
@@ -56,6 +59,13 @@ void readDirector(ifstream* Map, string stroka_Personage, Director* director, in
             director[*nomerDirector].x = atoi(stroka_X.c_str());
             getline (*Map, stroka_Y);
             director[*nomerDirector].y = atoi(stroka_X.c_str());
+            getline (*Map, stroka_X);
+            //stroka_X.c_str() - конвертация string в const char*
+            //strlen - длина строки
+            //substr(a, b)- часть строки начиная с №a длиной b символов (6 символов под p.x_=_)
+
+            p[*nomerDirector].x = atoi(stroka_X.substr(6, strlen(stroka_X.c_str())-6).c_str());
+            //p[*nomerDirector].x = atoi(stroka_X.c_str());
             *nomerDirector = *nomerDirector + 1;
         }
 }
