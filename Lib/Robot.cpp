@@ -33,19 +33,19 @@ void drawRobot(Robot r, int nomerRobota)
 
     if (r.direction == DIRECTION_DOWN)
     {
-        txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picDown, r.frame * 45, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), r.x - r.width/2 - absolutX, r.y - r.height/2 - absolutY, r.width, r.height, r.picDown, r.frame * 45, 0, RGB(255, 255, 255));
     }
     else if (r.direction == DIRECTION_UP)
     {
-        txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picUp, r.frame * 47, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), r.x - r.width/2 - absolutX, r.y - r.height/2 - absolutY, r.width, r.height, r.picUp, r.frame * 47, 0, RGB(255, 255, 255));
     }
     else if (r.direction == DIRECTION_LEFT)
     {
-        txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picLeft, r.frame * 45, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), r.x - r.width/2 - absolutX, r.y - r.height/2 - absolutY, r.width, r.height, r.picLeft, r.frame * 45, 0, RGB(255, 255, 255));
     }
     else if (r.direction == DIRECTION_RIGHT)
     {
-        txTransparentBlt(txDC(), r.x - r.width/2, r.y - r.height/2, r.width, r.height, r.picRight, r.frame * 47, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), r.x - r.width/2 - absolutX, r.y - r.height/2 - absolutY, r.width, r.height, r.picRight, r.frame * 47, 0, RGB(255, 255, 255));
     }
 }
 
