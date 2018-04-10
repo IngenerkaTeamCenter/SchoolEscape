@@ -82,7 +82,7 @@ void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, int nome
 
 
 
-void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, Exit e, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
+void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, Exit e, LifeLane ll, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
 {
     SYSTEMTIME st;
     GetLocalTime(&st);
@@ -132,6 +132,15 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         moveBomzh(&b);
 
         fillCrashZone(&b);
+
+        drawLifeLane(b.x - 30, b.y - 100);
+
+        ll.x = 300;
+        ll.y = 200;
+        ll.width = 62;
+        ll.height = 84;
+
+        LifeLane = txLoadImage("IMG\\Items\\LifeLine.bmp");
 
         for (int nomer = 0; nomer < nomer_directorov; nomer++)
         {
@@ -404,7 +413,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    scene1(b, robots, director, p, Piteks, stena, e, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
+    scene1(b, robots, director, p, Piteks, stena, e, ll, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
 
     DeletePics(&b.picDown, &b.picUp, &b.picLeft, &b.picRight);
     for (int nomer = 0; nomer < nomerRobota; nomer++)
