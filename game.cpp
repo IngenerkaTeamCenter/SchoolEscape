@@ -1,6 +1,7 @@
 #include "Lib\\TXLib.h"
 #include "Lib\\directionFrameFrameTimer.cpp"
 #include "Lib\\Bomzh.cpp"
+#include "Lib\\Life.cpp"
 #include "Lib\\consmenu.cpp"
 #include "Lib\\Director.cpp"
 #include "Lib\\Pitek.cpp"
@@ -12,11 +13,8 @@
 
 using namespace std;
 
-
-
-
-
 Bomzh b;
+LifeLane ll;
 
 void catchCheckR(Bomzh* b, Robot r)
 {
@@ -58,26 +56,26 @@ void ConditionOfVictory(Bomzh* b)
 
 void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, int nomer_sten, int nomer_piteka, int nomer_robotov, int nomer_directorov)
 {
-     for (int nomer = 0; nomer < nomer_sten; nomer++)
-        {
-            drawStena(stena[nomer]);
-        }
-        for (int nomer = 0; nomer < nomer_piteka; nomer++)
-        {
-            drawPitek(pi[nomer]);
-        }
+    for (int nomer = 0; nomer < nomer_sten; nomer++)
+    {
+        drawStena(stena[nomer]);
+    }
+    for (int nomer = 0; nomer < nomer_piteka; nomer++)
+    {
+        drawPitek(pi[nomer]);
+    }
 
-        for (int nomer = 0; nomer < nomer_robotov; nomer++)
-        {
-            drawRobot(r[nomer], nomer_robotov);
-        }
+    for (int nomer = 0; nomer < nomer_robotov; nomer++)
+    {
+        drawRobot(r[nomer], nomer_robotov);
+    }
 
-        drawBomzh(b);
+    drawBomzh(b);
 
-        for (int nomer = 0; nomer < nomer_directorov; nomer++)
-        {
-            drawDirector(d[nomer]);
-        }
+    for (int nomer = 0; nomer < nomer_directorov; nomer++)
+    {
+        drawDirector(d[nomer]);
+    }
 }
 
 
@@ -110,17 +108,19 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         txBegin();
 
         //Move & intersect
-
-                if(GetAsyncKeyState('Q'))
+        if (GetAsyncKeyState('Q'))
         {
-
             drawExit(e);
             EscapeTimer++;
             if(EscapeTimer >= 30)
+            {
                 break;
+            }
         }
         else
+        {
             EscapeTimer = 0;
+        }
 
         for (int nomer = 0; nomer < nomer_robotov; nomer++)
         {
@@ -134,14 +134,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
 
         fillCrashZone(&b);
 
-        drawLifeLane(b.x - 30, b.y - 100);
-
-        ll.x = 300;
-        ll.y = 200;
-        ll.width = 62;
-        ll.height = 84;
-
-        LifeLane = txLoadImage("IMG\\Items\\LifeLine.bmp");
+        drawLifeLane(ll);
 
         for (int nomer = 0; nomer < nomer_directorov; nomer++)
         {
@@ -235,8 +228,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         //Time += 10;
         GetLocalTime(&st);
 
-
-
         Time = 60 * st.wMinute + st.wSecond;
         char stm[100];
         sprintf(stm, "%d", TimeVictory - (Time - TimeBeg));
@@ -252,14 +243,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
 
     }
     txDeleteDC(fon);
- }
-
-/*void directionFrameFrameTimer(int *direction, int *frame, int *frameTimer)
-{
-    *direction = 0;
-    *frame = 0;
-    *frameTimer = 0;
-}*/
+}
 
 void DeletePics(HDC* picDown, HDC* picUp, HDC* picLeft, HDC* picRight)
 {
@@ -333,6 +317,12 @@ int main(int argc, char *argv[])
     e.y = 10;
     e.Exit = txLoadImage("IMG\\ImgMainMenu\\Exit0.bmp");
 
+    ll.x = 300;
+    ll.y = 200;
+    ll.width = 100;
+    ll.height = 17;
+    ll.picDown = txLoadImage("IMG\\Items\\LifeLine.bmp");
+
     b.x = 500;
     b.y = 300;
     b.width = 62;
@@ -372,18 +362,7 @@ int main(int argc, char *argv[])
 
     for (int nomer = 0; nomer < nomerDirector; nomer++)
     {
-        director[nomer].speed = 1;
-        director[nomer].width = 61;
-        director[nomer].height = 96;
-        director[nomer].PointStartX1 = 27;
-        director[nomer].PointStartX2 = 24;
-        director[nomer].PointStartY = 74;
-        director[nomer].manyframeRight = 4;
-        director[nomer].manyframeLeft = 4;
-        director[nomer].manyframeUp = 4;
-        director[nomer].manyframeDown = 4;
-        directionFrameFrameTimer(&director[nomer].direction, &director[nomer].frame, &director[nomer].frameTimer);
-        director[nomer].radius = 170;
+        initDirector(&director[nomer]);
         if (nomer > 0)
         {
             director[nomer].picDown = director[0].picDown;

@@ -54,20 +54,36 @@ void readDirector(ifstream* Map, string stroka_Personage, Director* director, in
     string stroka_X = "";
     string stroka_Y = "";
     if (strcmp(stroka_Personage.c_str(), "director") == 0)
-        {
-            getline (*Map, stroka_X);
-            director[*nomerDirector].x = atoi(stroka_X.c_str());
-            getline (*Map, stroka_Y);
-            director[*nomerDirector].y = atoi(stroka_X.c_str());
-            getline (*Map, stroka_X);
-            //stroka_X.c_str() - конвертация string в const char*
-            //strlen - длина строки
-            //substr(a, b)- часть строки начиная с №a длиной b символов (6 символов под p.x_=_)
+    {
+        getline (*Map, stroka_X);
+        director[*nomerDirector].x = atoi(stroka_X.c_str());
+        getline (*Map, stroka_Y);
+        director[*nomerDirector].y = atoi(stroka_X.c_str());
+        getline (*Map, stroka_X);
+        //stroka_X.c_str() - конвертация string в const char*
+        //strlen - длина строки
+        //substr(a, b)- часть строки начиная с №a длиной b символов (6 символов под p.x_=_)
 
-            p[*nomerDirector].x = atoi(stroka_X.substr(6, strlen(stroka_X.c_str())-6).c_str());
-            //p[*nomerDirector].x = atoi(stroka_X.c_str());
-            *nomerDirector = *nomerDirector + 1;
-        }
+        p[*nomerDirector].x = atoi(stroka_X.substr(6, strlen(stroka_X.c_str())-6).c_str());
+        //p[*nomerDirector].x = atoi(stroka_X.c_str());
+        *nomerDirector = *nomerDirector + 1;
+    }
+}
+
+void initDirector(Director* d)
+{
+    d->speed = 1;
+    d->width = 61;
+    d->height = 96;
+    d->PointStartX1 = 27;
+    d->PointStartX2 = 24;
+    d->PointStartY = 74;
+    d->manyframeRight = 4;
+    d->manyframeLeft = 4;
+    d->manyframeUp = 4;
+    d->manyframeDown = 4;
+    directionFrameFrameTimer(&d->direction, &d->frame, &d->frameTimer);
+    d->radius = 170;
 }
 
 void fillCrashZone(Director* d)
