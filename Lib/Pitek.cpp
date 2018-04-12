@@ -16,7 +16,7 @@ struct Pitek
 
 void drawPitek(Pitek pi)
 {
-    txTransparentBlt(txDC(),  pi.x - pi.width / 2, pi.y - pi.height / 2, pi.width, pi.height, pi.picDown, 0, 0, RGB(255, 255, 255));
+    txTransparentBlt(txDC(),  pi.x - pi.width / 2 - absolutX, pi.y - pi.height / 2 - absolutY, pi.width, pi.height, pi.picDown, 0, 0, RGB(255, 255, 255));
 }
 
 void fillCrashZone(Pitek* pi)

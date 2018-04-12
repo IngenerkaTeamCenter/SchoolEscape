@@ -20,7 +20,7 @@ Bomzh b;
 
 void catchCheckR(Bomzh* b, Robot r)
 {
-    if(abs(r.x - b->x) <= 30 && abs(r.y - b->y) <= 30)
+    if(abs(r.x - b->x) <= 30 && abs(r.y - b->y) <= 80)
     {
         b->life -= 1;//(b.life -= 10)
     }
@@ -47,12 +47,12 @@ void ConditionOfVictory(Bomzh* b)
 
     if(GameMode == 1)
     {
-        txCircle(xVictory, yVictory, 50);
+        txCircle(xVictory - absolutX, yVictory - absolutY, 50);
         char str[100];
         sprintf(str, "%d", b->x);
-        txTextOut(b->x, 100, str);
+        txTextOut(b->x - absolutX, 100, str);
         sprintf(str, "%d", b->y);
-        txTextOut(b->x + 100, 100, str);
+        txTextOut(b->x + 100 - absolutX, 100, str);
     }
 }
 
@@ -105,7 +105,8 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
     HDC fon = txLoadImage("IMG\\Maps\\Level1\\canteen.bmp");
     while (!GetAsyncKeyState(VK_ESCAPE))
     {
-        txBitBlt(txDC(), 0, 0, 1200, 900, fon, 0, 0);
+        txClear();
+        txBitBlt(txDC(), 0, 0, 1200, 900, fon, absolutX, absolutY);
         txBegin();
 
         //Move & intersect
@@ -332,8 +333,8 @@ int main(int argc, char *argv[])
     e.y = 10;
     e.Exit = txLoadImage("IMG\\ImgMainMenu\\Exit0.bmp");
 
-    b.x = 300;
-    b.y = 200;
+    b.x = 500;
+    b.y = 300;
     b.width = 62;
     b.height = 84;
     b.speed = 6;

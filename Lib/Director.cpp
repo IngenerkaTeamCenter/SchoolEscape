@@ -160,11 +160,15 @@ void moveDirector(Director *d, Point* p)
 
     if(GameMode == 1)
     {
+        txArc (d->x - absolutX - d->radius, d->y - absolutY - d->radius,
+               d->x - absolutX + d->radius, d->y - absolutY + d->radius, 0, 180);
+        txArc (d->x - absolutX - d->radius, d->y - absolutY - d->radius,
+               d->x - absolutX + d->radius, d->y - absolutY + d->radius, 180, 180);
+
         char str[100];
         sprintf(str, "%d", p->nomerPoint);
-        txTextOut(d->x, 400, str);
+        txTextOut(d->x - absolutX, d->y + 100 - absolutY, str);
 
-        txCircle(director[0].x, director[0].y, director[0].radius);
     }
 
     if (predX != d->x || predY != d->y)
@@ -192,25 +196,25 @@ void drawDirector(Director d)
 {
     if (d.direction == DIRECTION_DOWN)
     {
-        txTransparentBlt(txDC(),  d.x - d.PointStartX1 - abs_x , d.y - d.PointStartY, d.width, d.height, d.picDown, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(),  d.x - d.PointStartX1 - absolutX , d.y - d.PointStartY - absolutY, d.width, d.height, d.picDown, d.frame * 61, 0, RGB(255, 255, 255));
     }
     else if (d.direction == DIRECTION_UP)
     {
-        txTransparentBlt(txDC(), d.x - d.PointStartX1 - abs_x , d.y - d.PointStartY , d.width, d.height, d.picUp, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), d.x - d.PointStartX1 - absolutX, d.y - d.PointStartY - absolutY, d.width, d.height, d.picUp, d.frame * 61, 0, RGB(255, 255, 255));
     }
     else if (d.direction == DIRECTION_LEFT)
     {
-        txTransparentBlt(txDC(), d.x - d.PointStartX2 - abs_x , d.y - d.PointStartY, d.width - 6, d.height, d.picLeft, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), d.x - d.PointStartX2 - absolutX , d.y - d.PointStartY - absolutY, d.width - 6, d.height, d.picLeft, d.frame * 61, 0, RGB(255, 255, 255));
     }
     else if (d.direction == DIRECTION_RIGHT)
     {
-        txTransparentBlt(txDC(), d.x - d.PointStartX2 - abs_x , d.y - d.PointStartY , d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
+        txTransparentBlt(txDC(), d.x - d.PointStartX2 - absolutX , d.y - d.PointStartY - absolutY, d.width - 6, d.height, d.picRight, d.frame * 61, 0, RGB(255, 255, 255));
     }
 
 
     if (d.Stolknuls > 0)
     {
-        txTextOut(d.x, d.y - 20, "I'm embarassed");
+        txTextOut(d.x - absolutX, d.y - 20 - absolutY, "I'm embarassed");
     }
 }
 
