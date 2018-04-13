@@ -15,6 +15,9 @@ using namespace std;
 
 Bomzh b;
 LifeLane ll;
+LifeLane sl;
+
+int energy = 100000;
 
 void catchCheckR(Bomzh* b, Robot r)
 {
@@ -80,7 +83,7 @@ void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, int nome
 
 
 
-void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, Exit e, LifeLane ll, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
+void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, Exit e, LifeLane ll, LifeLane sl, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
 {
     SYSTEMTIME st;
     GetLocalTime(&st);
@@ -128,13 +131,48 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
             catchCheckR(&b, r[nomer]);
         }
 
+        if (b.predX != b.x || b.predY != b.y)
+        {
+            energy -= 400;
+        }
+        sl.width = energy / 1000;
+        drawLifeLane(sl);
+
         b.predX = b.x;
         b.predY = b.y;
         moveBomzh(&b);
 
         fillCrashZone(&b);
 
+        if (b.life == -1)
+        {
+            txTextOut(0, 0, "game over");
+            exit(1);
+            txDestroyWindow();
+        }
+
+        if (energy == 0)
+        {
+
+        b.speed = 2;
+
+        }
+
+        if (b.predX == b.x && b.predY == b.y && energy <= 100000)
+        {
+            energy += 400;
+        }
+
+        if (energy >= 1200)
+        {
+
+        b.speed = 6;
+
+        }
+
+        ll.width = b.life;
         drawLifeLane(ll);
+
 
         for (int nomer = 0; nomer < nomer_directorov; nomer++)
         {
@@ -231,12 +269,12 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         Time = 60 * st.wMinute + st.wSecond;
         char stm[100];
         sprintf(stm, "%d", TimeVictory - (Time - TimeBeg));
-        txTextOut(100, 50, stm);
+        //txTextOut(100, 50, stm);
         ConditionOfVictory(&b);
 
         char stt[100];
         sprintf(stt, "%d", b.life);
-        txTextOut(50, 50, stt);
+        //txTextOut(50, 50, stt);
 
         txEnd();
         txSleep(10);
@@ -317,11 +355,17 @@ int main(int argc, char *argv[])
     e.y = 10;
     e.Exit = txLoadImage("IMG\\ImgMainMenu\\Exit0.bmp");
 
-    ll.x = 300;
+    ll.x = 454;
     ll.y = 200;
     ll.width = 100;
-    ll.height = 17;
+    ll.height = 10;
     ll.picDown = txLoadImage("IMG\\Items\\LifeLine.bmp");
+
+    sl.x = 454;
+    sl.y = 212;
+    sl.width = 100;
+    sl.height = 10;
+    sl.picDown = txLoadImage("IMG\\Items\\Stamina.bmp");
 
     b.x = 500;
     b.y = 300;
@@ -393,7 +437,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    scene1(b, robots, director, p, Piteks, stena, e, ll, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
+    scene1(b, robots, director, p, Piteks, stena, e, ll, sl, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
 
     DeletePics(&b.picDown, &b.picUp, &b.picLeft, &b.picRight);
     for (int nomer = 0; nomer < nomerRobota; nomer++)
