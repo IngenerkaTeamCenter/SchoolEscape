@@ -8,6 +8,7 @@ struct Stena
 void drawStena(Stena s)
 {
     txSetFillColor(TX_RED);
+    txSetColour(TX_RED);
     txRectangle(s.x1 - absolutX, s.y1 - absolutY, s.x2 - absolutX, s.y2 - absolutY);
 }
 

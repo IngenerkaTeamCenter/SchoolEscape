@@ -16,6 +16,44 @@ using namespace std;
 Bomzh b;
 LifeLane ll;
 
+struct stairs
+{
+    int x1, x2;
+    int y1, y2;
+    CrashZone crash;
+};
+stairs s;
+
+void stairs1(stairs* s)
+{
+    txSetColour(TX_WHITE);
+    txSetFillColour(TX_RED);
+    txRectangle(s->x1 - absolutX, s->y1 - absolutY, s->x2 - absolutX, s->y2 - absolutY);
+
+    if(GameMode == 1)
+    {
+        txSetColor(TX_WHITE);
+        txSetFillColor(TX_WHITE);
+        txRectangle(s->crash.x1 - absolutX, s->crash.y1 - absolutY, s->crash.x2 - absolutX, s->crash.y2 - absolutY);
+    }
+}
+
+void fillCrashZone(stairs* s)
+{
+    s->crash.x1 = s->x1;
+    s->crash.y1 = s->y1;
+    s->crash.x2 = s->x1 + 10;
+    s->crash.y2 = s->y2;
+}
+
+void checkTransitionNextFloor(Bomzh b, stairs* s)
+{
+    if(intersect(s->crash, b.crash) == true)
+    {
+        nomerLevel++;
+    }
+}
+
 void catchCheckR(Bomzh* b, Robot r)
 {
     if(abs(r.x - b->x) <= 30 && abs(r.y - b->y) <= 80)
@@ -54,7 +92,7 @@ void ConditionOfVictory(Bomzh* b)
     }
 }
 
-void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, int nomer_sten, int nomer_piteka, int nomer_robotov, int nomer_directorov)
+void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, stairs* s, int nomer_sten, int nomer_piteka, int nomer_robotov, int nomer_directorov)
 {
     for (int nomer = 0; nomer < nomer_sten; nomer++)
     {
@@ -69,24 +107,30 @@ void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, int nome
     {
         drawRobot(r[nomer], nomer_robotov);
     }
-
-    drawBomzh(b);
+    stairs1(s);
 
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
         drawDirector(d[nomer]);
     }
+
+    drawBomzh(b);
 }
 
 
 
-void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, Exit e, LifeLane ll, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
+void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, stairs* s, Exit e, LifeLane ll, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
 {
     SYSTEMTIME st;
     GetLocalTime(&st);
     TimeBeg = 60 * st.wMinute + st.wSecond;
     Time = 60 * st.wMinute + st.wSecond;
 
+
+    s->x1 = 200;
+    s->y1 = 200;
+    s->x2 = 300;
+    s->y2 = 300;
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
         p[nomer].y = 100;
@@ -132,7 +176,9 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         b.predY = b.y;
         moveBomzh(&b);
 
+        fillCrashZone(s);
         fillCrashZone(&b);
+        checkTransitionNextFloor(b, s);
 
         drawLifeLane(ll);
 
@@ -222,8 +268,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
 
         }
 
-        drawLevel(stena, pi, r, d, b, nomerStena, nomerPiteka, nomerRobota, nomerDirector);
-
+        drawLevel(stena, pi, r, d, b, s, nomerStena, nomerPiteka, nomerRobota, nomerDirector);
 
         //Time += 10;
         GetLocalTime(&st);
@@ -237,6 +282,12 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         char stt[100];
         sprintf(stt, "%d", b.life);
         txTextOut(50, 50, stt);
+
+        sprintf(stt, "%d", nomerLevel);
+        txTextOut(100, 100, stt);
+
+        txSetColor(TX_PINK);
+        txSetFillColor(TX_PINK);
 
         txEnd();
         txSleep(10);
@@ -253,13 +304,13 @@ void DeletePics(HDC* picDown, HDC* picUp, HDC* picLeft, HDC* picRight)
     txDeleteDC(*picRight);
  }
 
-void MapSchitivanie()
+void MapSchitivanie(const char* File_Name)
 {
     ifstream Map;
     string stroka_Personage;
     string stroka_X;
     string stroka_Y;
-    Map.open("Lib\\Map.txt");
+    Map.open(File_Name/*"Lib\\Map.txt"*/);
 
     while (Map.good()) {
 
@@ -309,7 +360,8 @@ int main(int argc, char *argv[])
     }
 
     txCreateWindow (1090, 654);
-    MapSchitivanie();
+
+    MapSchitivanie("Lib\\Map.txt");
     txBegin();
 
     Exit e;
@@ -338,6 +390,7 @@ int main(int argc, char *argv[])
     b.life = 100;
     directionFrameFrameTimer(&b.direction, &b.frame, &b.frameTimer);
     b.frameTimer = 0;
+    b.nomerLevel = 1;
     if(strcmp(nomerPerson, "3") == 0)
     {
         b.picDown = txLoadImage ("IMG\\Men\\Robot\\RobotDown.bmp");
@@ -393,7 +446,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    scene1(b, robots, director, p, Piteks, stena, e, ll, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
+    scene1(b, robots, director, p, Piteks, stena, &s, e, ll, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
 
     DeletePics(&b.picDown, &b.picUp, &b.picLeft, &b.picRight);
     for (int nomer = 0; nomer < nomerRobota; nomer++)

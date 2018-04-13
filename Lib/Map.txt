@@ -1,7 +1,7 @@
 director
 700
 500
-p.x = 9è00
+p.x = 900
 director
 700
 500

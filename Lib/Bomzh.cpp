@@ -49,6 +49,7 @@ struct Bomzh
     int predX;
     int predY;
     int life;
+    int nomerLevel;
 };
 
 void readBomzh(ifstream* Map, string stroka_Personage, Bomzh b)
