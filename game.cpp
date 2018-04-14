@@ -10,11 +10,13 @@
 #include "Lib\\Exit.cpp"
 #include <windows.h>
 #include <stdio.h>
+#include "Lib\\stairs.cpp"
 
 using namespace std;
 
 Bomzh b;
 LifeLane ll;
+stairs s[100];
 LifeLane sl;
 
 int energy = 100000;
@@ -57,7 +59,7 @@ void ConditionOfVictory(Bomzh* b)
     }
 }
 
-void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, int nomer_sten, int nomer_piteka, int nomer_robotov, int nomer_directorov)
+void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, stairs* s, int nomer_sten, int nomer_piteka, int nomer_robotov, int nomer_directorov)
 {
     for (int nomer = 0; nomer < nomer_sten; nomer++)
     {
@@ -72,29 +74,29 @@ void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, int nome
     {
         drawRobot(r[nomer], nomer_robotov);
     }
-
-    drawBomzh(b);
+    stairs1(s);
 
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
         drawDirector(d[nomer]);
     }
+
+    drawBomzh(b);
 }
 
 
-
-void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, Exit e, LifeLane ll, LifeLane sl, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
+void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, stairs* s, Exit e, LifeLane ll, LifeLane sl, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
 {
     SYSTEMTIME st;
     GetLocalTime(&st);
     TimeBeg = 60 * st.wMinute + st.wSecond;
     Time = 60 * st.wMinute + st.wSecond;
 
+
+    s->x2 = 300;
+    s->y2 = 300;
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
-        p[nomer].y = 100;
-        p[nomer].x1 = 600;
-        p[nomer].y1 = 100;
         p[nomer].x2 = b.x;
         p[nomer].y2 = b.y;
         p[nomer].nomerPoint = 1;
@@ -142,7 +144,9 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         b.predY = b.y;
         moveBomzh(&b);
 
+        fillCrashZone(s);
         fillCrashZone(&b);
+        checkTransitionNextFloor(b, s);
 
         if (b.life == -1)
         {
@@ -217,6 +221,13 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         {
             p[nomer].x2 = b.x;
             p[nomer].y2 = b.y;
+            if(GameMode == 1)
+            {
+                txSetColour(TX_BROWN);
+                txSetFillColour(TX_BROWN);
+                txCircle(p->x - absolutX, p->y - absolutY, 5);
+                txCircle(p->x1 - absolutX, p->y1 - absolutY, 5);
+            }
 
             moveDirector(&d[nomer], &p[nomer]);
             fillCrashZone(&d[nomer]);
@@ -260,8 +271,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
 
         }
 
-        drawLevel(stena, pi, r, d, b, nomerStena, nomerPiteka, nomerRobota, nomerDirector);
-
+        drawLevel(stena, pi, r, d, b, s, nomerStena, nomerPiteka, nomerRobota, nomerDirector);
 
         //Time += 10;
         GetLocalTime(&st);
@@ -275,6 +285,12 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, E
         char stt[100];
         sprintf(stt, "%d", b.life);
         //txTextOut(50, 50, stt);
+
+        sprintf(stt, "%d", nomerLevel);
+        txTextOut(100, 100, stt);
+
+        txSetColor(TX_PINK);
+        txSetFillColor(TX_PINK);
 
         txEnd();
         txSleep(10);
@@ -291,13 +307,13 @@ void DeletePics(HDC* picDown, HDC* picUp, HDC* picLeft, HDC* picRight)
     txDeleteDC(*picRight);
  }
 
-void MapSchitivanie()
+void MapSchitivanie(const char* File_Name)
 {
     ifstream Map;
     string stroka_Personage;
     string stroka_X;
     string stroka_Y;
-    Map.open("Lib\\Map.txt");
+    Map.open(File_Name/*"Lib\\Map.txt"*/);
 
     while (Map.good()) {
 
@@ -312,6 +328,8 @@ void MapSchitivanie()
         readPitek(&Map, stroka_Personage, Piteks, &nomerPiteka);
 
         readBomzh(&Map, stroka_Personage, b);
+
+        readStairs(&Map, stroka_Personage, *s);
         /*if (strcmp(stroka_Personage.c_str(), "bomzh") == 0)
         {
             getline (Map, stroka_X);
@@ -347,7 +365,8 @@ int main(int argc, char *argv[])
     }
 
     txCreateWindow (1090, 654);
-    MapSchitivanie();
+
+    MapSchitivanie("Lib\\Map.txt");
     txBegin();
 
     Exit e;
@@ -382,6 +401,7 @@ int main(int argc, char *argv[])
     b.life = 100;
     directionFrameFrameTimer(&b.direction, &b.frame, &b.frameTimer);
     b.frameTimer = 0;
+    b.nomerLevel = 1;
     if(strcmp(nomerPerson, "3") == 0)
     {
         b.picDown = txLoadImage ("IMG\\Men\\Robot\\RobotDown.bmp");
@@ -437,7 +457,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    scene1(b, robots, director, p, Piteks, stena, e, ll, sl, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
+    scene1(b, robots, director, p, Piteks, stena, s, e, ll, sl, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
 
     DeletePics(&b.picDown, &b.picUp, &b.picLeft, &b.picRight);
     for (int nomer = 0; nomer < nomerRobota; nomer++)

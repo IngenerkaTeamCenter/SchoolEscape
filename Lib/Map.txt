@@ -1,11 +1,20 @@
 director
 700
 500
-p.x = 9è00
+p.x = 600
+p.y = 100
+p.x1 = 900
+p.y1 = 100
 director
 700
 500
-p.x = 100
+p.x = 300
+p.y = 100
+p.x1 = 900
+p.y1 = 100
+stairs
+300
+300
 bomzh
 500
 200
