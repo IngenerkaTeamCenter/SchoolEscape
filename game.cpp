@@ -10,49 +10,13 @@
 #include "Lib\\Exit.cpp"
 #include <windows.h>
 #include <stdio.h>
+#include "Lib\\stairs.cpp"
 
 using namespace std;
 
 Bomzh b;
 LifeLane ll;
-
-struct stairs
-{
-    int x1, x2;
-    int y1, y2;
-    CrashZone crash;
-};
-stairs s;
-
-void stairs1(stairs* s)
-{
-    txSetColour(TX_WHITE);
-    txSetFillColour(TX_RED);
-    txRectangle(s->x1 - absolutX, s->y1 - absolutY, s->x2 - absolutX, s->y2 - absolutY);
-
-    if(GameMode == 1)
-    {
-        txSetColor(TX_WHITE);
-        txSetFillColor(TX_WHITE);
-        txRectangle(s->crash.x1 - absolutX, s->crash.y1 - absolutY, s->crash.x2 - absolutX, s->crash.y2 - absolutY);
-    }
-}
-
-void fillCrashZone(stairs* s)
-{
-    s->crash.x1 = s->x1;
-    s->crash.y1 = s->y1;
-    s->crash.x2 = s->x1 + 10;
-    s->crash.y2 = s->y2;
-}
-
-void checkTransitionNextFloor(Bomzh b, stairs* s)
-{
-    if(intersect(s->crash, b.crash) == true)
-    {
-        nomerLevel++;
-    }
-}
+stairs s[100];
 
 void catchCheckR(Bomzh* b, Robot r)
 {
@@ -127,8 +91,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
     Time = 60 * st.wMinute + st.wSecond;
 
 
-    s->x1 = 200;
-    s->y1 = 200;
     s->x2 = 300;
     s->y2 = 300;
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
@@ -329,6 +291,8 @@ void MapSchitivanie(const char* File_Name)
         readPitek(&Map, stroka_Personage, Piteks, &nomerPiteka);
 
         readBomzh(&Map, stroka_Personage, b);
+
+        readStairs(&Map, stroka_Personage, *s);
         /*if (strcmp(stroka_Personage.c_str(), "bomzh") == 0)
         {
             getline (Map, stroka_X);
@@ -450,7 +414,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    scene1(b, robots, director, p, Piteks, stena, &s, e, ll, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
+    scene1(b, robots, director, p, Piteks, stena, s, e, ll, nomerRobota, nomerDirector, nomerPiteka, nomerStena);
 
     DeletePics(&b.picDown, &b.picUp, &b.picLeft, &b.picRight);
     for (int nomer = 0; nomer < nomerRobota; nomer++)
