@@ -65,7 +65,13 @@ void readDirector(ifstream* Map, string stroka_Personage, Director* director, in
         //substr(a, b)- часть строки начиная с №a длиной b символов (6 символов под p.x_=_)
 
         p[*nomerDirector].x = atoi(stroka_X.substr(6, strlen(stroka_X.c_str())-6).c_str());
-        //p[*nomerDirector].x = atoi(stroka_X.c_str());
+        getline (*Map, stroka_X);
+        p[*nomerDirector].y = atoi(stroka_X.substr(6, strlen(stroka_X.c_str())-6).c_str());
+        getline (*Map, stroka_X);
+        p[*nomerDirector].x1 = atoi(stroka_X.substr(7, strlen(stroka_X.c_str())-7).c_str());
+        getline (*Map, stroka_X);
+        p[*nomerDirector].y1 = atoi(stroka_X.substr(7, strlen(stroka_X.c_str())-7).c_str());
+
         *nomerDirector = *nomerDirector + 1;
     }
 }

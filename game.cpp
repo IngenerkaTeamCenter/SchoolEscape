@@ -133,9 +133,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
     s->y2 = 300;
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
-        p[nomer].y = 100;
-        p[nomer].x1 = 600;
-        p[nomer].y1 = 100;
         p[nomer].x2 = b.x;
         p[nomer].y2 = b.y;
         p[nomer].nomerPoint = 1;
@@ -225,6 +222,13 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
         {
             p[nomer].x2 = b.x;
             p[nomer].y2 = b.y;
+            if(GameMode == 1)
+            {
+                txSetColour(TX_BROWN);
+                txSetFillColour(TX_BROWN);
+                txCircle(p->x - absolutX, p->y - absolutY, 5);
+                txCircle(p->x1 - absolutX, p->y1 - absolutY, 5);
+            }
 
             moveDirector(&d[nomer], &p[nomer]);
             fillCrashZone(&d[nomer]);
