@@ -9,7 +9,7 @@ struct LifeLane
     HDC picDown;
 };
 
-void drawLifeLane(LifeLane pi)
+void drawLifeLane(LifeLane ll)
 {
-    txTransparentBlt(txDC(),  pi.x, pi.y, pi.width, pi.height, pi.picDown, 0, 0, RGB(255, 255, 255));
+    txTransparentBlt(txDC(),  ll.x, ll.y, ll.width, ll.height, ll.picDown, 0, 0, RGB(255, 255, 255));
 }
