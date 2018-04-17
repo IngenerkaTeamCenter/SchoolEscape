@@ -14,12 +14,16 @@
 
 using namespace std;
 
+string Level[100];
+
 Bomzh b;
 LifeLane ll;
-stairs s[100];
 LifeLane sl;
 
 int energy = 100000;
+
+
+void checkTransitionNextFloor(Bomzh b, stairs* s);
 
 void catchCheckR(Bomzh* b, Robot r)
 {
@@ -59,7 +63,7 @@ void ConditionOfVictory(Bomzh* b)
     }
 }
 
-void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, stairs* s, int nomer_sten, int nomer_piteka, int nomer_robotov, int nomer_directorov)
+void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, stairs* s, int nomer_sten, int nomer_piteka, int nomer_robotov, int nomer_directorov, int nomer_stairs)
 {
     for (int nomer = 0; nomer < nomer_sten; nomer++)
     {
@@ -74,7 +78,11 @@ void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, stairs* 
     {
         drawRobot(r[nomer], nomer_robotov);
     }
-    stairs1(s);
+
+    for (int nomer = 0; nomer < nomer_stairs; nomer++)
+    {
+       drawStairs(s[nomer]);
+    }
 
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
@@ -85,7 +93,8 @@ void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, stairs* 
 }
 
 
-void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, stairs* s, Exit e, LifeLane ll, LifeLane sl, int nomer_robotov, int nomer_directorov, int nomer_piteka, int nomer_sten)
+void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, stairs* s, Exit e, LifeLane ll, LifeLane sl, int nomer_robotov,
+ int nomer_directorov, int nomer_piteka, int nomer_sten)
 {
     SYSTEMTIME st;
     GetLocalTime(&st);
@@ -93,8 +102,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
     Time = 60 * st.wMinute + st.wSecond;
 
 
-    s->x2 = 300;
-    s->y2 = 300;
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
     {
         p[nomer].x2 = b.x;
@@ -221,13 +228,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
         {
             p[nomer].x2 = b.x;
             p[nomer].y2 = b.y;
-            if(GameMode == 1)
-            {
-                txSetColour(TX_BROWN);
-                txSetFillColour(TX_BROWN);
-                txCircle(p->x - absolutX, p->y - absolutY, 5);
-                txCircle(p->x1 - absolutX, p->y1 - absolutY, 5);
-            }
 
             moveDirector(&d[nomer], &p[nomer]);
             fillCrashZone(&d[nomer]);
@@ -271,7 +271,18 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
 
         }
 
-        drawLevel(stena, pi, r, d, b, s, nomerStena, nomerPiteka, nomerRobota, nomerDirector);
+        for(int nomer = 0; nomer < nomerDirector; nomer++)
+        {
+            if(GameMode == 1)
+            {
+                txSetColour(TX_BROWN);
+                txSetFillColour(TX_BROWN);
+                txCircle(p[nomer].x - absolutX, p[nomer].y - absolutY, 5);
+                txCircle(p[nomer].x1 - absolutX, p[nomer].y1 - absolutY, 5);
+            }
+        }
+
+        drawLevel(stena, pi, r, d, b, s, nomerStena, nomerPiteka, nomerRobota, nomerDirector, nomerStairs);
 
         //Time += 10;
         GetLocalTime(&st);
@@ -329,27 +340,19 @@ void MapSchitivanie(const char* File_Name)
 
         readBomzh(&Map, stroka_Personage, b);
 
-        readStairs(&Map, stroka_Personage, *s);
-        /*if (strcmp(stroka_Personage.c_str(), "bomzh") == 0)
-        {
-            getline (Map, stroka_X);
-            b.x = atoi(stroka_X.c_str());
-            getline (Map, stroka_Y);
-            b.y = atoi(stroka_Y.c_str());
-        }*/
-
-        /*if (strcmp(stroka_Personage.c_str(), "pitek") == 0)
-        {
-            getline (Map, stroka_X);
-            Piteks[nomerPiteka].x = atoi(stroka_X.c_str());
-            getline (Map, stroka_Y);
-            Piteks[nomerPiteka].y = atoi(stroka_Y.c_str());
-            fillCrashZone(&Piteks[nomerPiteka]);
-            nomerPiteka++;
-        }*/
+        readStairs(&Map, stroka_Personage, s, &nomerStairs);
     }
 
     Map.close();
+}
+
+void checkTransitionNextFloor(Bomzh b, stairs* s)
+{
+    if(intersect(s->crash, b.crash) == true)
+    {
+        nomerLevel++;
+        MapSchitivanie(Level[nomerLevel - 1].c_str()/*"Lib\\Map.txt"*/);
+    }
 }
 
 int main(int argc, char *argv[])
@@ -366,7 +369,10 @@ int main(int argc, char *argv[])
 
     txCreateWindow (1090, 654);
 
-    MapSchitivanie("Lib\\Map.txt");
+    Level[0] = "Lib\\Map.txt";
+    Level[1] = "Lib\\Map1.txt";
+
+    MapSchitivanie(Level[nomerLevel - 1].c_str()/*"Lib\\Map.txt"*/);
     txBegin();
 
     Exit e;
