@@ -100,13 +100,14 @@ void fillCrashZone(Director* d)
     d->crash.y2 = d->y + 12;
 }
 
-void catchCheck(Bomzh b, Director d)
+void catchCheck(Bomzh* b, Director d)
 {
-    if((d.x - b.x) * (d.x - b.x) + (d.y - b.y) * (d.y - b.y) <= 75)
+    if((d.x - b->x) * (d.x - b->x) + (d.y - b->y) * (d.y - b->y) <= 75)
     {
-        txTextOut(0, 0, "game over");
+        b->life = b->life - 1;
+        /*txTextOut(0, 0, "game over");
         exit(1);
-        txDestroyWindow();
+        txDestroyWindow();  */
     }
 }
 

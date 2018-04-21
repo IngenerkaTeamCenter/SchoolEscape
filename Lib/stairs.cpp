@@ -4,6 +4,7 @@ struct stairs
     int x1, x2;
     int y1, y2;
     CrashZone crash;
+    bool tipStairs;
 };
 
 void drawStairs(stairs s)
@@ -40,8 +41,31 @@ void readStairs(ifstream* Map, string stroka_Personage, stairs* s, int* nomerSta
             getline (*Map, stroka_Y);
             s[*nomerStairs].y1 = atoi(stroka_Y.c_str());
             s[*nomerStairs].y2 = s[*nomerStairs].y1 + 100;
+            getline (*Map, stroka_Y);
+
+
+            /*
+            if (x == 5)
+            {
+                b = true;
+            }
+            else
+            {
+                b = false;
+            }
+
+            То же самое, что и
+
+            b = (x == 5);
+
+            */
+            s[*nomerStairs].tipStairs = false;
+            s[*nomerStairs].tipStairs = (strcmp(stroka_Y.c_str(), "Вверх") == 0);
+            fillCrashZone(&s[*nomerStairs]);
+
             *nomerStairs = *nomerStairs + 1;
         }
+        //s->tipStairs = false;
 }
 
 stairs s[100];

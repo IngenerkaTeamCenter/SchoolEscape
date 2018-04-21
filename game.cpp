@@ -20,6 +20,8 @@ Bomzh b;
 LifeLane ll;
 LifeLane sl;
 
+const int CHISLO_UROVNEI = 2;
+
 int energy = 100000;
 
 
@@ -35,12 +37,13 @@ void catchCheckR(Bomzh* b, Robot r)
 
 void ConditionOfVictory(Bomzh* b)
 {
+    txSetColor(TX_WHITE);
     int xVictory = 666, yVictory = 555;
 
     if((b->x - xVictory) * (b->x - xVictory) +
        (b->y - yVictory) * (b->y - yVictory) <= 50 * 50)
     {
-        txTextOut(0, 0, "You won");
+        txTextOut(500, 400, "You won");
         exit(1);
         txDestroyWindow();
     }
@@ -113,7 +116,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
     int EscapeTimer = 0;
 
     HDC fon = txLoadImage("IMG\\Maps\\Level1\\canteen.bmp");
-    while (!GetAsyncKeyState(VK_ESCAPE))
+    while (!GetAsyncKeyState(VK_ESCAPE) /*&& nomerLevel < CHISLO_UROVNEI*/)
     {
         txClear();
         txBitBlt(txDC(), 0, 0, 1200, 900, fon, absolutX, absolutY);
@@ -151,22 +154,23 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
         b.predY = b.y;
         moveBomzh(&b);
 
-        fillCrashZone(s);
         fillCrashZone(&b);
-        checkTransitionNextFloor(b, s);
-
+        for (int nomer = 0; nomer < nomerStairs; nomer++)
+        {
+            checkTransitionNextFloor(b, &s[nomer]);
+        }
+        txSetColor(TX_WHITE);
         if (b.life == -1)
         {
-            txTextOut(0, 0, "game over");
+            txTextOut(500, 300, "game over");
+            txSleep(10);
             exit(1);
             txDestroyWindow();
         }
 
         if (energy == 0)
         {
-
-        b.speed = 2;
-
+            b.speed = 2;
         }
 
         if (b.predX == b.x && b.predY == b.y && energy <= 100000)
@@ -176,9 +180,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
 
         if (energy >= 1200)
         {
-
-        b.speed = 6;
-
+            b.speed = 6;
         }
 
         ll.width = b.life;
@@ -232,7 +234,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
             moveDirector(&d[nomer], &p[nomer]);
             fillCrashZone(&d[nomer]);
 
-            catchCheck(b, d[nomer]);
+            catchCheck(&b, d[nomer]);
 
 
             bool stolkn = false;
@@ -350,8 +352,37 @@ void checkTransitionNextFloor(Bomzh b, stairs* s)
 {
     if(intersect(s->crash, b.crash) == true)
     {
-        nomerLevel++;
-        MapSchitivanie(Level[nomerLevel - 1].c_str()/*"Lib\\Map.txt"*/);
+        bool levelChanged = false;
+        if (s->tipStairs && nomerLevel < CHISLO_UROVNEI)
+        {
+            nomerLevel++;
+            levelChanged = true;
+        }
+        else if (s->tipStairs == false && nomerLevel > 1)
+        {
+            nomerLevel--;
+            levelChanged = true;
+        }
+
+        if (levelChanged)
+        {
+            nomerRobota = 0;
+            nomerStena = 0;
+            nomerDirector = 0;
+            nomerPiteka = 0;
+            nomerStairs = 0;
+            MapSchitivanie(Level[nomerLevel - 1].c_str());
+        }
+        else if(s->tipStairs == true)
+        {
+            txSetColor(TX_WHITE);
+            txTextOut(200, 200, "Выше только крыша");
+        }
+        else if(s->tipStairs == false)
+        {
+            txSetColor(TX_WHITE);
+            txTextOut(200, 200, "Ниже только подвал");
+        }
     }
 }
 
