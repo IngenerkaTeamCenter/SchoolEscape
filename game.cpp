@@ -24,12 +24,13 @@ const int CHISLO_UROVNEI = 2;
 
 int energy = 100000;
 
-
+bool R = false;//оскорбил ли ты коллективный разум роботов или нет
+bool R1 = false;//знает директор о прогуле или нет
 void checkTransitionNextFloor(Bomzh b, stairs* s);
 
 void catchCheckR(Bomzh* b, Robot r)
 {
-    if(abs(r.x - b->x) <= 30 && abs(r.y - b->y) <= 80)
+    if(abs(r.x - b->x) <= 30 && abs(r.y - b->y) <= 80 && R == true)
     {
         b->life -= 1;//(b.life -= 10)
     }
@@ -48,9 +49,10 @@ void ConditionOfVictory(Bomzh* b)
         txDestroyWindow();
     }
 
+    txSetColor(TX_BROWN);
     if(Time - TimeBeg >= TimeVictory)
     {
-        txTextOut(0, 0, "You won");
+        txTextOut(300, 300, "You won");
         exit(1);
         txDestroyWindow();
     }
@@ -84,7 +86,14 @@ void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, stairs* 
 
     for (int nomer = 0; nomer < nomer_stairs; nomer++)
     {
-       drawStairs(s[nomer]);
+        if(s[nomer].tipStairs == false)
+        {
+            txSetFillColour(TX_BLUE);
+        }else{
+            txSetFillColour(TX_RED);
+        }
+    drawStairs(s[nomer]);
+
     }
 
     for (int nomer = 0; nomer < nomer_directorov; nomer++)
@@ -93,6 +102,131 @@ void drawLevel(Stena* stena, Pitek* pi, Robot* r, Director* d, Bomzh b, stairs* 
     }
 
     drawBomzh(b);
+}
+
+void dialog(Stena* stena, Pitek* pi, Director* d, stairs* s, int nomer_sten, int nomer_piteka, int nomer_directorov, int nomer_stairs, Bomzh b,int nomerRobota, Robot* r)
+{
+    int x = 300;
+    int y = 200;
+    int risovat = 0;
+
+
+    if(abs(b.x - r[nomerRobota].x) <= 15 && abs(b.y - r[nomerRobota].y) <= 15)
+    {
+        risovat = 1;
+    }
+    if(GameMode == 1)
+    {
+    char str[100];
+    sprintf(str, "%d", risovat);
+    txTextOut(100, 200, str);
+    }
+
+    if(risovat != 0)
+    {
+    while(risovat != 4)
+    {
+    drawLevel(stena, pi, r, d, b, s, nomerStena, nomerPiteka, nomerRobota, nomerDirector, nomerStairs);
+
+    txBegin();
+    txSetColor(TX_BLACK);
+    txSetFillColor(TX_BLACK);
+    txRectangle(x, y, x + 230, y + 105);
+
+    if(txMouseButtons() &1 && txMouseX() >= x + 5 && txMouseY() >= y + 30 && txMouseX() <= x + 225
+    && txMouseY() <= y + 50 && R != true)
+    {
+    risovat = 2;
+    }
+
+    if(txMouseButtons() &1 && txMouseX() >= x + 5 && txMouseY() >= y + 55 && txMouseX() <= x + 225
+    && txMouseY() <= y + 75 && R1 != true)
+    {
+    risovat = 3;
+    }
+
+    if(txMouseButtons() &1 && txMouseX() >= x + 5 && txMouseY() >= y + 80 && txMouseX() <= x + 225
+    && txMouseY() <= y + 100)
+    {
+    risovat = 4;
+    }
+
+
+    if(risovat == 1)
+    {
+    txSetColor(TX_WHITE);
+    txSetFillColor(TX_WHITE);
+    txTextOut(x + 5, y + 5, "Что ты тут забыл?");
+
+    if(R != true)
+    {
+        txSetColor(TX_WHITE);
+        txRectangle(x + 5, y + 30, x + 225, y + 50);
+        txSetColor(TX_RED);
+        txTextOut(x + 10, y + 35, "Не твоё дело");
+    }
+
+    if(R1 != true)
+    {
+        txSetColor(TX_WHITE);
+        txRectangle(x + 5, y + 55, x + 225, y + 75);
+        txSetColor(TX_RED);
+        txTextOut(x + 10, y + 60, "Прогуливаю уроки");
+    }
+
+
+    txSetColor(TX_WHITE);
+    txRectangle(x + 5, y + 80, x + 225, y + 100);
+    txSetColor(TX_RED);
+    txTextOut(x + 10, y + 85, "Просто иду в туалет");
+    }
+
+    if(risovat == 2 && R != true)
+    {
+    txSetColor(TX_WHITE);
+    txSetFillColor(TX_WHITE);
+
+    txTextOut(x + 5, y + 5, "Зря ты так, кожаный уб**док");
+    txSleep(200);
+    r[nomerRobota].x = r[nomerRobota].x + 30;
+    r[nomerRobota].y = r[nomerRobota].y + 30;
+    r[nomerRobota].direction = DIRECTION_DOWN;
+    R = true;
+    break;
+    }
+
+    if(risovat == 3)
+    {
+    txSetColor(TX_WHITE);
+    txSetFillColor(TX_WHITE);
+
+    txDrawText(x + 5, y + 5, x + 225, y + 90, "Я оповестил директора,\n лучше не попадайся ему на глаза\n *Злобный электронный смех*");
+    txSleep(200);
+    r[nomerRobota].x = r[nomerRobota].x + 30;
+    r[nomerRobota].y = r[nomerRobota].y + 30;
+    r[nomerRobota].direction = DIRECTION_DOWN;
+    R1 = true;
+    break;
+    }
+
+    if(risovat == 4)
+    {
+    txSetColor(TX_WHITE);
+    txSetFillColor(TX_WHITE);
+
+    txTextOut(x + 5, y + 5, "Прости");
+    txSleep(200);
+    r[nomerRobota].x = r[nomerRobota].x + 30;
+    r[nomerRobota].y = r[nomerRobota].y + 30;
+    r[nomerRobota].direction = DIRECTION_DOWN;
+    break;
+    }
+
+    txSleep(10);
+    txClear();
+    }
+    }
+
 }
 
 
@@ -159,7 +293,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
         {
             checkTransitionNextFloor(b, &s[nomer]);
         }
-        txSetColor(TX_WHITE);
+        txSetColor(TX_BROWN);
         if (b.life == -1)
         {
             txTextOut(500, 300, "game over");
@@ -185,15 +319,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
 
         ll.width = b.life;
         drawLifeLane(ll);
-
-
-        for (int nomer = 0; nomer < nomer_directorov; nomer++)
-        {
-            d[nomer].predX = d[nomer].x;
-            d[nomer].predY = d[nomer].y;
-            moveDirector(&d[nomer], &p[nomer]);
-            fillCrashZone(&d[nomer]);
-        }
 
         for (int nomer = 0; nomer < nomer_piteka; nomer++)
         {
@@ -231,10 +356,13 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
             p[nomer].x2 = b.x;
             p[nomer].y2 = b.y;
 
-            moveDirector(&d[nomer], &p[nomer]);
+            d[nomer].predX = d[nomer].x;
+            d[nomer].predY = d[nomer].y;
+
+            moveDirector(&d[nomer], &p[nomer], R1);
             fillCrashZone(&d[nomer]);
 
-            catchCheck(&b, d[nomer]);
+            catchCheck(&b, d[nomer], R1);
 
 
             bool stolkn = false;
@@ -247,6 +375,7 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
                     stolkn = true;
                 }
             }
+
 
             for (int nomer1 = 0; nomer1 < nomer_sten; nomer1++)
             {
@@ -286,13 +415,19 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
 
         drawLevel(stena, pi, r, d, b, s, nomerStena, nomerPiteka, nomerRobota, nomerDirector, nomerStairs);
 
+        for(int nomer = 0; nomer < nomerRobota; nomer++)
+        {
+          dialog(stena, pi, d, s, nomerStena, nomerPiteka, nomerDirector, nomerStairs, b, nomer, r);
+        }
+
+
         //Time += 10;
         GetLocalTime(&st);
 
         Time = 60 * st.wMinute + st.wSecond;
         char stm[100];
         sprintf(stm, "%d", TimeVictory - (Time - TimeBeg));
-        //txTextOut(100, 50, stm);
+        txTextOut(100, 50, stm);
         ConditionOfVictory(&b);
 
         char stt[100];

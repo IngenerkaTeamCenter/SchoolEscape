@@ -10,7 +10,6 @@ struct stairs
 void drawStairs(stairs s)
 {
     txSetColour(TX_WHITE);
-    txSetFillColour(TX_RED);
     txRectangle(s.x1 - absolutX, s.y1 - absolutY, s.x2 - absolutX, s.y2 - absolutY);
 
     if(GameMode == 1)
@@ -28,6 +27,7 @@ void fillCrashZone(stairs* s)
     s->crash.x2 = s->x1 + 10;
     s->crash.y2 = s->y2;
 }
+
 
 void readStairs(ifstream* Map, string stroka_Personage, stairs* s, int* nomerStairs)
 {
