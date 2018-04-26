@@ -38,7 +38,7 @@ struct Director
     HDC picRight;
     int frame;
     int frameTimer;
-    int radius;//Ч ЧђЧ”ЧЧЈЧЎ ЧћЧ‘Ч—ЧћЧ Чђ
+    int radius;//область в которой директор тебя почуствует
     CrashZone crash;
     //int exit_time;
     int predX;
@@ -100,25 +100,22 @@ void fillCrashZone(Director* d)
     d->crash.y2 = d->y + 12;
 }
 
-void catchCheck(Bomzh* b, Director d)
+void catchCheck(Bomzh* b, Director d, bool R1)
 {
-    if((d.x - b->x) * (d.x - b->x) + (d.y - b->y) * (d.y - b->y) <= 75)
+    if((d.x - b->x) * (d.x - b->x) + (d.y - b->y) * (d.y - b->y) <= 75 && R1 == true)
     {
         b->life = b->life - 1;
-        /*txTextOut(0, 0, "game over");
-        exit(1);
-        txDestroyWindow();  */
     }
 }
 
 
-void moveDirector(Director *d, Point* p)
+void moveDirector(Director *d, Point* p, bool R1)
 {
     int predX = d->x;
     int predY = d->y;
     int maxCountOfFrames = 4;
 
-    if((d->x - p->x2) * (d->x - p->x2) + (d->y - p->y2) * (d->y - p->y2) <= d->radius * d->radius)
+    if((d->x - p->x2) * (d->x - p->x2) + (d->y - p->y2) * (d->y - p->y2) <= d->radius * d->radius && R1 == true)
     {
         p->nomerPoint = 2;
     }
