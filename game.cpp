@@ -16,17 +16,10 @@ using namespace std;
 
 string Level[100];
 
-Bomzh b;
-LifeLane ll;
-LifeLane sl;
-
-const int CHISLO_UROVNEI = 2;
-
-int energy = 100000;
 int terpenieR = 0;
-
 bool R = false;//оскорбил ли ты коллективный разум роботов или нет
 bool R1 = false;//знает директор о прогуле или нет
+
 void checkTransitionNextFloor(Bomzh b, stairs* s);
 
 void catchCheckR(Bomzh* b, Robot r)
@@ -36,21 +29,21 @@ void catchCheckR(Bomzh* b, Robot r)
         txSetColour(RGB(255, 0, 0));
         txSelectFont ("Comic Sans MS", 20);
         txTextOut(r.x - 40 - absolutX, r.y - 50 - absolutY, "Жалкий человек");
-        b->life -= 1;//(b.life -= 10)
+        b->life -= 1;
     }
 }
 
 void ConditionOfVictory(Bomzh* b)
 {
     txSetColor(TX_WHITE);
-    int xVictory = 666, yVictory = 555;
+    int xVictory = 666, yVictory = 666;
 
     if((b->x - xVictory) * (b->x - xVictory) +
        (b->y - yVictory) * (b->y - yVictory) <= 50 * 50)
     {
         txSelectFont ("Comic Sans MS", 50);
         txSetColour(TX_WHITE);
-        txTextOut(500, 400, "Ты морально проиграл");
+        txTextOut(350, 300, "Ты морально проиграл");
         txSleep(800);
         exit(1);
         txDestroyWindow();
@@ -61,7 +54,7 @@ void ConditionOfVictory(Bomzh* b)
     {
         txSelectFont ("Comic Sans MS", 50);
         txSetColour(TX_WHITE);
-        txTextOut(300, 300, "You won");
+        txTextOut(300, 300, "Ты победил");
         exit(1);
         txDestroyWindow();
     }
@@ -115,14 +108,16 @@ void dialog(Stena* stena, Pitek* pi, Director* d, stairs* s, int nomer_sten, int
     int x = 300;
     int y = 200;
     int risovat = 0;
+    int QuiteTime;
 
-
-    if(abs(b.x - r[nomerRobota].x) <= 15 && abs(b.y - r[nomerRobota].y) <= 15)
+    if(abs(b.x - r[nomerRobota].x) <= 15 && abs(b.y - r[nomerRobota].y) <= 15 && QuiteTime >= 20)
     {
         risovat = 1;
     }
-    if(risovat != 0 && (R1 != true || R != true))
+
+    if(risovat != 0 && (R1 != true || R != true) && QuiteTime >= 20)
     {
+
     while(1)
     {
     drawLevel(stena, pi, r, d, b, s, nomerStena, nomerPiteka, nomerRobota, nomerDirector, nomerStairs);
@@ -137,14 +132,6 @@ void dialog(Stena* stena, Pitek* pi, Director* d, stairs* s, int nomer_sten, int
     txSelectFont ("Comic Sans MS", 18);
     txTextOut(x + 5, y + 5, "Что ты тут забыл?");
 
-    if(GameMode == 1)
-    {
-    txSetColour(TX_BLACK);
-    char str[100];
-    txTextOut(5, 100, "Номер диалогового окна:");
-    sprintf(str, "%d", risovat);
-    txTextOut(170, 100, str);
-    }
 
 
     if( (txMouseButtons() &1 && txMouseX() >= x + 5 && txMouseY() >= y + 30 && txMouseX() <= x + 225
@@ -168,7 +155,7 @@ void dialog(Stena* stena, Pitek* pi, Director* d, stairs* s, int nomer_sten, int
 
     if(risovat == 1)
     {
-        if(/*terpenieR != 6*/ R1 != true)
+        if(R1 != true)
         {
             txSetColor(TX_WHITE);
             txRectangle(x + 5, y + 80, x + 225, y + 100);
@@ -247,6 +234,7 @@ void dialog(Stena* stena, Pitek* pi, Director* d, stairs* s, int nomer_sten, int
         r[nomerRobota].direction = DIRECTION_DOWN;
         terpenieR = terpenieR + 1;
         break;
+
     }else if(terpenieR == 5 && risovat == 4)
     {
         txSetFillColor(TX_BLACK);
@@ -293,10 +281,12 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
     int EscapeTimer = 0;
 
     HDC fon = txLoadImage("IMG\\Maps\\Level1\\canteen.bmp");
+    HDC fon1 = txLoadImage("IMG\\Maps\\Level1\\canteen.bmp");
     while (!GetAsyncKeyState(VK_ESCAPE) /*&& nomerLevel < CHISLO_UROVNEI*/)
     {
         txClear();
-        txBitBlt(txDC(), 0, 0, 1200, 900, fon, absolutX, absolutY);
+        txBitBlt(txDC(), 0, 0, 1090, 654, fon, absolutX, absolutY);
+        txBitBlt(txDC(), 1190, 0, 2280, 654, fon1, absolutX, absolutY);
         txBegin();
 
         //Move & intersect

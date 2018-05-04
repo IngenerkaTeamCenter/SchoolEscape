@@ -237,7 +237,7 @@ void drawDirector(Director d)
 
     if (d.Stolknuls > 0)
     {
-        txTextOut(d.x - absolutX, d.y - 20 - absolutY, "I'm embarassed");
+        txTextOut(d.x - absolutX, d.y - 20 - absolutY, "Я запуталась");
     }
 }
 

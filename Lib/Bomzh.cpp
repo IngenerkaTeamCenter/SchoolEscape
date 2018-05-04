@@ -9,6 +9,7 @@ using namespace std;
 
 int absolutX;
 int absolutY;
+
 struct CrashZone
 {
     int x1, y1;
@@ -51,6 +52,8 @@ struct Bomzh
     int life;
     int nomerLevel;
 };
+
+Bomzh b;
 
 void readBomzh(ifstream* Map, string stroka_Personage, Bomzh b)
 {
