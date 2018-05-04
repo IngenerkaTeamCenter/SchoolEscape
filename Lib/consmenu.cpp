@@ -20,3 +20,4 @@ int Time = 0;
 const int TimeVictory = 100;
 int abs_x = 0;
 int abs_y = 0;
+const int CHISLO_UROVNEI = 2;
