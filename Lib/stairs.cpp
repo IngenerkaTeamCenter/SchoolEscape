@@ -65,7 +65,6 @@ void readStairs(ifstream* Map, string stroka_Personage, stairs* s, int* nomerSta
 
             *nomerStairs = *nomerStairs + 1;
         }
-        //s->tipStairs = false;
 }
 
 stairs s[100];

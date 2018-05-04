@@ -23,6 +23,7 @@ LifeLane sl;
 const int CHISLO_UROVNEI = 2;
 
 int energy = 100000;
+int terpenieR = 0;
 
 bool R = false;//оскорбил ли ты коллективный разум роботов или нет
 bool R1 = false;//знает директор о прогуле или нет
@@ -32,6 +33,9 @@ void catchCheckR(Bomzh* b, Robot r)
 {
     if(abs(r.x - b->x) <= 30 && abs(r.y - b->y) <= 80 && R == true)
     {
+        txSetColour(RGB(255, 0, 0));
+        txSelectFont ("Comic Sans MS", 20);
+        txTextOut(r.x - 40 - absolutX, r.y - 50 - absolutY, "Жалкий человек");
         b->life -= 1;//(b.life -= 10)
     }
 }
@@ -44,7 +48,10 @@ void ConditionOfVictory(Bomzh* b)
     if((b->x - xVictory) * (b->x - xVictory) +
        (b->y - yVictory) * (b->y - yVictory) <= 50 * 50)
     {
-        txTextOut(500, 400, "You won");
+        txSelectFont ("Comic Sans MS", 50);
+        txSetColour(TX_WHITE);
+        txTextOut(500, 400, "Ты морально проиграл");
+        txSleep(800);
         exit(1);
         txDestroyWindow();
     }
@@ -52,6 +59,8 @@ void ConditionOfVictory(Bomzh* b)
     txSetColor(TX_BROWN);
     if(Time - TimeBeg >= TimeVictory)
     {
+        txSelectFont ("Comic Sans MS", 50);
+        txSetColour(TX_WHITE);
         txTextOut(300, 300, "You won");
         exit(1);
         txDestroyWindow();
@@ -59,12 +68,9 @@ void ConditionOfVictory(Bomzh* b)
 
     if(GameMode == 1)
     {
+        txSelectFont ("Comic Sans MS", 18);
         txCircle(xVictory - absolutX, yVictory - absolutY, 50);
-        char str[100];
-        sprintf(str, "%d", b->x);
-        txTextOut(b->x - absolutX, 100, str);
-        sprintf(str, "%d", b->y);
-        txTextOut(b->x + 100 - absolutX, 100, str);
+        txTextOut(xVictory + 5 - absolutX - 40, yVictory - 5 - absolutY, "Твоё место");
     }
 }
 
@@ -115,38 +121,46 @@ void dialog(Stena* stena, Pitek* pi, Director* d, stairs* s, int nomer_sten, int
     {
         risovat = 1;
     }
-    if(GameMode == 1)
+    if(risovat != 0 && (R1 != true || R != true))
     {
-    char str[100];
-    sprintf(str, "%d", risovat);
-    txTextOut(100, 200, str);
-    }
-
-    if(risovat != 0)
-    {
-    while(risovat != 4)
+    while(1)
     {
     drawLevel(stena, pi, r, d, b, s, nomerStena, nomerPiteka, nomerRobota, nomerDirector, nomerStairs);
 
     txBegin();
+
     txSetColor(TX_BLACK);
     txSetFillColor(TX_BLACK);
     txRectangle(x, y, x + 230, y + 105);
+    txSetColor(TX_WHITE);
+    txSetFillColor(TX_WHITE);
+    txSelectFont ("Comic Sans MS", 18);
+    txTextOut(x + 5, y + 5, "Что ты тут забыл?");
 
-    if(txMouseButtons() &1 && txMouseX() >= x + 5 && txMouseY() >= y + 30 && txMouseX() <= x + 225
-    && txMouseY() <= y + 50 && R != true)
+    if(GameMode == 1)
+    {
+    txSetColour(TX_BLACK);
+    char str[100];
+    txTextOut(5, 100, "Номер диалогового окна:");
+    sprintf(str, "%d", risovat);
+    txTextOut(170, 100, str);
+    }
+
+
+    if( (txMouseButtons() &1 && txMouseX() >= x + 5 && txMouseY() >= y + 30 && txMouseX() <= x + 225
+    && txMouseY() <= y + 50 || GetAsyncKeyState(VK_NUMPAD1) ) && R != true)
     {
     risovat = 2;
     }
 
-    if(txMouseButtons() &1 && txMouseX() >= x + 5 && txMouseY() >= y + 55 && txMouseX() <= x + 225
-    && txMouseY() <= y + 75 && R1 != true)
+    if( ( txMouseButtons() &1 && txMouseX() >= x + 5 && txMouseY() >= y + 55 && txMouseX() <= x + 225
+    && txMouseY() <= y + 75 || GetAsyncKeyState(VK_NUMPAD2) )&& R1 != true)
     {
     risovat = 3;
     }
 
-    if(txMouseButtons() &1 && txMouseX() >= x + 5 && txMouseY() >= y + 80 && txMouseX() <= x + 225
-    && txMouseY() <= y + 100)
+    if( (txMouseButtons() &1 && txMouseX() >= x + 5 && txMouseY() >= y + 80 && txMouseX() <= x + 225
+    && txMouseY() <= y + 100 || GetAsyncKeyState(VK_NUMPAD3) )&& (terpenieR != 6 || R1 != true) )
     {
     risovat = 4;
     }
@@ -154,16 +168,20 @@ void dialog(Stena* stena, Pitek* pi, Director* d, stairs* s, int nomer_sten, int
 
     if(risovat == 1)
     {
-    txSetColor(TX_WHITE);
-    txSetFillColor(TX_WHITE);
-    txTextOut(x + 5, y + 5, "Что ты тут забыл?");
+        if(/*terpenieR != 6*/ R1 != true)
+        {
+            txSetColor(TX_WHITE);
+            txRectangle(x + 5, y + 80, x + 225, y + 100);
+            txSetColor(TX_RED);
+            txTextOut(x + 10, y + 80, "Просто иду в туалет");
+        }
 
     if(R != true)
     {
         txSetColor(TX_WHITE);
         txRectangle(x + 5, y + 30, x + 225, y + 50);
         txSetColor(TX_RED);
-        txTextOut(x + 10, y + 35, "Не твоё дело");
+        txTextOut(x + 10, y + 30, "Не твоё дело");
     }
 
     if(R1 != true)
@@ -171,55 +189,80 @@ void dialog(Stena* stena, Pitek* pi, Director* d, stairs* s, int nomer_sten, int
         txSetColor(TX_WHITE);
         txRectangle(x + 5, y + 55, x + 225, y + 75);
         txSetColor(TX_RED);
-        txTextOut(x + 10, y + 60, "Прогуливаю уроки");
+        txTextOut(x + 10, y + 55, "Прогуливаю уроки");
+    }
     }
 
 
-    txSetColor(TX_WHITE);
-    txRectangle(x + 5, y + 80, x + 225, y + 100);
-    txSetColor(TX_RED);
-    txTextOut(x + 10, y + 85, "Просто иду в туалет");
-    }
+
+
 
     if(risovat == 2 && R != true)
     {
-    txSetColor(TX_WHITE);
-    txSetFillColor(TX_WHITE);
+        txSetFillColor(TX_BLACK);
+        txRectangle(x, y, x + 230, y + 105);
 
-    txTextOut(x + 5, y + 5, "Зря ты так, кожаный уб**док");
-    txSleep(200);
-    r[nomerRobota].x = r[nomerRobota].x + 30;
-    r[nomerRobota].y = r[nomerRobota].y + 30;
-    r[nomerRobota].direction = DIRECTION_DOWN;
-    R = true;
-    break;
+        txSetColor(TX_WHITE);
+        txSetFillColor(TX_WHITE);
+
+        txDrawText(x + 5, y + 5, x + 225 , y + 30, "Зря ты так, кожаный уб**док");
+        txSleep(3000);
+        r[nomerRobota].x = r[nomerRobota].x + 30;
+        r[nomerRobota].y = r[nomerRobota].y + 30;
+        r[nomerRobota].direction = DIRECTION_DOWN;
+        R = true;
+        break;
     }
 
     if(risovat == 3)
     {
-    txSetColor(TX_WHITE);
-    txSetFillColor(TX_WHITE);
+        txSetFillColor(TX_BLACK);
+        txRectangle(x, y, x + 230, y + 105);
 
-    txDrawText(x + 5, y + 5, x + 225, y + 90, "Я оповестил директора,\n лучше не попадайся ему на глаза\n *Злобный электронный смех*");
-    txSleep(200);
-    r[nomerRobota].x = r[nomerRobota].x + 30;
-    r[nomerRobota].y = r[nomerRobota].y + 30;
-    r[nomerRobota].direction = DIRECTION_DOWN;
-    R1 = true;
-    break;
+        txSetColor(TX_WHITE);
+        txSetFillColor(TX_WHITE);
+
+        txDrawText(x + 5, y + 5, x + 225, y + 90, "Я оповестил директора,\n лучше не попадайся ему на глаза\n *Злобный электронный смех*");
+
+        txSleep(4500);
+        r[nomerRobota].x = r[nomerRobota].x + 30;
+        r[nomerRobota].y = r[nomerRobota].y + 30;
+        r[nomerRobota].direction = DIRECTION_DOWN;
+        R1 = true;
+        break;
     }
 
-    if(risovat == 4)
+    if(risovat == 4 && terpenieR != 5)
     {
-    txSetColor(TX_WHITE);
-    txSetFillColor(TX_WHITE);
+        txSetFillColor(TX_BLACK);
+        txRectangle(x, y, x + 230, y + 105);
 
-    txTextOut(x + 5, y + 5, "Прости");
-    txSleep(200);
-    r[nomerRobota].x = r[nomerRobota].x + 30;
-    r[nomerRobota].y = r[nomerRobota].y + 30;
-    r[nomerRobota].direction = DIRECTION_DOWN;
-    break;
+        txSetColor(TX_WHITE);
+        txSetFillColor(TX_WHITE);
+
+        txTextOut(x + 5, y + 5, "Прости");
+        txSleep(1000);
+        r[nomerRobota].x = r[nomerRobota].x + 30;
+        r[nomerRobota].y = r[nomerRobota].y + 30;
+        r[nomerRobota].direction = DIRECTION_DOWN;
+        terpenieR = terpenieR + 1;
+        break;
+    }else if(terpenieR == 5 && risovat == 4)
+    {
+        txSetFillColor(TX_BLACK);
+        txRectangle(x, y, x + 230, y + 105);
+
+        txSetColor(TX_WHITE);
+        txSetFillColor(TX_WHITE);
+
+        txDrawText(x, y + 20, x + 255, y + 70, "Слишком долго, \nя оповестил директора");
+        txSleep(3500);
+        R1 = true;
+        r[nomerRobota].x = r[nomerRobota].x + 30;
+        r[nomerRobota].y = r[nomerRobota].y + 30;
+        r[nomerRobota].direction = DIRECTION_DOWN;
+        terpenieR++;
+        break;
     }
 
     txSleep(10);
@@ -281,8 +324,8 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
         {
             energy -= 400;
         }
-        sl.width = energy / 1000;
-        drawLifeLane(sl);
+        //sl.width = energy / 1000;
+        //drawLifeLane(sl);
 
         b.predX = b.x;
         b.predY = b.y;
@@ -296,6 +339,8 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
         txSetColor(TX_BROWN);
         if (b.life == -1)
         {
+            txSelectFont ("Comic Sans MS", 50);
+            txSetColour(TX_WHITE);
             txTextOut(500, 300, "game over");
             txSleep(10);
             exit(1);
@@ -316,9 +361,6 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
         {
             b.speed = 6;
         }
-
-        ll.width = b.life;
-        drawLifeLane(ll);
 
         for (int nomer = 0; nomer < nomer_piteka; nomer++)
         {
@@ -415,28 +457,49 @@ void scene1(Bomzh b, Robot* r, Director* d, Point* p, Pitek* pi, Stena* stena, s
 
         drawLevel(stena, pi, r, d, b, s, nomerStena, nomerPiteka, nomerRobota, nomerDirector, nomerStairs);
 
+        ll.width = b.life;
+        drawLifeLane(ll);
+
+        sl.width = energy / 1000;
+        drawLifeLane(sl);
+
+        char stq[100];
+        sprintf(stq, "%d", terpenieR);  //Writing car_x_coord value to str
+        txTextOut(300, 100, stq);
+
         for(int nomer = 0; nomer < nomerRobota; nomer++)
         {
+
           dialog(stena, pi, d, s, nomerStena, nomerPiteka, nomerDirector, nomerStairs, b, nomer, r);
         }
 
 
-        //Time += 10;
         GetLocalTime(&st);
 
         Time = 60 * st.wMinute + st.wSecond;
         char stm[100];
+        txTextOut(10, 50, "Время до звонка :");
         sprintf(stm, "%d", TimeVictory - (Time - TimeBeg));
-        txTextOut(100, 50, stm);
+        txTextOut(130, 50, stm);
+
         ConditionOfVictory(&b);
+        if(GameMode == 1)
+        {
+        txSetColour(TX_WHITE);
+        sprintf(stm, "%d", b.life);
+        txTextOut(ll.x + 40, ll.y - 4, stm);
 
-        char stt[100];
-        sprintf(stt, "%d", b.life);
-        //txTextOut(50, 50, stt);
 
-        sprintf(stt, "%d", nomerLevel);
-        txTextOut(100, 100, stt);
-
+        sprintf(stm, "%d", nomerLevel);
+        txTextOut(110, 100, stm);
+        txTextOut(10, 100, "номер уровня :");
+        sprintf(stm, "%d", b.x);
+        txTextOut(b.x - absolutX - 65, b.y - absolutY, "x=");
+        txTextOut(b.x - absolutX - 50, b.y - absolutY, stm);
+        txTextOut(b.x - absolutX - 15, b.y - absolutY, "y=");
+        sprintf(stm, "%d", b.y);
+        txTextOut(b.x - absolutX, b.y - absolutY, stm);
+        }
         txSetColor(TX_PINK);
         txSetFillColor(TX_PINK);
 

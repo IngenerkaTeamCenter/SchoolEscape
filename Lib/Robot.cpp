@@ -62,7 +62,7 @@ void readRobot(ifstream* Map, string stroka_Personage, Robot* robots, int* nomer
 
 
         robots[*nomerRobota].height = 62;
-        robots[*nomerRobota].speed = 10;
+        robots[*nomerRobota].speed = 5;
         robots[*nomerRobota].manyframeRight = 4;
         robots[*nomerRobota].manyframeLeft = 4;
         robots[*nomerRobota].manyframeUp = 4;

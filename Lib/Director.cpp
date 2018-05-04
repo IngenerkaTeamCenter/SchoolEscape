@@ -105,6 +105,9 @@ void catchCheck(Bomzh* b, Director d, bool R1)
     if((d.x - b->x) * (d.x - b->x) + (d.y - b->y) * (d.y - b->y) <= 75 && R1 == true)
     {
         b->life = b->life - 1;
+        txSelectFont ("Comic Sans MS", 20);
+        txSetColour(TX_WHITE);
+        txTextOut(d.x + 35 - absolutX, d.y - 100 - absolutY, "Что ты тут забыл ?");
     }
 }
 
